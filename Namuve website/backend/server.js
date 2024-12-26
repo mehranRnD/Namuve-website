@@ -125,7 +125,9 @@ class HostawayListingManager {
         if (response.data && response.data.access_token) {
             this.authToken = `Bearer ${response.data.access_token}`;
             // console.log('New access token:', this.authToken);
-            console.log('Token obtained successfully!');
+
+            console.log('Congratulations Mehran Token obtained successfully!');
+
             return this.authToken;
         } else {
             console.log('Response data:', response.data);

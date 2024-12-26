@@ -217,7 +217,11 @@ async function loadListings() {
         roomDescriptions[images.findIndex((img) => img.id === image.id)]
       }</p>
       <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
+<<<<<<< HEAD
         <a href="listings-details.html?id=${image.id}" 
+=======
+        <a href="/listings-details?id=${image.id}" 
+>>>>>>> 9ffba38 (Initial commit)
           class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
           style="background-color: #989549; border: none;">
           <i class="fas fa-info-circle me-2"></i>View Details

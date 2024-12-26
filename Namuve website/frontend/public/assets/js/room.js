@@ -44,7 +44,7 @@ const images = [{ id: "323227" }, { id: "288691" }, { id: "288678" }];
 
 // Update the virtualTourPaths object
 const virtualTourPaths = {
-  "323227": "../Opus4F42/index.html",  // Updated path for room 323227
+  "323227": "../Opus4F42/index.html", // Updated path for room 323227
   "288724": "./assets/virtual-tours/tour2.html",
   "309909": "./assets/virtual-tours/tour3.html"
 };
@@ -101,6 +101,14 @@ const checkAvailabilityStatus = (calendarData, selectedDate) => {
     price: dateEntry.price,
   };
 };
+
+// Function to blur reserved dates
+function blurReservedDates(calendarData) {
+  const reservedDates = calendarData.result
+    .filter((entry) => entry.status === "reserved")
+    .map((entry) => entry.date);
+  return reservedDates;
+}
 
 // Load and render room data dynamically
 const loadRooms = async () => {
@@ -199,45 +207,21 @@ const loadRooms = async () => {
       document.getElementById("guests").value = "1";
 
       // Initialize flatpickr for date inputs
+      const calendarData = await fetchCalendarData(roomId, "2024-01-01", "2024-12-31");
+      const reservedDates = blurReservedDates(calendarData);
+
       flatpickr("#checkin", {
         minDate: "today",
         dateFormat: "Y-m-d",
-        onChange: async (selectedDates, dateStr) => {
-          const calendarData = await fetchCalendarData(
-            roomId,
-            dateStr,
-            dateStr
-          );
-          const result = checkAvailabilityStatus(calendarData, dateStr);
-          if (result) {
-            console.log(`Check-in date ${dateStr}:`);
-            console.log(`Status: ${result.status}`);
-            console.log(`Price: $${result.price}`);
-          } else {
-            console.log(`Check-in date ${dateStr}: Data not available`);
-          }
-        },
+        disable: reservedDates, // Disable reserved dates
       });
 
       flatpickr("#checkout", {
         minDate: "today",
         dateFormat: "Y-m-d",
-        onChange: async (selectedDates, dateStr) => {
-          const calendarData = await fetchCalendarData(
-            roomId,
-            dateStr,
-            dateStr
-          );
-          const result = checkAvailabilityStatus(calendarData, dateStr);
-          if (result) {
-            console.log(`Check-out date ${dateStr}:`);
-            console.log(`Status: ${result.status}`);
-            console.log(`Price: $${result.price}`);
-          } else {
-            console.log(`Check-out date ${dateStr}: Data not available`);
-          }
-        },
+        disable: reservedDates, // Disable reserved dates
       });
+
       const confirmBookingBtn = document.getElementById("confirm-booking");
       if (confirmBookingBtn) {
         confirmBookingBtn.onclick = () => {
