@@ -42,12 +42,6 @@ const getListingData = async () => {
 // Images array with IDs for room data
 const images = [{ id: "323227" }, { id: "288691" }, { id: "288678" }];
 
-// Update the virtualTourPaths object
-const virtualTourPaths = {
-  "323227": "../Opus4F42/index.html", // Updated path for room 323227
-  "288724": "./assets/virtual-tours/tour2.html",
-  "309909": "./assets/virtual-tours/tour3.html"
-};
 
 // Function to update room prices based on selected currency
 function updateRoomPrices(listings) {

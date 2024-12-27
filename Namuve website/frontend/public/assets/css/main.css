@@ -127,62 +127,108 @@ h6 {
   border-top-color: var(--surface-color);
   animation: php-email-form-loading 1s linear infinite;
 }
-
 .booking-engine {
-  position: relative;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 20px 30px;
-  border-radius: 10px;
-  max-width: 90%;
-  margin: auto;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 1s ease-in-out;
+  position: absolute;
+  top: 42%; /* Centered vertically */
+  left: 15%; /* Centered horizontally */
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+  backdrop-filter: blur(12px); /* Softer blur effect */
+  border-radius: 15px; /* Smooth border radius */
+  padding: 30px; /* Larger padding for a spacious layout */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+  transition: all 0.3s ease-in-out;
 }
-.form-inline {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+
+.booking-engine h4 {
+  margin-bottom: 20px;
+  font-size: 1.8rem; /* Larger and more prominent */
+  color: #333; /* Neutral color for better readability */
+  font-weight: 600;
 }
-.form-control {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  height: 50px;
+
+.booking-engine .form-control {
+  border-radius: 8px; /* Smooth corners */
+  border: 1px solid #ddd; /* Subtle border for definition */
   padding: 10px;
+  font-size: 1rem; /* Comfortable font size */
+  transition: border-color 0.3s ease;
 }
-.btn-book-now {
-  background-color: #007bff;
-  color: white;
-  height: 50px;
-  border-radius: 5px;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 0 20px;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+.booking-engine .form-control:focus {
+  border-color: #007bff; /* Highlight border on focus */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
 }
-.btn-book-now:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+
+.booking-engine .btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #007bff; /* Primary color */
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
 }
+
+.booking-engine .btn:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+  box-shadow: 0 4px 12px rgba(0, 91, 179, 0.3);
+}
+
+/* Animation for the booking engine */
+.booking-engine {
+  opacity: 0;
+  animation: fadeIn 0.7s forwards ease-out;
+}
+
 @keyframes fadeIn {
-  from {
+  0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .form-inline {
-    flex-direction: column;
+  .booking-engine {
+    width: 90%; /* Full width on smaller screens */
+    padding: 20px;
   }
-  .btn-book-now {
-    width: 100%;
+
+  .booking-engine h4 {
+    font-size: 1.5rem;
+  }
+
+  .booking-engine .btn {
+    width: 100%; /* Full-width button */
+    padding: 12px;
   }
 }
+
+@media (max-width: 576px) {
+  .booking-engine {
+    padding: 15px;
+  }
+
+  .booking-engine h4 {
+    font-size: 1.2rem;
+  }
+
+  .booking-engine .form-control {
+    font-size: 0.9rem;
+  }
+
+  .booking-engine .btn {
+    font-size: 0.9rem;
+  }
+}
+
 .top-text {
   text-align: right;
   max-width: 506px;
