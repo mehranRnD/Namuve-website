@@ -29,32 +29,32 @@ export function createFooter() {
                     <div class="col-lg-2 col-6 footer-links">
                         <h4>Company</h4>
                         <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="about-us.html">About us</a></li>
-                            <li><a href="rooms.html">Rooms</a></li>
-                            <li><a href="#">Team</a></li>
-                            <li><a href="contact-us.html">Contact</a></li>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/about">About us</a></li>
+                            <li><a href="/listings">Rooms</a></li>
+                            <li><a href="/team">Team</a></li>
+                            <li><a href="/contact">Contact</a></li>
                         </ul>
                     </div>
 
                     <div class="col-lg-2 col-6 footer-links">
                         <h4>Services</h4>
                         <ul>
-                            <li><a href="#">Spaces</a></li>
-                            <li><a href="#">Serve</a></li>
-                            <li><a href="#">Empire Holdings</a></li>
-                            <li><a href="#">TechSol</a></li>
-                            <li><a href="#">Uniform</a></li>
+                            <li><a href="/spaces">Spaces</a></li>
+                            <li><a href="/serve">Serve</a></li>
+                            <li><a href="/empire-holdings">Empire Holdings</a></li>
+                            <li><a href="/techsol">TechSol</a></li>
+                            <li><a href="/uniform">Uniform</a></li>
                         </ul>
                     </div>
 
                     <div class="col-lg-2 col-6 footer-links">
                         <h4>Learn</h4>
                         <ul>
-                            <li><a href="#">Blog / News</a></li>
-                            <li><a href="#">FAQs</a></li>
-                            <li><a href="#">Reviews and Testimonials</a></li>
-                            <li><a href="#">Terms & Conditions</a></li>
+                            <li><a href="/blogs">Blog / News</a></li>
+                            <li><a href="/faqs">FAQs</a></li>
+                            <li><a href="/reviews-and-testimonials">Reviews and Testimonials</a></li>
+                            <li><a href="/terms-and-conditions">Terms & Conditions</a></li>
                         </ul>
                     </div>
 
