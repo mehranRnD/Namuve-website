@@ -128,17 +128,7 @@ h6 {
   animation: php-email-form-loading 1s linear infinite;
 }
 
-.booking-engine {
-  position: relative;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 20px 30px;
-  border-radius: 10px;
-  max-width: 90%;
-  margin: auto;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 1s ease-in-out;
-}
+
 .form-inline {
   display: flex;
   gap: 10px;
