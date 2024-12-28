@@ -11,7 +11,7 @@ export function createNavbar() {
                 <nav id="navmenu" class="navmenu">
                     <ul>
                         <li><a href="/" class="active">Home</a></li>
-                        <li><a href="./about">About us</a></li>
+                        <li><a href="/about">About us</a></li>
                         <li class="dropdown">
                             <a href="#"><span>Services</span><i class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
@@ -53,13 +53,20 @@ export function createNavbar() {
     // Create a function to insert the navbar
     document.body.insertAdjacentHTML('afterbegin', headerHTML);
 
-    // Set active nav item based on current page
+    // Set active nav item based on the current page
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('#navmenu a');
     
     navLinks.forEach(link => {
+        // If the link matches the current path, mark it as active
         if (link.getAttribute('href') === currentPath) {
             link.classList.add('active');
+            // Check if the link is inside a dropdown and set the dropdown as active
+            const dropdown = link.closest('.dropdown');
+            if (dropdown) {
+                const dropdownLink = dropdown.querySelector('a');
+                dropdownLink.classList.add('active');
+            }
         } else {
             link.classList.remove('active');
         }
