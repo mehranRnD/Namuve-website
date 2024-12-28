@@ -85,6 +85,9 @@ router.get("/terms-and-conditions", (req, res) => {
 router.get("/team", (req, res) => {
   res.sendFile(path.join(publicDir, "team.html"));
 });
+router.get("/booking-engine", (req, res) => {
+  res.sendFile(path.join(publicDir, "booking-engine.html"));
+});
 
 // Add API routes
 router.get("/api/listings", async (req, res) => {
