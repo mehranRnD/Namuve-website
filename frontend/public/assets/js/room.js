@@ -87,6 +87,21 @@ async function fetchCalendarData(listingId, startDate, endDate) {
   }
 }
 
+// Update the checkAvailabilityStatus function to include price
+const checkAvailabilityStatus = (calendarData, selectedDate) => {
+  if (!calendarData || !calendarData.result) return null;
+
+  const dateEntry = calendarData.result.find(
+    (entry) => entry.date === selectedDate
+  );
+  if (!dateEntry) return null;
+
+  return {
+    status: dateEntry.status,
+    price: dateEntry.price,
+  };
+};
+
 // Function to blur reserved dates
 function blurReservedDates(calendarData) {
   const reservedDates = calendarData.result
@@ -99,6 +114,7 @@ function blurReservedDates(calendarData) {
 const loadRooms = async () => {
   const roomList = document.getElementById("room-list");
 
+  // If roomList doesn't exist, silently return without showing error
   if (!roomList) {
     return;
   }
@@ -120,14 +136,28 @@ const loadRooms = async () => {
     roomItem.innerHTML = `
       <div class="room-item shadow rounded overflow-hidden" style="height: 100% !important;">
         <div class="position-relative">
-          <img class="img-fluid" src="${imageUrl}" alt="Room Image ${image.id}" style="width: 100% !important; height: 250px !important; object-fit: cover !important;" />
+          <img class="img-fluid" src="${imageUrl}" alt="Room Image ${
+      image.id
+    }" style="width: 100% !important; height: 250px !important; object-fit: cover !important;" />
           <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #989549;">
-            ${currentCurrency === "USD" ? `$ ${listing ? listing.price : "N/A"}` : `₨ ${listing ? (listing.price * usdToPkrRate).toFixed(2).toLocaleString() : "N/A"}`}
+            ${
+              currentCurrency === "USD"
+                ? `$ ${listing ? listing.price : "N/A"}`
+                : `₨ ${
+                    listing
+                      ? (listing.price * usdToPkrRate)
+                          .toFixed(2)
+                          .toLocaleString()
+                      : "N/A"
+                  }`
+            }
           </small>
         </div>
         <div class="p-4 mt-2">
           <div class="d-flex justify-content-between mb-3">
-            <h5 class="mb-0" style="width: 60% !important;">${listing ? listing.name : "Loading..."}</h5>
+            <h5 class="mb-0" style="width: 60% !important;">${
+              listing ? listing.name : "Loading..."
+            }</h5>
             <div class="ps-2 d-flex" style="color: #989549; width: 40% !important; justify-content: flex-end !important;">
               <small class="fa fa-star" style="margin-right: 2px !important;"></small>
               <small class="fa fa-star" style="margin-right: 2px !important;"></small>
@@ -141,18 +171,22 @@ const loadRooms = async () => {
             <small class="border-end me-3 pe-3"><i class="fa fa-bath me-2" style="color: #989549;"></i>2 Baths</small>
             <small><i class="fa fa-wifi me-2" style="color: #989549;"></i>Wifi</small>
           </div>
-          <p class="text-body mb-3" style="min-height: 48px !important;">${roomDescriptions[index]}</p>
+          <p class="text-body mb-3" style="min-height: 48px !important;">${
+            roomDescriptions[index]
+          }</p>
           <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
-            <a href="listings-details.html?id=${image.id}" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #989549; border: none;">
-              <i class="fas fa-info-circle me-2"></i>View Details
-            </a>
-            <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
-              <i class="fas fa-video me-2"></i>Virtual Tour
-            </button>
-            <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn">
-              <i class="fas fa-calendar-check me-2"></i>Book Now
-            </button>
-          </div>
+        <a href="listings-details.html?id=${image.id}" 
+          class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
+          style="background-color: #989549; border: none;">
+          <i class="fas fa-info-circle me-2"></i>View Details
+        </a>
+        <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
+          <i class="fas fa-video me-2"></i>Virtual Tour
+        </button>
+        <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn">
+          <i class="fas fa-calendar-check me-2"></i>Book Now
+        </button>
+      </div>
         </div>
       </div>
     `;
@@ -162,7 +196,9 @@ const loadRooms = async () => {
     const bookNowBtn = roomItem.querySelector(".book-now-btn");
     bookNowBtn.addEventListener("click", async () => {
       const roomId = image.id;
-      const modal = new bootstrap.Modal(document.getElementById("calendar-popup"));
+      const modal = new bootstrap.Modal(
+        document.getElementById("calendar-popup")
+      );
       modal.show();
 
       // Reset form fields when modal opens
@@ -170,32 +206,20 @@ const loadRooms = async () => {
       document.getElementById("checkout").value = "";
       document.getElementById("guests").value = "1";
 
-      // Fetch calendar data
+      // Initialize flatpickr for date inputs
       const calendarData = await fetchCalendarData(roomId, "2024-01-01", "2024-12-31");
       const reservedDates = blurReservedDates(calendarData);
 
-      // Initialize Bootstrap Datepicker for date inputs
-      $('#checkin').datepicker({
-        format: 'yyyy-mm-dd',
-        startDate: 'today',
-        beforeShowDay: function(date) {
-          const string = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
-          return [reservedDates.indexOf(string) === -1]; // Disable reserved dates
-        },
-        autoclose: true
-      }).on('changeDate', function(selected) {
-        const checkinDate = selected.format(); // Get selected date
-        $('#checkout').datepicker('setStartDate', checkinDate); // Set check-out start date
+      flatpickr("#checkin", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        disable: reservedDates, // Disable reserved dates
       });
 
-      $('#checkout').datepicker({
-        format: 'yyyy-mm-dd',
-        startDate: 'today',
-        beforeShowDay: function(date) {
-          const string = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
-          return [reservedDates.indexOf(string) === -1]; // Disable reserved dates
-        },
-        autoclose: true
+      flatpickr("#checkout", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        disable: reservedDates, // Disable reserved dates
       });
 
       const confirmBookingBtn = document.getElementById("confirm-booking");
