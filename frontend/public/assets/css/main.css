@@ -826,7 +826,7 @@ section,
   margin-bottom: 0;
 }
 .carousel-caption h1 {
-  font-size: 3.5rem; /* Adjust as needed */
+  font-size: 65px; /* Adjust as needed */
 }
 
 .carousel-caption p {
@@ -840,7 +840,7 @@ section,
   width: 100%;
   min-height: 100vh;
   position: relative;
-  padding-top: 123px;
+  padding-top: 0px !important;
   padding-bottom: 0px !important;
   display: flex;
   align-items: center;
@@ -1201,7 +1201,7 @@ section,
   content: "";
   height: 30px;
   width: 30px;
-  background: color-mix(in srgb, var(--accent-color), transparent 70%);
+  background: #989549c4;
   border-radius: 50px;
   z-index: 1;
   bottom: -15px;
@@ -3041,10 +3041,14 @@ section,
 
 /* Calculator CSS */
 .cf-div {
-  background-color: rgba(255, 255, 255, 0.889);
+  background-color: rgba(255, 255, 255, 99%);
   padding: 2rem;
   border-radius: 10px !important;
   border: 1px solid #21252970;
+}
+
+.revenue-h {
+  font-size: 3rem !important;
 }
 
 .fc-input {
@@ -3424,4 +3428,11 @@ section,
     opacity: 1;
     transform: scale(1.12);
   }
+}
+
+/* index carousel */
+.carousel-item .carousel-caption {
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
 }
