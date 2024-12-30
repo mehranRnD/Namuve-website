@@ -42,13 +42,6 @@ const getListingData = async () => {
 // Images array with IDs for room data
 const images = [{ id: "323227" }, { id: "288691" }, { id: "288678" }];
 
-// Update the virtualTourPaths object
-const virtualTourPaths = {
-  "323227": "../Opus4F42/index.html", // Updated path for room 323227
-  "288724": "./assets/virtual-tours/tour2.html",
-  "309909": "./assets/virtual-tours/tour3.html"
-};
-
 // Function to update room prices based on selected currency
 function updateRoomPrices(listings) {
   const roomItems = document.querySelectorAll(".room-item");
@@ -108,6 +101,50 @@ function blurReservedDates(calendarData) {
     .filter((entry) => entry.status === "reserved")
     .map((entry) => entry.date);
   return reservedDates;
+}
+
+// Function to format dates for display
+function formatDate(dateString) {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+// Modal initialization and event listeners
+function initializeModal() {
+  const modal = new bootstrap.Modal(document.getElementById("calendar-popup"));
+
+  const confirmBookingBtn = document.getElementById("confirm-booking");
+  if (confirmBookingBtn) {
+    confirmBookingBtn.onclick = () => {
+      const checkin = document.getElementById("checkin").value;
+      const checkout = document.getElementById("checkout").value;
+      const guests = document.getElementById("guests").value;
+
+      if (!checkin || !checkout || !guests) {
+        alert("Please fill in all fields");
+        return;
+      }
+
+      const formattedCheckin = formatDate(checkin);
+      const formattedCheckout = formatDate(checkout);
+      alert(
+        `Booking Details:\nCheck-in: ${formattedCheckin}\nCheck-out: ${formattedCheckout}\nGuests: ${guests}`
+      );
+
+      // Construct the booking URL
+      const roomId = document.getElementById("calendar-popup").dataset.roomId;
+      const booknrentUrl = `https://www.booknrent.com/checkout/${roomId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
+
+      // Reset form fields
+      document.getElementById("checkin").value = "";
+      document.getElementById("checkout").value = "";
+      document.getElementById("guests").value = "1";
+      // Close the modal
+      modal.hide();
+      // Redirect to the booking URL
+      window.location.href = booknrentUrl;
+    };
+  }
 }
 
 // Load and render room data dynamically
@@ -183,7 +220,9 @@ const loadRooms = async () => {
         <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
           <i class="fas fa-video me-2"></i>Virtual Tour
         </button>
-        <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn">
+        <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${
+          image.id
+        }">
           <i class="fas fa-calendar-check me-2"></i>Book Now
         </button>
       </div>
@@ -196,9 +235,9 @@ const loadRooms = async () => {
     const bookNowBtn = roomItem.querySelector(".book-now-btn");
     bookNowBtn.addEventListener("click", async () => {
       const roomId = image.id;
-      const modal = new bootstrap.Modal(
-        document.getElementById("calendar-popup")
-      );
+      const modalElement = document.getElementById("calendar-popup");
+      modalElement.dataset.roomId = roomId; // Store roomId in the modal
+      const modal = new bootstrap.Modal(modalElement);
       modal.show();
 
       // Reset form fields when modal opens
@@ -207,7 +246,11 @@ const loadRooms = async () => {
       document.getElementById("guests").value = "1";
 
       // Initialize flatpickr for date inputs
-      const calendarData = await fetchCalendarData(roomId, "2024-01-01", "2024-12-31");
+      const calendarData = await fetchCalendarData(
+        roomId,
+        "2024-01-01",
+        "2024-12-31"
+      );
       const reservedDates = blurReservedDates(calendarData);
 
       flatpickr("#checkin", {
@@ -221,32 +264,6 @@ const loadRooms = async () => {
         dateFormat: "Y-m-d",
         disable: reservedDates, // Disable reserved dates
       });
-
-      const confirmBookingBtn = document.getElementById("confirm-booking");
-      if (confirmBookingBtn) {
-        confirmBookingBtn.onclick = () => {
-          const checkin = document.getElementById("checkin").value;
-          const checkout = document.getElementById("checkout").value;
-          const guests = document.getElementById("guests").value;
-
-          if (!checkin || !checkout || !guests) {
-            alert("Please fill in all fields");
-            return;
-          }
-
-          // Construct the booking URL
-          const booknrentUrl = `https://www.booknrent.com/checkout/${roomId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
-
-          // Reset form fields
-          document.getElementById("checkin").value = "";
-          document.getElementById("checkout").value = "";
-          document.getElementById("guests").value = "1";
-          // Close the modal
-          modal.hide();
-          // Redirect to the booking URL
-          window.location.href = booknrentUrl;
-        };
-      }
     });
   });
 

@@ -127,6 +127,75 @@ h6 {
   border-top-color: var(--surface-color);
   animation: php-email-form-loading 1s linear infinite;
 }
+/* Centered and Transparent Booking Engine */
+.booking-engine-overlay {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%; /* Larger width */
+  z-index: 10;
+  border: 2px solid #fff; /* Subtle border */
+  padding: 20px; /* More padding for better spacing */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow for depth */
+  border-radius: 8px; /* Rounded corners for a modern look */
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent dark background for contrast */
+}
+
+.booking-engine-overlay .form-select,
+.booking-engine-overlay .form-control {
+  max-width: 200px; /* Increased width for inputs */
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.9); /* Slight transparency for inputs */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  padding: 10px 30px; /* Added padding for better usability */
+  font-size: 14px; /* Increased font size */
+}
+
+.booking-engine-overlay label {
+  color: #fff; /* White text for labels */
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: block; /* Display labels above inputs */
+}
+
+.booking-engine-overlay .btn {
+  background: #ff5722; /* Vibrant color for the button */
+  color: white;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  padding: 15px 55px; /* Larger button */
+  border-radius: 25px;
+  font-size: 16px; /* Slightly larger font */
+}
+
+.booking-engine-overlay .btn:hover {
+  background-color: #e64a19; /* Darker shade on hover */
+  transform: translateY(-3px); /* Lift on hover */
+}
+
+.booking-engine-overlay form {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start; /* Align labels and inputs properly */
+  gap: 20px; /* Increased spacing between inputs */
+  flex-wrap: wrap;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .booking-engine-overlay {
+    width: 90%; /* Full width on smaller screens */
+  }
+
+  .booking-engine-overlay form {
+    flex-direction: column;
+    gap: 15px; /* Adjust spacing for smaller screens */
+  }
+}
 
 
 .form-inline {

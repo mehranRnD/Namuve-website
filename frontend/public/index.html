@@ -67,8 +67,63 @@
     <main class="main">
       <!-- Hero Section -->
       <section id="hero" class="hero section">
-      <!-- Booking Engine Overlay -->
-      
+        <!--  Engine Overlay -->
+        <div class="booking-engine-overlay animate__animated animate__fadeInUp">
+          <div class="container">
+            <form
+              id="booking-form"
+              class="d-flex justify-content-between align-items-center p-3"
+            >
+              <div>
+                <label for="location">Location</label>
+                <select class="form-select" id="location">
+                  <option value="Lahore">Lahore</option>
+                </select>
+              </div>
+              <div>
+                <label for="checkin">Check-in Date</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="checkin"
+                  placeholder="Select check-in date"
+                  data-bs-toggle="datepicker"
+                  required
+                />
+              </div>
+              <div>
+                <label for="checkout">Check-out Date</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="checkout"
+                  placeholder="Select check-out date"
+                  data-bs-toggle="datepicker"
+                  required
+                />
+              </div>
+              <div>
+                <label for="guests">Guests</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="guests"
+                  value="1"
+                  min="1"
+                  placeholder="Guests"
+                  required
+                />
+              </div>
+              <div>
+                <label for="search">Search for availability</label>
+                <button type="submit" class="btn btn-primary" id="search-button">Search</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- /Booking Engine Overlay -->
+
         <div class="container-fluid p-0 mb-0 position-relative">
           <div
             id="header-carousel"
@@ -420,7 +475,6 @@
                       >
                         <option value="">Area</option>
                         <option value="Lahore">Lahore</option>
-                     
                       </select>
                     </div>
                     <div class="col">
@@ -673,8 +727,6 @@
       </section>
       <!-- /Stats Section -->
 
-      
-
       <!-- Features Section -->
       <section id="features" class="features section">
         <!-- Section Title -->
@@ -731,11 +783,7 @@
               class="col-lg-6 d-flex align-items-center features-img-bg"
               data-aos="zoom-out"
             >
-              <img
-                src="assets/img/bg-main/ro-3.jpg"
-                class="img-fluid"
-                alt=""
-              />
+              <img src="assets/img/bg-main/ro-3.jpg" class="img-fluid" alt="" />
             </div>
             <div
               class="col-lg-5 d-flex justify-content-center flex-column"
@@ -1139,7 +1187,6 @@
         </div>
       </section>
       <!-- /Contact Section -->
-       
     </main>
 
     <script type="module">
@@ -1171,5 +1218,6 @@
     <script src="assets/js/main.js"></script>
     <script type="module" src="assets/js/script.js"></script>
     <script type="module" src="assets/js/room.js"></script>
+    <script type="module" src="assets/js/booking-engine.js"></script>
   </body>
 </html>
