@@ -6,20 +6,12 @@ const LISTING_IDS = [
   323227, 288688, 288686, 305327, 288676,
 ];
 
-// Function to get URL parameters
-function getQueryParams() {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    checkinDate: params.get('checkinDate'),
-    checkoutDate: params.get('checkoutDate'),
-    guests: params.get('guests'),
-  };
-}
-
 // Function to fetch calendar data for a specific listing
 async function fetchCalendarData(listingId, startDate, endDate) {
   try {
-    const response = await fetch(`${BASE_URL}/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`);
+    const response = await fetch(
+      `${BASE_URL}/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`
+    );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -30,63 +22,47 @@ async function fetchCalendarData(listingId, startDate, endDate) {
   }
 }
 
-// Function to load cached data or fetch new data
-async function loadCalendarData(checkinDate, checkoutDate) {
-  const cacheKey = `calendarData_${checkinDate}_${checkoutDate}`;
-  const cachedData = localStorage.getItem(cacheKey);
-
-  if (cachedData) {
-    // Parse and return cached data
-    return JSON.parse(cachedData);
-  } else {
-    // Fetch new data and cache it
-    const fetchPromises = LISTING_IDS.map(listingId => fetchCalendarData(listingId, checkinDate, checkoutDate));
-    const calendarDataArray = await Promise.all(fetchPromises);
-    
-    // Cache the fetched data
-    localStorage.setItem(cacheKey, JSON.stringify(calendarDataArray));
-    return calendarDataArray;
-  }
-}
-
-// On page load, fetch available listings based on URL parameters
-document.addEventListener("DOMContentLoaded", async () => {
-  const { checkinDate, checkoutDate } = getQueryParams();
+// Function to check available listings based on user-selected dates
+async function checkAvailableListings(checkinDate, checkoutDate) {
   const availableListings = [];
 
-  // Load calendar data (either from cache or by fetching)
-  const calendarDataArray = await loadCalendarData(checkinDate, checkoutDate);
+  // Create an array of promises for fetching calendar data
+  const fetchPromises = LISTING_IDS.map(async (listingId) => {
+    const calendarData = await fetchCalendarData(listingId, checkinDate, checkoutDate);
+    
+    // Log the fetched calendar data for debugging
+    console.log(`Calendar data for listing ${listingId}:`, calendarData);
 
-  // Filter available listings
-  calendarDataArray.forEach((calendarData, index) => {
-    if (calendarData && calendarData.result.some(entry => entry.status === "available")) {
-      availableListings.push({
-        id: LISTING_IDS[index],
-        name: `Listing ID: ${LISTING_IDS[index]}`, // Replace with actual names if available
-        status: "available"
+    // Check if the calendar data is valid
+    if (calendarData && calendarData.result) {
+      // Check if all dates in the range are available
+      const allDatesAvailable = calendarData.result.every(entry => {
+        const entryDate = new Date(entry.date);
+        const isAvailable = entry.status === "available" && 
+                           entryDate >= new Date(checkinDate) && 
+                           entryDate < new Date(checkoutDate);
+        // Log each entry's availability status for debugging
+        console.log(`Listing ${listingId} - Date: ${entry.date}, Status: ${entry.status}`);
+        return isAvailable;
       });
+
+      // If all dates are available, add the listing ID to the available listings
+      if (allDatesAvailable) {
+        availableListings.push(listingId);
+      }
     }
   });
 
-  // Display available listings
-  const listingsContainer = document.getElementById("available-listings");
-  if (availableListings.length > 0) {
-    availableListings.forEach(listing => {
-      const listingElement = document.createElement("div");
-      listingElement.className = "listing-item";
-      listingElement.innerHTML = `
-        <h5>${listing.name}</h5>
-        <p>Status: ${listing.status}</p>
-      `;
-      listingsContainer.appendChild(listingElement);
-    });
-  } else {
-    listingsContainer.innerHTML = "<p>No listings are available.</p>";
-  }
-});
+  // Wait for all fetch promises to resolve
+  await Promise.all(fetchPromises);
+
+  // Log available listings IDs to the console
+  console.log("Available Listings IDs:", availableListings);
+  return availableListings; // Return the available listings
+}
 
 // Event listener for the booking form submission
-document.getElementById("booking-form").addEventListener("submit", (event) => {
+document.getElementById("booking-form").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   // Get user input values
@@ -101,12 +77,21 @@ document.getElementById("booking-form").addEventListener("submit", (event) => {
     return;
   }
 
-  // Redirect to booking-engine.html with selected dates
-  const queryParams = new URLSearchParams({
-    location,
-    checkinDate,
-    checkoutDate,
-    guests,
-  });
-  window.location.href = `/booking-engine?${queryParams.toString()}`;
+  // Check available listings based on the provided dates
+  const availableListings = await checkAvailableListings(checkinDate, checkoutDate);
+
+  // If available listings are found, redirect with the listing IDs
+  if (availableListings.length > 0) {
+    const queryParams = new URLSearchParams({
+      location,
+      checkinDate,
+      checkoutDate,
+      guests,
+      availableListings: availableListings.join(",") // Pass the listing IDs as a comma-separated string
+    });
+
+    window.location.href = `/booking-engine?${queryParams.toString()}`;
+  } else {
+    alert("No available listings for the selected dates.");
+  }
 });

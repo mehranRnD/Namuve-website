@@ -81,5 +81,31 @@
     <script type="module" src="assets/js/script.js"></script>
     <script type="module" src="assets/js/room.js"></script>
     <script type="module" src="assets/js/booking-engine.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Get query parameters from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const availableListings = urlParams.get("availableListings");
+
+        if (availableListings) {
+          // Convert the string of listing IDs into an array
+          const listingIdsArray = availableListings.split(",");
+          console.log("Available Listings:", listingIdsArray);
+
+          // Dynamically display the listing IDs on the page
+          const listingsContainer = document.getElementById("available-listings");
+          listingsContainer.innerHTML = `
+            <h3>Available Listings for Your Dates:</h3>
+            <ul>
+              ${listingIdsArray.map(id => `<li>Listing ID: ${id}</li>`).join('')}
+            </ul>
+          `;
+        } else {
+          console.log("No available listings found.");
+          document.getElementById("available-listings").innerHTML = "<p>No available listings found for your selected dates.</p>";
+        }
+      });
+    </script>
   </body>
 </html>
