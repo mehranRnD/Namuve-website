@@ -27,12 +27,11 @@ async function fetchConversionRate() {
 // Fetch listings data from the server
 const getListingData = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/listings"); // Ensure the backend is running
+    const response = await fetch("http://localhost:3000/api/listings");
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Error fetching listings:", error);
     return [];
@@ -72,86 +71,25 @@ async function fetchCalendarData(listingId, startDate, endDate) {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Error fetching calendar data:", error);
     return null;
   }
 }
 
-// Update the checkAvailabilityStatus function to include price
-const checkAvailabilityStatus = (calendarData, selectedDate) => {
-  if (!calendarData || !calendarData.result) return null;
-
-  const dateEntry = calendarData.result.find(
-    (entry) => entry.date === selectedDate
-  );
-  if (!dateEntry) return null;
-
-  return {
-    status: dateEntry.status,
-    price: dateEntry.price,
-  };
-};
-
 // Function to blur reserved dates
 function blurReservedDates(calendarData) {
-  const reservedDates = calendarData.result
+  if (!calendarData || !calendarData.result) return [];
+  return calendarData.result
     .filter((entry) => entry.status === "reserved")
     .map((entry) => entry.date);
-  return reservedDates;
-}
-
-// Function to format dates for display
-function formatDate(dateString) {
-  const options = { year: "numeric", month: "long", day: "numeric" };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-}
-
-// Modal initialization and event listeners
-function initializeModal() {
-  const modal = new bootstrap.Modal(document.getElementById("calendar-popup"));
-
-  const confirmBookingBtn = document.getElementById("confirm-booking");
-  if (confirmBookingBtn) {
-    confirmBookingBtn.onclick = () => {
-      const checkin = document.getElementById("checkin").value;
-      const checkout = document.getElementById("checkout").value;
-      const guests = document.getElementById("guests").value;
-
-      if (!checkin || !checkout || !guests) {
-        alert("Please fill in all fields");
-        return;
-      }
-
-      const formattedCheckin = formatDate(checkin);
-      const formattedCheckout = formatDate(checkout);
-      alert(
-        `Booking Details:\nCheck-in: ${formattedCheckin}\nCheck-out: ${formattedCheckout}\nGuests: ${guests}`
-      );
-
-      // Construct the booking URL
-      const roomId = document.getElementById("calendar-popup").dataset.roomId;
-      const booknrentUrl = `https://www.booknrent.com/checkout/${roomId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
-
-      // Reset form fields
-      document.getElementById("checkin").value = "";
-      document.getElementById("checkout").value = "";
-      document.getElementById("guests").value = "1";
-      // Close the modal
-      modal.hide();
-      // Redirect to the booking URL
-      window.location.href = booknrentUrl;
-    };
-  }
 }
 
 // Load and render room data dynamically
 const loadRooms = async () => {
   const roomList = document.getElementById("room-list");
 
-  // If roomList doesn't exist, silently return without showing error
   if (!roomList) {
     return;
   }
@@ -175,7 +113,7 @@ const loadRooms = async () => {
         <div class="position-relative">
           <img class="img-fluid" src="${imageUrl}" alt="Room Image ${
       image.id
-    }" style="width: 100% !important; height: 250px !important; object-fit: cover !important;" />
+    }" style="width: 100%; height: 250px; object-fit: cover;" />
           <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #989549;">
             ${
               currentCurrency === "USD"
@@ -212,40 +150,35 @@ const loadRooms = async () => {
             roomDescriptions[index]
           }</p>
           <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
-        <a href="listings-details.html?id=${image.id}" 
-          class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
-          style="background-color: #989549; border: none;">
-          <i class="fas fa-info-circle me-2"></i>View Details
-        </a>
-        <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
-          <i class="fas fa-video me-2"></i>Virtual Tour
-        </button>
-        <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${
-          image.id
-        }">
-          <i class="fas fa-calendar-check me-2"></i>Book Now
-        </button>
-      </div>
+            <a href="listings-details.html?id=${image.id}" 
+              class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
+              style="background-color: #989549; border: none;">
+              <i class="fas fa-info-circle me-2"></i>View Details
+            </a>
+            <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
+              <i class="fas fa-video me-2"></i>Virtual Tour
+            </button>
+            <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${image.id}">
+              <i class="fas fa-calendar-check me-2"></i>Book Now
+            </button>
+          </div>
         </div>
       </div>
     `;
     roomList.appendChild(roomItem);
 
-    // Add click event listener to the Book Now button
     const bookNowBtn = roomItem.querySelector(".book-now-btn");
     bookNowBtn.addEventListener("click", async () => {
       const roomId = image.id;
       const modalElement = document.getElementById("calendar-popup");
-      modalElement.dataset.roomId = roomId; // Store roomId in the modal
+      modalElement.dataset.roomId = roomId;
       const modal = new bootstrap.Modal(modalElement);
       modal.show();
 
-      // Reset form fields when modal opens
       document.getElementById("checkin").value = "";
       document.getElementById("checkout").value = "";
       document.getElementById("guests").value = "1";
 
-      // Initialize flatpickr for date inputs
       const calendarData = await fetchCalendarData(
         roomId,
         "2024-01-01",
@@ -253,24 +186,65 @@ const loadRooms = async () => {
       );
       const reservedDates = blurReservedDates(calendarData);
 
+      // Initialize flatpickr for checkin and checkout
       flatpickr("#checkin", {
         minDate: "today",
         dateFormat: "Y-m-d",
-        disable: reservedDates, // Disable reserved dates
+        disable: reservedDates,
+        onChange: (selectedDates, dateStr) => {
+          document.getElementById("checkin").dataset.selectedDate = dateStr;
+        },
       });
 
       flatpickr("#checkout", {
         minDate: "today",
         dateFormat: "Y-m-d",
-        disable: reservedDates, // Disable reserved dates
+        disable: reservedDates,
+        onChange: (selectedDates, dateStr) => {
+          document.getElementById("checkout").dataset.selectedDate = dateStr;
+        },
       });
+
+      const confirmBookingBtn = document.getElementById("confirm-booking");
+      confirmBookingBtn.onclick = () => {
+        const checkinInput = document.getElementById("checkin");
+        const checkoutInput = document.getElementById("checkout");
+        const guestsInput = document.getElementById("guests");
+
+        const checkin = checkinInput.dataset.selectedDate;
+        const checkout = checkoutInput.dataset.selectedDate;
+        const guests = guestsInput.value;
+
+        if (!checkin) {
+          alert("Please select a check-in date.");
+          return;
+        }
+        if (!checkout) {
+          alert("Please select a check-out date.");
+          return;
+        }
+        if (!guests || parseInt(guests) < 1) {
+          alert("Please enter a valid number of guests.");
+          return;
+        }
+
+        const booknrentUrl = `https://www.booknrent.com/checkout/${roomId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
+
+        // Clear the form inputs
+        checkinInput.value = "";
+        checkoutInput.value = "";
+        guestsInput.value = "1";
+        checkinInput.dataset.selectedDate = "";
+        checkoutInput.dataset.selectedDate = "";
+
+        modal.hide();
+        window.location.href = booknrentUrl;
+      };
     });
   });
 
-  // Update room prices initially
   updateRoomPrices(listings);
 
-  // Add event listener for currency selector
   const currencySelector = document.getElementById("currencySelector");
   if (currencySelector) {
     currencySelector.addEventListener("change", (event) => {
@@ -280,7 +254,6 @@ const loadRooms = async () => {
   }
 };
 
-// Wait for DOM to be fully loaded before executing
 document.addEventListener("DOMContentLoaded", () => {
-  loadRooms(); // Will silently return if room-list doesn't exist
+  loadRooms();
 });
