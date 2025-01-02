@@ -67,8 +67,6 @@
     </div>
     <div id="preloader"></div>
 
-    
-
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         // Get query parameters from the URL
@@ -81,25 +79,29 @@
           console.log("Available Listings:", listingIdsArray);
 
           // Dynamically display the listing IDs on the page
-          const listingsContainer = document.getElementById("available-listings");
+          const listingsContainer =
+            document.getElementById("available-listings");
           listingsContainer.innerHTML = `
             <h3>Available Listings for Your Dates:</h3>
             <ul>
-              ${listingIdsArray.map(id => `<li>Listing ID: ${id}</li>`).join('')}
+              ${listingIdsArray
+                .map((id) => `<li>Listing ID: ${id}</li>`)
+                .join("")}
             </ul>
           `;
         } else {
           console.log("No available listings found.");
-          document.getElementById("available-listings").innerHTML = "<p>No available listings found for your selected dates.</p>";
+          document.getElementById("available-listings").innerHTML =
+            "<p>No available listings found for your selected dates.</p>";
         }
       });
     </script>
-      <script type="module">
-        import { createFooter } from "/assets/js/footer.js";
-        document.addEventListener("DOMContentLoaded", createFooter);
-      </script>
+    <script type="module">
+      import { createFooter } from "/assets/js/footer.js";
+      document.addEventListener("DOMContentLoaded", createFooter);
+    </script>
 
-      <!-- Vendor JS Files -->
+    <!-- Vendor JS Files -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
     <script src="assets/vendor/aos/aos.js"></script>
@@ -113,6 +115,5 @@
     <script type="module" src="assets/js/script.js"></script>
     <script type="module" src="assets/js/room.js"></script>
     <script type="module" src="assets/js/booking-engine.js"></script>
-    
   </body>
 </html>

@@ -158,7 +158,9 @@ const loadRooms = async () => {
             <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
               <i class="fas fa-video me-2"></i>Virtual Tour
             </button>
-            <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${image.id}">
+            <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${
+              image.id
+            }">
               <i class="fas fa-calendar-check me-2"></i>Book Now
             </button>
           </div>

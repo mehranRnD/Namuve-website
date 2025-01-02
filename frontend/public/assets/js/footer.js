@@ -1,5 +1,5 @@
 export function createFooter() {
-    const footerHTML = `
+  const footerHTML = `
         <footer id="footer" class="footer position-relative light-background">
             <div class="container footer-top">
                 <div class="row gy-4">
@@ -80,6 +80,6 @@ export function createFooter() {
         </footer>
     `;
 
-    // Insert the footer HTML into the body
-    document.body.insertAdjacentHTML('beforeend', footerHTML);
+  // Insert the footer HTML into the body
+  document.body.insertAdjacentHTML("beforeend", footerHTML);
 }
