@@ -923,6 +923,7 @@ section,
   height: 100%;
   object-fit: cover;
   z-index: 1;
+  padding-top: 6.4rem;
 }
 
 .hero:before {
@@ -1858,7 +1859,7 @@ section,
 
 .call-to-action p {
   color: var(--default-color);
-  font-size: 16px !important;
+  font-size: 18px !important;
 }
 
 .about-txt {
@@ -3174,7 +3175,7 @@ section,
 # About Section
 --------------------------------------------------------------*/
 .about {
-  padding-bottom: 20px;
+  background-color: #e9ecef;
 }
 
 .about .content .who-we-are {

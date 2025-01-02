@@ -55,6 +55,8 @@
 
     <!-- Main CSS File -->
     <link href="assets/css/main.css" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/templatemo-woox-travel.css">
+    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
   </head>
 
   <body class="index-page">
@@ -67,6 +69,10 @@
     <main class="main">
       <!-- Hero Section -->
       <section id="hero" class="hero section">
+        <!-- engine -->
+         
+        <!-- engine -->
+
         <!--  Engine Overlay -->
         <div class="booking-engine-overlay animate__animated animate__fadeInUp">
           <div class="container">
@@ -160,7 +166,7 @@
               </div>
 
               <!-- Second carousel item -->
-              <div class="carousel-item">
+              <!-- <div class="carousel-item">
                 <img
                   class="w-100"
                   src="./assets/img/bg-main/bg-2.jpg"
@@ -184,10 +190,10 @@
                     comfort and hospitality to make every stay truly special.
                   </p>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Third carousel item -->
-              <div class="carousel-item">
+              <!-- <div class="carousel-item">
                 <img
                   class="w-100"
                   src="./assets/img/bg-main/bg-3.jpg"
@@ -212,7 +218,7 @@
                   </p>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!-- Carousel controls -->
             <button
@@ -314,36 +320,71 @@
       </div>
 
       <!-- Modal for Booking Details -->
-      <!-- Modal for Booking Details -->
-<div class="modal fade" id="calendar-popup" tabindex="-1" aria-labelledby="calendar-popupLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="calendar-popupLabel">Booking Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="checkin" class="form-label">Check-in Date</label>
-          <input type="text" class="form-control" id="checkin" placeholder="Select check-in date" />
+      <div
+        class="modal fade"
+        id="calendar-popup"
+        tabindex="-1"
+        aria-labelledby="calendar-popupLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="calendar-popupLabel">
+                Booking Details
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="checkin" class="form-label">Check-in Date</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="checkin"
+                  placeholder="Select check-in date"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="checkout" class="form-label">Check-out Date</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="checkout"
+                  placeholder="Select check-out date"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="guests" class="form-label">Number of Guests</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="guests"
+                  value="1"
+                  min="1"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" class="btn btn-dark" id="confirm-booking">
+                Confirm Booking
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="checkout" class="form-label">Check-out Date</label>
-          <input type="text" class="form-control" id="checkout" placeholder="Select check-out date" />
-        </div>
-        <div class="mb-3">
-          <label for="guests" class="form-label">Number of Guests</label>
-          <input type="number" class="form-control" id="guests" value="1" min="1" />
-        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-dark" id="confirm-booking">Confirm Booking</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- /Modal for Booking Details -->
       <!-- /Modal for Booking Details -->
 
       <!-- About Section -->
