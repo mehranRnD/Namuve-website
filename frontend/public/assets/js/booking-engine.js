@@ -1,5 +1,3 @@
-
-
 const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
 const LISTING_IDS = [
   288675, 288682, 288690, 323229, 323261, 336255, 307143, 306032, 288691,
@@ -24,33 +22,38 @@ async function fetchCalendarData(listingId, startDate, endDate) {
   }
 }
 
+
 // Function to check available listings based on user-selected dates
 async function checkAvailableListings(checkinDate, checkoutDate) {
   const availableListings = [];
 
   // Create an array of promises for fetching calendar data
   const fetchPromises = LISTING_IDS.map(async (listingId) => {
-    const calendarData = await fetchCalendarData(listingId, checkinDate, checkoutDate);
-    
+    const calendarData = await fetchCalendarData(
+      listingId,
+      checkinDate,
+      checkoutDate
+    );
+
     // Log the fetched calendar data for debugging
-    console.log(`Calendar data for listing ${listingId}:`, calendarData);
+    // console.log(`Calendar data for listing ${listingId}:`, calendarData);
 
     // Check if the calendar data is valid
     if (calendarData && calendarData.result) {
-      // Check if all dates in the range are available
-      const allDatesAvailable = calendarData.result.every(entry => {
-        const entryDate = new Date(entry.date);
-        const isAvailable = entry.status === "available" && 
-                           entryDate >= new Date(checkinDate) && 
-                           entryDate < new Date(checkoutDate);
-        // Log each entry's availability status for debugging
-        console.log(`Listing ${listingId} - Date: ${entry.date}, Status: ${entry.status}`);
-        return isAvailable;
+      // Check if any date in the range is available
+      const isAvailable = calendarData.result.some((entry) => {
+        return (
+          entry.status === "available" &&
+          new Date(entry.date) >= new Date(checkinDate) &&
+          new Date(entry.date) < new Date(checkoutDate)
+        );
       });
 
-      // If all dates are available, add the listing ID to the available listings
-      if (allDatesAvailable) {
+      // If any date is available, add the listing ID to the available listings
+      if (isAvailable) {
         availableListings.push(listingId);
+        // Alert the user with the listing ID
+        console.log(`This listing is available and ID is ${listingId}`);
       }
     }
   });
@@ -60,40 +63,51 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
 
   // Log available listings IDs to the console
   console.log("Available Listings IDs:", availableListings);
+
+  // Show alert if no listings are available
+  if (availableListings.length === 0) {
+    alert("No available listings for the selected dates.");
+  }
+
   return availableListings; // Return the available listings
 }
 
 // Event listener for the booking form submission
-document.getElementById("booking-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
+document
+  .getElementById("booking-form")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  // Get user input values
-  const location = document.getElementById("location").value;
-  const checkinDate = document.getElementById("checkin").value;
-  const checkoutDate = document.getElementById("checkout").value;
-  const guests = document.getElementById("guests").value;
+    // Get user input values
+    const location = document.getElementById("location").value;
+    const checkinDate = document.getElementById("checkin").value;
+    const checkoutDate = document.getElementById("checkout").value;
+    const guests = document.getElementById("guests").value;
 
-  // Validate inputs
-  if (!checkinDate || !checkoutDate || !guests) {
-    alert("Please fill in all the required fields.");
-    return;
-  }
+    // Validate inputs
+    if (!checkinDate || !checkoutDate || !guests) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
 
-  // Check available listings based on the provided dates
-  const availableListings = await checkAvailableListings(checkinDate, checkoutDate);
-
-  // If available listings are found, redirect with the listing IDs
-  if (availableListings.length > 0) {
-    const queryParams = new URLSearchParams({
-      location,
+    // Check available listings based on the provided dates
+    const availableListings = await checkAvailableListings(
       checkinDate,
-      checkoutDate,
-      guests,
-      availableListings: availableListings.join(",") // Pass the listing IDs as a comma-separated string
-    });
+      checkoutDate
+    );
 
-    window.location.href = `/booking-engine?${queryParams.toString()}`;
-  } else {
-    alert("No available listings for the selected dates.");
-  }
-});
+    // If available listings are found, redirect with the listing IDs
+    if (availableListings.length > 0) {
+      const queryParams = new URLSearchParams({
+        location,
+        checkinDate,
+        checkoutDate,
+        guests,
+        availableListings: availableListings.join(","), // Pass the listing IDs as a comma-separated string
+      });
+
+      window.location.href = `/booking-engine?${queryParams.toString()}`;
+    } else {
+      alert("No available listings for the selected dates.");
+    }
+  });
