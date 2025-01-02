@@ -27,26 +27,26 @@ const LISTINGS_DATA = {
 
 // Add guest capacity mapping
 const ROOM_DETAILS = {
-    "Studio": {
-        guests: "1-2",
-        beds: "1"
-    },
-    "1BR": {
-        guests: "1-3",
-        beds: "1"
-    },
-    "2BR": {
-        guests: "1-4",
-        beds: "2"
-    },
-    "2BR Premium": {
-        guests: "1-4",
-        beds: "2"
-    },
-    "3BR": {
-        guests: "1-6",
-        beds: "3"
-    }
+  Studio: {
+    guests: "1-2",
+    beds: "1",
+  },
+  "1BR": {
+    guests: "1-3",
+    beds: "1",
+  },
+  "2BR": {
+    guests: "1-4",
+    beds: "2",
+  },
+  "2BR Premium": {
+    guests: "1-4",
+    beds: "2",
+  },
+  "3BR": {
+    guests: "1-6",
+    beds: "3",
+  },
 };
 
 // Helper function to get room type and base price by listing ID
@@ -58,15 +58,15 @@ function getListingInfo(listingId) {
         roomType: category,
         basePrice: BASE_PRICES[category],
         guests: ROOM_DETAILS[category].guests,
-        beds: ROOM_DETAILS[category].beds
+        beds: ROOM_DETAILS[category].beds,
       };
     }
   }
-  return { 
-    roomType: 'Studio', 
+  return {
+    roomType: "Studio",
     basePrice: 40,
     guests: "1-2",
-    beds: "1"
+    beds: "1",
   }; // Default fallback
 }
 

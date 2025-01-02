@@ -1,5 +1,5 @@
 export function createNavbar() {
-    const headerHTML = `
+  const headerHTML = `
         <header id="header" class="header d-flex align-items-center fixed-top">
             <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
                 <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
@@ -50,25 +50,25 @@ export function createNavbar() {
         </header>
     `;
 
-    // Create a function to insert the navbar
-    document.body.insertAdjacentHTML('afterbegin', headerHTML);
+  // Create a function to insert the navbar
+  document.body.insertAdjacentHTML("afterbegin", headerHTML);
 
-    // Set active nav item based on the current page
-    const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll('#navmenu a');
-    
-    navLinks.forEach(link => {
-        // If the link matches the current path, mark it as active
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('active');
-            // Check if the link is inside a dropdown and set the dropdown as active
-            const dropdown = link.closest('.dropdown');
-            if (dropdown) {
-                const dropdownLink = dropdown.querySelector('a');
-                dropdownLink.classList.add('active');
-            }
-        } else {
-            link.classList.remove('active');
-        }
-    });
+  // Set active nav item based on the current page
+  const currentPath = window.location.pathname;
+  const navLinks = document.querySelectorAll("#navmenu a");
+
+  navLinks.forEach((link) => {
+    // If the link matches the current path, mark it as active
+    if (link.getAttribute("href") === currentPath) {
+      link.classList.add("active");
+      // Check if the link is inside a dropdown and set the dropdown as active
+      const dropdown = link.closest(".dropdown");
+      if (dropdown) {
+        const dropdownLink = dropdown.querySelector("a");
+        dropdownLink.classList.add("active");
+      }
+    } else {
+      link.classList.remove("active");
+    }
+  });
 }
