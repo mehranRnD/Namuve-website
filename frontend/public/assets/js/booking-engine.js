@@ -1,5 +1,3 @@
-
-
 const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
 const LISTING_IDS = [
   288675, 288682, 288690, 323229, 323261, 336255, 307143, 306032, 288691,
