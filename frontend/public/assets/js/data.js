@@ -100,3 +100,64 @@ export const roomDescriptions = [
   "Experience our premium room with city views and contemporary styling.",
   "Rest in our signature suite with upgraded amenities and elegant atmosphere.",
 ];
+
+export const LISTINGS = [
+  { id: 288675, price: 40 }, { id: 288682, price: 40 }, { id: 288690, price: 40 },
+  { id: 323229, price: 40 }, { id: 323261, price: 40 }, { id: 336255, price: 40 }, // Studio
+  { id: 307143, price: 48 }, { id: 306032, price: 48 }, { id: 288691, price: 48 },
+  { id: 305069, price: 48 }, { id: 288681, price: 48 }, { id: 288726, price: 48 },
+  { id: 288679, price: 48 }, { id: 288723, price: 48 }, { id: 288678, price: 48 },
+  { id: 323258, price: 48 }, // 1BR
+  { id: 288677, price: 57 }, { id: 288684, price: 57 }, { id: 288687, price: 57 },
+  { id: 288977, price: 57 }, { id: 288689, price: 57 }, { id: 288685, price: 57 },
+  { id: 288683, price: 57 }, { id: 306543, price: 57 }, { id: 288724, price: 57 }, // 2BR
+  { id: 305055, price: 78 }, { id: 309909, price: 78 }, { id: 323227, price: 78 },
+  { id: 288688, price: 78 }, // 2BR Premium
+  { id: 288686, price: 65 }, { id: 305327, price: 65 }, { id: 288676, price: 65 }, // 3BR
+];
+
+// Add the same pricing and listings data structure
+export const BASE_PRICES = {
+  Studio: 40,
+  "1BR": 48,
+  "2BR": 57,
+  "2BR Premium": 78,
+  "3BR": 65,
+};
+
+export const LISTINGS_DATA = {
+  Studio: [288675, 288682, 288690, 323229, 323261, 336255],
+  "1BR": [
+    307143, 306032, 288691, 305069, 288681, 288726, 288679, 288723, 288678,
+    323258,
+  ],
+  "2BR": [
+    288677, 288684, 288687, 288977, 288689, 288685, 288683, 306543, 288724,
+  ],
+  "2BR Premium": [305055, 309909, 323227, 288688],
+  "3BR": [288686, 305327, 288676],
+};
+
+// Add guest capacity mapping
+export const ROOM_DETAILS = {
+  Studio: {
+    guests: "1-2",
+    beds: "1",
+  },
+  "1BR": {
+    guests: "1-3",
+    beds: "1",
+  },
+  "2BR": {
+    guests: "1-4",
+    beds: "2",
+  },
+  "2BR Premium": {
+    guests: "1-4",
+    beds: "2",
+  },
+  "3BR": {
+    guests: "1-6",
+    beds: "3",
+  },
+};

@@ -1,30 +1,7 @@
-import { idToImageUrlMap, roomDescriptions } from "./data.js";
+import { idToImageUrlMap, roomDescriptions, BASE_PRICES, LISTINGS_DATA } from "./data.js";
 
 let usdToPkrRate = 277.66; // Default rate
 let currentCurrency = "USD"; // Default currency
-
-// Add base prices mapping near the top of the file
-const BASE_PRICES = {
-  Studio: 40,
-  "1BR": 48,
-  "2BR": 57,
-  "2BR Premium": 78,
-  "3BR": 65,
-};
-
-// Replace the images array with this structured data
-const LISTINGS_DATA = {
-  Studio: [288675, 288682, 288690, 323229, 323261, 336255],
-  "1BR": [
-    307143, 306032, 288691, 305069, 288681, 288726, 288679, 288723, 288678,
-    323258,
-  ],
-  "2BR": [
-    288677, 288684, 288687, 288977, 288689, 288685, 288683, 306543, 288724,
-  ],
-  "2BR Premium": [305055, 309909, 323227, 288688],
-  "3BR": [288686, 305327, 288676],
-};
 
 // Helper function to get all listing IDs
 const getAllListingIds = () => Object.values(LISTINGS_DATA).flat();
@@ -33,7 +10,7 @@ const getAllListingIds = () => Object.values(LISTINGS_DATA).flat();
 async function fetchConversionRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/dd469c4556431d9b5576d5f2/latest/USD"
+      "https://v6.exchangerate-api.com/v6/f1672b88bf550c2ce88410bc/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;

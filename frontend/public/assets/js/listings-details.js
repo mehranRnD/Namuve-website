@@ -1,53 +1,7 @@
-import { idToImageUrlMap } from "./data.js";
+import { idToImageUrlMap, BASE_PRICES, LISTINGS_DATA, ROOM_DETAILS } from "./data.js";
 
 let currentListing = null;
 let usdToPkrRate = 277.66; // Default rate
-
-// Add the same pricing and listings data structure
-const BASE_PRICES = {
-  Studio: 40,
-  "1BR": 48,
-  "2BR": 57,
-  "2BR Premium": 78,
-  "3BR": 65,
-};
-
-const LISTINGS_DATA = {
-  Studio: [288675, 288682, 288690, 323229, 323261, 336255],
-  "1BR": [
-    307143, 306032, 288691, 305069, 288681, 288726, 288679, 288723, 288678,
-    323258,
-  ],
-  "2BR": [
-    288677, 288684, 288687, 288977, 288689, 288685, 288683, 306543, 288724,
-  ],
-  "2BR Premium": [305055, 309909, 323227, 288688],
-  "3BR": [288686, 305327, 288676],
-};
-
-// Add guest capacity mapping
-const ROOM_DETAILS = {
-  Studio: {
-    guests: "1-2",
-    beds: "1",
-  },
-  "1BR": {
-    guests: "1-3",
-    beds: "1",
-  },
-  "2BR": {
-    guests: "1-4",
-    beds: "2",
-  },
-  "2BR Premium": {
-    guests: "1-4",
-    beds: "2",
-  },
-  "3BR": {
-    guests: "1-6",
-    beds: "3",
-  },
-};
 
 // Helper function to get room type and base price by listing ID
 function getListingInfo(listingId) {

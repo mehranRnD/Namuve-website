@@ -1,12 +1,15 @@
-import { idToImageUrlMap } from "./data.js"; // Import the image URL map
+import { idToImageUrlMap, LISTINGS } from "./data.js"; // Import the image URL map
 
 const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
-const LISTING_IDS = [
-  288675, 288682, 288690, 323229, 323261, 336255, 307143, 306032, 288691,
-  305069, 288681, 288726, 288679, 288723, 288678, 323258, 288677, 288684,
-  288687, 288977, 288689, 288685, 288683, 306543, 288724, 305055, 309909,
-  323227, 288688, 288686, 305327, 288676,
-];
+
+// Extract the listing IDs from the array
+const LISTING_IDS = LISTINGS.map((listing) => listing.id);
+
+// Function to get the price for a specific listing ID
+const getPriceById = (listingId) => {
+  const listing = LISTINGS.find((l) => l.id === listingId);
+  return listing ? listing.price : "N/A";
+};
 
 // Function to fetch calendar data for a specific listing
 async function fetchCalendarData(listingId, startDate, endDate) {
@@ -24,11 +27,29 @@ async function fetchCalendarData(listingId, startDate, endDate) {
   }
 }
 
+// Function to fetch listing details by ID
+async function fetchListingDetails(listingId) {
+  try {
+    const response = await fetch(`${BASE_URL}/${listingId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const listing = await response.json();
+
+    // Add hardcoded price to the listing object
+    listing.price = getPriceById(listingId); // Assign the price based on the ID
+
+    return listing;
+  } catch (error) {
+    console.error("Error fetching listing details:", error);
+    return null;
+  }
+}
+
 // Function to check available listings based on user-selected dates
 async function checkAvailableListings(checkinDate, checkoutDate) {
   const availableListings = [];
 
-  // Create an array of promises for fetching calendar data
   const fetchPromises = LISTING_IDS.map(async (listingId) => {
     const calendarData = await fetchCalendarData(
       listingId,
@@ -36,9 +57,7 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
       checkoutDate
     );
 
-    // Check if the calendar data is valid
     if (calendarData && calendarData.result) {
-      // Check if any date in the range is available
       const isAvailable = calendarData.result.some((entry) => {
         return (
           entry.status === "available" &&
@@ -47,7 +66,6 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
         );
       });
 
-      // If any date is available, add the listing ID to the available listings
       if (isAvailable) {
         availableListings.push(listingId);
         console.log(`This listing is available and ID is ${listingId}`);
@@ -55,7 +73,6 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
     }
   });
 
-  // Wait for all fetch promises to resolve
   await Promise.all(fetchPromises);
 
   console.log("Available Listings IDs:", availableListings);
@@ -64,12 +81,13 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
     alert("No available listings for the selected dates.");
   }
 
-  return availableListings; // Return the available listings
+  return availableListings;
 }
 
 // Event listener for the booking form submission
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const bookingForm = document.getElementById("booking-form");
+
   if (bookingForm) {
     bookingForm.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -98,78 +116,91 @@ document.addEventListener("DOMContentLoaded", () => {
           availableListings: availableListings.join(","),
         });
 
-        // Redirect to the same page with query parameters
         window.location.href = `/booking-engine?${queryParams.toString()}`;
       } else {
         alert("No available listings for the selected dates.");
       }
     });
-  } else {
-    console.error("Booking form not found.");
   }
 
-  // After redirection, display images of available listings
   const urlParams = new URLSearchParams(window.location.search);
   const availableListings = urlParams.get("availableListings");
 
   if (availableListings) {
-    const listingIdsArray = availableListings.split(",").map(Number); // Convert to an array of numbers
+    const listingIdsArray = availableListings.split(",").map(Number);
     const listingsContainer = document.getElementById("available-listings");
 
     if (listingsContainer) {
+      listingsContainer.innerHTML = "<p>Loading available listings...</p>";
+
+      const listingDetailsPromises = listingIdsArray.map(fetchListingDetails);
+      const listingDetails = await Promise.all(listingDetailsPromises);
+
       listingsContainer.innerHTML = `
         <div class="row">
           <div class="col-lg-8">
             <div class="items">
               <div class="row">
-                ${listingIdsArray
-                  .map((id) => {
-                    const imageUrl = idToImageUrlMap[id];
-                    return imageUrl ? `
-                      <div class="col-lg-12 mb-4">
-                        <div class="item" style="padding: 15px;">
-                          <div class="row">
-                            <div class="col-lg-4 col-sm-5">
-                              <div class="image">
-                                <img src="${imageUrl}" alt="Listing ID: ${id}" />
+                ${listingDetails
+                  .map((listing) => {
+                    if (listing) {
+                      const imageUrl = idToImageUrlMap[listing.id];
+                      return `
+                        <div class="col-lg-12 mb-4">
+                          <div class="item" style="padding: 15px;">
+                            <div class="row">
+                              <div class="col-lg-4 col-sm-5">
+                                <div class="image">
+                                  <img src="${imageUrl}" alt="Listing Name: ${
+                        listing.name
+                      }" />
+                                </div>
                               </div>
-                            </div>
-                            <div class="col-lg-8 col-sm-7">
-                              <div class="right-content">
-                                <h4>Listing ID: ${id}</h4>
-                                <span>Available</span>
-                                
-                                <p>
-                                  This listing is available for your selected dates.
-                                </p>
-                                <ul class="info">
-                                  <li><i class="fa fa-user"></i> Guests: 4</li>
-                                  <li><i class="fa fa-globe"></i> Location: TBD</li>
-                                  <li><i class="fa fa-home"></i> Price: TBD</li>
-                                </ul>
+                              <div class="col-lg-8 col-sm-7">
+                                <div class="right-content">
+                                  <h4>${listing.name}</h4>
+                                  <span>Available</span>
+                                  
+                                  <p>
+                                    This listing is available for your selected dates.
+                                  </p>
+                                  <ul class="info">
+                                    <li><i class="fa fa-user"></i> Guests: ${
+                                      listing.guests || "N/A"
+                                    }</li>
+                                    <li><i class="fa fa-globe"></i> Location: ${
+                                      listing.location || "TBD"
+                                    }</li>
+                                    <li><i class="fa fa-home"></i> Price: Starting from $${
+                                      listing.price || "TBD"
+                                    }</li>
+                                  </ul>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ` : '';
+                      `;
+                    }
+                    return "";
                   })
                   .join("")}
               </div>
             </div>
           </div>
           <div class="col-lg-4">
-            <div class="side-bar-map">
+            <div class="side-bar-map sticky-sidebar">
               <div class="row">
                 <div class="col-lg-12">
                   <div id="map">
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12469.776493332698!2d-80.14036379941481!3d25.907788681148624!2m3!1f357.26927939317244!2f20.870722720054623!3f0!3m2!1i1024!2i768!4f35!3m3!1m2!1s0x88d9add4b4ac788f%3A0xe77469d09480fcdb!2sSunny%20Isles%20Beach!5e1!3m2!1sen!2sth!4v1642869952544!5m2!1sen!2sth"
-                      width="100%"
-                      height="550px"
-                      frameborder="0"
-                      style="border: 0; border-radius: 23px"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.8439540732948!2d74.3334951754502!3d31.500972774222813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391904421ce9dde7%3A0x24a794a453d56e5a!2sThe%20Opus%20Luxury%20Residences!5e0!3m2!1sen!2s!4v1733138745085!5m2!1sen!2s"
+                      width="600"
+                      height="450"
+                      style="border: 0"
                       allowfullscreen=""
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade"
                     ></iframe>
                   </div>
                 </div>
