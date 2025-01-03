@@ -55,11 +55,22 @@
 
     <!-- Main CSS File -->
     <link href="assets/css/main.css" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/templatemo-woox-travel.css">
-    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="assets/css/templatemo-woox-travel.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@7/swiper-bundle.min.css"
+    />
   </head>
 
   <body class="index-page">
+    <!-- Maintenance Alert -->
+    <div id="maintenance-alert" role="alert">
+      🚧 The website is currently under maintenance to enhance your experience. 
+      For the best view, please use a laptop or PC. Thank you for your understanding and support! 
+      – RnD Team BooknRent/Namuve
+    </div>
+    
+
     <!-- Navbar will be inserted here -->
     <script type="module">
       import { createNavbar } from "/assets/js/navbar.js";
@@ -69,7 +80,6 @@
     <main class="main">
       <!-- Hero Section -->
       <section id="hero" class="hero section">
-
         <!--  Engine Overlay -->
         <div class="booking-engine-overlay animate__animated animate__fadeInUp">
           <div class="container">
@@ -119,12 +129,18 @@
               </div>
               <div>
                 <label for="search">Search for availability</label>
-                <button type="submit" class="btn btn-primary" id="search-button">Search</button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  id="search-button"
+                >
+                  Search
+                </button>
               </div>
             </form>
           </div>
         </div>
-        
+
         <!-- /Booking Engine Overlay -->
 
         <div class="container-fluid p-0 mb-0 position-relative">
@@ -149,7 +165,10 @@
                     class="text-dark fw-bold display-3 mb-3 animate__animated animate__fadeInDown"
                     style="animation-delay: 0.5s"
                   >
-                    Welcome to <span class="text-uppercase" style="color: #989549">Namuve</span>
+                    Welcome to
+                    <span class="text-uppercase" style="color: #989549"
+                      >Namuve</span
+                    >
                   </h1>
                   <p
                     class="text-dark lead text-center w-75 mx-auto animate__animated animate__fadeInUp"
@@ -176,7 +195,10 @@
                     class="text-dark fw-bold display-3 mb-3 animate__animated animate__fadeInDown"
                     style="animation-delay: 0.5s"
                   >
-                    Your Home Away From <span class="text-uppercase" style="color: #989549">Home</span>
+                    Your Home Away From
+                    <span class="text-uppercase" style="color: #989549"
+                      >Home</span
+                    >
                   </h1>
                   <p
                     class="text-dark lead text-center w-75 mx-auto animate__animated animate__fadeInUp"
@@ -203,7 +225,10 @@
                     class="text-dark fw-bold display-3 mb-3 animate__animated animate__fadeInDown"
                     style="animation-delay: 0.5s"
                   >
-                    Unforgettable <span class="text-uppercase" style="color: #989549">Stays</span> 
+                    Unforgettable
+                    <span class="text-uppercase" style="color: #989549"
+                      >Stays</span
+                    >
                   </h1>
                   <p
                     class="text-dark lead text-center w-75 mx-auto animate__animated animate__fadeInUp"
@@ -456,7 +481,10 @@
         id="call-to-action"
         class="call-to-action section dark-background"
       >
-        <img src="https://media.istockphoto.com/id/970204400/photo/interior-living-room-3d-illustration.jpg?s=612x612&w=0&k=20&c=2sebCXx6xRgV7CPZOPQW-wAABWSsgU3nN8vB5CWSiRs=" alt="" />
+        <img
+          src="https://media.istockphoto.com/id/970204400/photo/interior-living-room-3d-illustration.jpg?s=612x612&w=0&k=20&c=2sebCXx6xRgV7CPZOPQW-wAABWSsgU3nN8vB5CWSiRs="
+          alt=""
+        />
         <div class="container">
           <div
             class="row justify-content-center"
@@ -465,7 +493,12 @@
           >
             <div class="col-xl-12 cf-div text-dark p-5">
               <div class="text-left text-body">
-                <h2 class="text-body revenue-h mb-5">Estimate <span class="text-bold" style="color: #989549">Your Revenue</span></h2>
+                <h2 class="text-body revenue-h mb-5">
+                  Estimate
+                  <span class="text-bold" style="color: #989549"
+                    >Your Revenue</span
+                  >
+                </h2>
                 <form
                   id="revenue-estimator"
                   onsubmit="return calculatePrice(event)"
@@ -524,7 +557,6 @@
         </div>
       </section>
       <!-- Estimate Revenue Calculator End -->
-
 
       <!-- Services Section -->
       <section id="services" class="services section">
@@ -831,139 +863,202 @@
       </section>
       <!-- /Features Section -->
 
-       <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials section light-background">
+      <!-- Testimonials Section -->
+      <section id="testimonials" class="testimonials section light-background">
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+          <h2>
+            Hear From Our
+            <span class="text-uppercase" style="color: #989549">Guest</span>
+          </h2>
+          <p>
+            Necessitatibus eius consequatur ex aliquid fuga eum quidem sint
+            consectetur velit
+          </p>
+        </div>
+        <!-- End Section Title -->
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Hear From Our <span class="text-uppercase" style="color: #989549">Guest</span></h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-      </div><!-- End Section Title -->
-
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="swiper init-swiper">
-          <script type="application/json" class="swiper-config">
-            {
-              "loop": true,
-              "speed": 600,
-              "autoplay": {
-                "delay": 5000
-              },
-              "slidesPerView": "auto",
-              "pagination": {
-                "el": ".swiper-pagination",
-                "type": "bullets",
-                "clickable": true
-              },
-              "breakpoints": {
-                "320": {
-                  "slidesPerView": 1,
-                  "spaceBetween": 40
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper init-swiper">
+            <script type="application/json" class="swiper-config">
+              {
+                "loop": true,
+                "speed": 600,
+                "autoplay": {
+                  "delay": 5000
                 },
-                "1200": {
-                  "slidesPerView": 3,
-                  "spaceBetween": 1
+                "slidesPerView": "auto",
+                "pagination": {
+                  "el": ".swiper-pagination",
+                  "type": "bullets",
+                  "clickable": true
+                },
+                "breakpoints": {
+                  "320": {
+                    "slidesPerView": 1,
+                    "spaceBetween": 40
+                  },
+                  "1200": {
+                    "slidesPerView": 3,
+                    "spaceBetween": 1
+                  }
                 }
               }
-            }
-          </script>
-          <div class="swiper-wrapper">
-
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <div class="stars">
-                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                </div>
-                <p>
-                  Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-                </p>
-                <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-                  <h3>Saul Goodman</h3>
-                  <h4>Ceo &amp; Founder</h4>
-                </div>
-              </div>
-            </div><!-- End testimonial item -->
-
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <div class="stars">
-                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                </div>
-                <p>
-                  Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
-                </p>
-                <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-                  <h3>Sara Wilsson</h3>
-                  <h4>Designer</h4>
+            </script>
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <div class="stars">
+                    <i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i>
+                  </div>
+                  <p>
+                    Proin iaculis purus consequat sem cure digni ssim donec
+                    porttitora entum suscipit rhoncus. Accusantium quam,
+                    ultricies eget id, aliquam eget nibh et. Maecen aliquam,
+                    risus at semper.
+                  </p>
+                  <div class="profile mt-auto">
+                    <img
+                      src="assets/img/testimonials/testimonials-1.jpg"
+                      class="testimonial-img"
+                      alt=""
+                    />
+                    <h3>Saul Goodman</h3>
+                    <h4>Ceo &amp; Founder</h4>
+                  </div>
                 </div>
               </div>
-            </div><!-- End testimonial item -->
+              <!-- End testimonial item -->
 
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <div class="stars">
-                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                </div>
-                <p>
-                  Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
-                </p>
-                <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-                  <h3>Jena Karlis</h3>
-                  <h4>Store Owner</h4>
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <div class="stars">
+                    <i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i>
+                  </div>
+                  <p>
+                    Export tempor illum tamen malis malis eram quae irure esse
+                    labore quem cillum quid cillum eram malis quorum velit fore
+                    eram velit sunt aliqua noster fugiat irure amet legam anim
+                    culpa.
+                  </p>
+                  <div class="profile mt-auto">
+                    <img
+                      src="assets/img/testimonials/testimonials-2.jpg"
+                      class="testimonial-img"
+                      alt=""
+                    />
+                    <h3>Sara Wilsson</h3>
+                    <h4>Designer</h4>
+                  </div>
                 </div>
               </div>
-            </div><!-- End testimonial item -->
+              <!-- End testimonial item -->
 
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <div class="stars">
-                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                </div>
-                <p>
-                  Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
-                </p>
-                <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-                  <h3>Matt Brandon</h3>
-                  <h4>Freelancer</h4>
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <div class="stars">
+                    <i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i>
+                  </div>
+                  <p>
+                    Enim nisi quem export duis labore cillum quae magna enim
+                    sint quorum nulla quem veniam duis minim tempor labore quem
+                    eram duis noster aute amet eram fore quis sint minim.
+                  </p>
+                  <div class="profile mt-auto">
+                    <img
+                      src="assets/img/testimonials/testimonials-3.jpg"
+                      class="testimonial-img"
+                      alt=""
+                    />
+                    <h3>Jena Karlis</h3>
+                    <h4>Store Owner</h4>
+                  </div>
                 </div>
               </div>
-            </div><!-- End testimonial item -->
+              <!-- End testimonial item -->
 
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <div class="stars">
-                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                </div>
-                <p>
-                  Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
-                </p>
-                <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
-                  <h3>John Larson</h3>
-                  <h4>Entrepreneur</h4>
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <div class="stars">
+                    <i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i>
+                  </div>
+                  <p>
+                    Fugiat enim eram quae cillum dolore dolor amet nulla culpa
+                    multos export minim fugiat minim velit minim dolor enim duis
+                    veniam ipsum anim magna sunt elit fore quem dolore labore
+                    illum veniam.
+                  </p>
+                  <div class="profile mt-auto">
+                    <img
+                      src="assets/img/testimonials/testimonials-4.jpg"
+                      class="testimonial-img"
+                      alt=""
+                    />
+                    <h3>Matt Brandon</h3>
+                    <h4>Freelancer</h4>
+                  </div>
                 </div>
               </div>
-            </div><!-- End testimonial item -->
+              <!-- End testimonial item -->
 
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <div class="stars">
+                    <i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i
+                    ><i class="bi bi-star-fill"></i>
+                  </div>
+                  <p>
+                    Quis quorum aliqua sint quem legam fore sunt eram irure
+                    aliqua veniam tempor noster veniam enim culpa labore duis
+                    sunt culpa nulla illum cillum fugiat legam esse veniam culpa
+                    fore nisi cillum quid.
+                  </p>
+                  <div class="profile mt-auto">
+                    <img
+                      src="assets/img/testimonials/testimonials-5.jpg"
+                      class="testimonial-img"
+                      alt=""
+                    />
+                    <h3>John Larson</h3>
+                    <h4>Entrepreneur</h4>
+                  </div>
+                </div>
+              </div>
+              <!-- End testimonial item -->
+            </div>
+            <div class="swiper-pagination"></div>
           </div>
-          <div class="swiper-pagination"></div>
         </div>
+      </section>
+      <!-- /Testimonials Section -->
 
-      </div>
-
-    </section><!-- /Testimonials Section -->
-
-  
       <!-- Recent Posts Section -->
       <section id="recent-posts" class="recent-posts section">
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-          <h2>Recent <span class="text-uppercase" style="color: #989549">Posts</span></h2>
+          <h2>
+            Recent
+            <span class="text-uppercase" style="color: #989549">Posts</span>
+          </h2>
           <p>
             Necessitatibus eius consequatur ex aliquid fuga eum quidem sint
             consectetur velit

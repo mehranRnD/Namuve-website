@@ -31,7 +31,7 @@ class HostawayListingManager {
 
     // Test endpoint to check token
     this.app.get('/test-token', (req, res) => {
-        // console.log('Current Auth Token:', this.authToken);
+        console.log('Current Auth Token:', this.authToken);
         res.json({ 
             message: 'Check console for token details',
             token: this.authToken 
@@ -106,7 +106,7 @@ class HostawayListingManager {
 
   async getAccessToken() {
     try {
-        console.log('Requesting new access token...');
+        // console.log('Requesting new access token...');
         const response = await axios.post('https://api.hostaway.com/v1/accessTokens', 
             new URLSearchParams({
                 grant_type: 'client_credentials',
@@ -124,9 +124,9 @@ class HostawayListingManager {
 
         if (response.data && response.data.access_token) {
             this.authToken = `Bearer ${response.data.access_token}`;
-            // console.log('New access token:', this.authToken);
+            console.log('New access token:', this.authToken);
 
-            console.log('Congratulations Mehran, Token obtained successfully!');
+            console.log('Congratulations Developers, Token obtained successfully!');
 
             return this.authToken;
         } else {
@@ -146,9 +146,7 @@ class HostawayListingManager {
 
   async initializeToken() {
     try {
-        // console.log('Initializing token...');
         await this.getAccessToken();
-        // console.log('Token initialization successful');
         
         // Refresh token every 23 hours
         setInterval(async () => {
