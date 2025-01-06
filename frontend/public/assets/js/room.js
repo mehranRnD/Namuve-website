@@ -1,4 +1,4 @@
-import { idToImageUrlMap } from "./data.js";
+import { idToImageUrlMap, LISTINGS } from "./data.js";
 
 let usdToPkrRate = 1;
 let currentCurrency = "USD"; // Default currency
@@ -42,14 +42,14 @@ const getListingData = async () => {
 const images = [{ id: "323227" }, { id: "288691" }, { id: "288678" }];
 
 // Function to update room prices based on selected currency
-function updateRoomPrices(listings) {
+function updateRoomPrices() {
   const roomItems = document.querySelectorAll(".room-item");
   roomItems.forEach((roomItem, index) => {
-    const listing = listings.find(
-      (listing) => listing.id.toString() === images[index].id.toString()
-    );
+    const roomId = images[index].id; // Get the room ID
+    const listing = LISTINGS.find((listing) => listing.id.toString() === roomId); // Find the listing by ID
     const priceElement = roomItem.querySelector(".position-absolute");
-    if (listing && listing.price) {
+
+    if (listing) {
       const priceInPkr = listing.price * usdToPkrRate;
       const priceText =
         currentCurrency === "USD"
@@ -111,21 +111,9 @@ const loadRooms = async () => {
     roomItem.innerHTML = `
       <div class="room-item shadow rounded overflow-hidden" style="height: 100% !important;">
         <div class="position-relative">
-          <img class="img-fluid" src="${imageUrl}" alt="Room Image ${
-      image.id
-    }" style="width: 100%; height: 250px; object-fit: cover;" />
+          <img class="img-fluid" src="${imageUrl}" alt="Room Image ${image.id}" style="width: 100%; height: 250px; object-fit: cover;" />
           <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #989549;">
-            ${
-              currentCurrency === "USD"
-                ? `$ ${listing ? listing.price : "N/A"}`
-                : `₨ ${
-                    listing
-                      ? (listing.price * usdToPkrRate)
-                          .toFixed(2)
-                          .toLocaleString()
-                      : "N/A"
-                  }`
-            }
+            ${listing ? `Starting from $${listing.price}` : "Price not available"}
           </small>
         </div>
         <div class="p-4 mt-2">
@@ -150,7 +138,7 @@ const loadRooms = async () => {
             roomDescriptions[index]
           }</p>
           <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
-            <a href="listings-details.html?id=${image.id}" 
+            <a href="/listings-details?id=${image.id}" 
               class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
               style="background-color: #989549; border: none;">
               <i class="fas fa-info-circle me-2"></i>View Details
@@ -158,9 +146,7 @@ const loadRooms = async () => {
             <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
               <i class="fas fa-video me-2"></i>Virtual Tour
             </button>
-            <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${
-              image.id
-            }">
+            <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${image.id}">
               <i class="fas fa-calendar-check me-2"></i>Book Now
             </button>
           </div>
@@ -245,13 +231,13 @@ const loadRooms = async () => {
     });
   });
 
-  updateRoomPrices(listings);
+  updateRoomPrices(); // Call to update prices after rooms are loaded
 
   const currencySelector = document.getElementById("currencySelector");
   if (currencySelector) {
     currencySelector.addEventListener("change", (event) => {
       currentCurrency = event.target.value;
-      updateRoomPrices(listings);
+      updateRoomPrices(); // Update prices when currency changes
     });
   }
 };

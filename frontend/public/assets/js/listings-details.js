@@ -107,7 +107,7 @@ async function fetchListingDetails() {
                     </span>
                     <span>
                         <i class="fa-solid fa-bed"></i> 
-                        ${listingInfo.beds} Beds 
+                        ${listingInfo.beds} Bed(s) 
                     </span>
                     <span>
                         <i class="fa-solid fa-users"></i> 

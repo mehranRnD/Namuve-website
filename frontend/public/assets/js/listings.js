@@ -1,4 +1,4 @@
-import { idToImageUrlMap, roomDescriptions, BASE_PRICES, LISTINGS_DATA } from "./data.js";
+import { idToImageUrlMap, roomDescriptions, BASE_PRICES, LISTINGS_DATA, ROOM_DETAILS } from "./data.js";
 
 let usdToPkrRate = 277.66; // Default rate
 let currentCurrency = "USD"; // Default currency
@@ -152,10 +152,11 @@ async function loadListings() {
       container.classList.add("col-lg-4", "col-md-6", "wow", "fadeInUp");
       container.setAttribute("data-wow-delay", `${0.1 * (index + 1)}s`);
 
+      // Get room details
+      const roomDetails = getListingInfo(listing.id); // Fetch room details using the listing ID
+
       container.innerHTML = `
-  <div class="room-item shadow rounded overflow-hidden" data-listing-id="${
-    image.id
-  }" style="height: 600px !important;">
+  <div class="room-item shadow rounded overflow-hidden" data-listing-id="${image.id}" style="height: 600px !important;">
     <div class="position-relative" style="height: 300px !important;">
       <img class="img-fluid" src="${getImageUrlById(image.id)}" 
         alt="Listing Image ${image.id}" 
@@ -186,8 +187,8 @@ async function loadListings() {
         </div>
       </div>
       <div class="d-flex mb-3">
-        <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>3 Bed</small>
-        <small class="border-end me-3 pe-3"><i class="fa fa-bath me-2" style="color: #989549;"></i>2 Bath</small>
+        <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>${roomDetails.beds} Bed(s)</small>
+        <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #989549;"></i>${roomDetails.guests} Guests</small>
         <small><i class="fa fa-wifi me-2" style="color: #989549;"></i>Wifi</small>
       </div>
       <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${
@@ -233,6 +234,27 @@ async function loadListings() {
     errorElement.style.display = "block";
     loading.style.display = "none";
   }
+}
+
+// Helper function to get room type and base price by listing ID
+function getListingInfo(listingId) {
+  listingId = Number(listingId);
+  for (const [category, ids] of Object.entries(LISTINGS_DATA)) {
+    if (ids.includes(listingId)) {
+      return {
+        roomType: category,
+        basePrice: BASE_PRICES[category],
+        guests: ROOM_DETAILS[category].guests,
+        beds: ROOM_DETAILS[category].beds,
+      };
+    }
+  }
+  return {
+    roomType: "Studio",
+    basePrice: 40,
+    guests: "1-2",
+    beds: "1",
+  }; // Default fallback
 }
 
 // Update the filterListings function to handle animations

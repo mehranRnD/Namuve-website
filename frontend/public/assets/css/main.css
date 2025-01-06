@@ -3514,22 +3514,22 @@ section,
   top: 20px; /* Adjust as needed */
 }
 /* Maintenance Alert Styles */
-#maintenance-alert {
+/* #maintenance-alert {
   position: fixed;
-  top: 0; /* Positioned at the very top */
+  top: 0; 
   left: 0;
   right: 0;
-  background-color: #ffcc00; /* Bright yellow background */
-  color: #000; /* Black text for contrast */
-  padding: 10px; /* Compact padding for clean appearance */
+  background-color: #ffcc00; 
+  color: #000; 
+  padding: 10px;
   text-align: center;
-  z-index: 1000; /* Ensure it stays above all other content */
-  font-size: 14px; /* Clean, readable font size */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for separation */
-  transform: translateY(-100%); /* Start off-screen from the top */
-  opacity: 0; /* Start invisible */
-  animation: topSlam 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; /* Slam effect */
-}
+  z-index: 1000;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transform: translateY(-100%); 
+  opacity: 0; 
+  animation: topSlam 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+} */
 
 @keyframes topSlam {
   0% {
