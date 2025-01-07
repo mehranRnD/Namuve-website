@@ -1,4 +1,4 @@
-import { idToImageUrlMap, LISTINGS } from "./data.js";
+import { idToImageUrlMap, LISTINGS, virtualTourLinks } from "./data.js";
 
 let usdToPkrRate = 1;
 let currentCurrency = "USD"; // Default currency
@@ -228,6 +228,20 @@ const loadRooms = async () => {
         modal.hide();
         window.location.href = booknrentUrl;
       };
+    });
+
+    const virtualTourBtn = roomItem.querySelector(".virtual-tour");
+    virtualTourBtn.addEventListener("click", () => {
+      const roomId = image.id; // Get the room ID
+      const tourLink = virtualTourLinks[roomId]; // Get the corresponding virtual tour link
+
+      if (tourLink) {
+        // Redirect to the virtual tour link if it exists
+        window.location.href = tourLink;
+      } else {
+        // Handle cases where the virtual tour link is not available
+        alert("Virtual tour is not available for this room.");
+      }
     });
   });
 
