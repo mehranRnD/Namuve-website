@@ -3545,3 +3545,8 @@ section,
     opacity: 1; /* Fully visible */
   }
 }
+
+.blurred {
+  filter: blur(2px); /* Adjust the blur effect as needed */
+  opacity: 0.5; /* Optional: make blurred dates semi-transparent */
+}

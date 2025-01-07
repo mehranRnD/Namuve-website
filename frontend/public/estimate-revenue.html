@@ -47,6 +47,53 @@
 
     <!-- Main CSS File -->
     <link href="assets/css/main.css" rel="stylesheet" />
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      body {
+        background-color: #f8f9fa; /* Light background color */
+      }
+      .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start; /* Align items to the top */
+        margin-top: 50px; /* Space from the top */
+      }
+      .calculator, .result {
+        background-color: white; /* White background for sections */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        padding: 20px; /* Padding inside the sections */
+        flex: 1; /* Take up equal space */
+        margin-right: 20px; /* Space between calculator and result */
+      }
+      .result {
+        margin-right: 0; /* Remove margin for the last element */
+      }
+      h2 {
+        color: #343a40; /* Darker text color for headings */
+      }
+      .cta-btn {
+        /* background-color: #343a40;  */
+        color: white; /* White text color */
+      }
+      .cta-btn:hover {
+        background-color: #495057; /* Darker on hover */
+      }
+      .formatted-result {
+        background-color: #e9ecef; /* Light gray background for formatted result */
+        border-left: 5px solid #007bff; /* Blue left border */
+        padding: 15px; /* Padding inside the formatted result */
+        margin-top: 20px; /* Space above the formatted result */
+        border-radius: 5px; /* Rounded corners */
+      }
+      .price {
+        font-size: 2rem; /* Larger font size for price */
+        font-weight: bold; /* Bold font for emphasis */
+        color: #28a745; /* Green color for price */
+      }
+    </style>
   </head>
 
   <body class="index-page">
@@ -70,13 +117,20 @@
               data-aos="zoom-in"
               data-aos-delay="100"
             >
-              <div class="col-xl-10 ">
+              <div class="col-xl-10">
                 <div class="text-center">
-                  <h1 class="mt-lg-5 mb-0">Maximize Profits: Holiday Home <span class="text-bold" style="color: #989549">Income Predictor</span></h1>
+                  <h1 class="mt-lg-5 mb-0">
+                    Maximize Profits: Holiday Home
+                    <span class="text-bold" style="color: #989549"
+                      >Income Predictor</span
+                    >
+                  </h1>
                   <p class="pt-3">
-                    Accurately estimate potential earnings from your Airbnb or holiday home with our revenue calculator. Understand seasonal trends, optimize pricing, and maximize your rental income effortlessly. Start planning smarter today!
+                    Accurately estimate potential earnings from your Airbnb or
+                    holiday home with our revenue calculator. Understand
+                    seasonal trends, optimize pricing, and maximize your rental
+                    income effortlessly. Start planning smarter today!
                   </p>
-                  
                 </div>
               </div>
             </div>
@@ -84,11 +138,68 @@
         </section>
       </div>
       <!-- End Page Title -->
-
-      <!-- Estimated Calculator Section -->
       <div class="container mt-5">
-        <h2>Your Estimated Revenue</h2>
-        <p id="revenue-result">Your estimated revenue will be shown here.</p>
+        <div class="calculator">
+          <h2 class="text-body revenue-h mb-4">
+            Estimate
+            <span class="text-bold" style="color: #989549">Your Revenue</span>
+          </h2>
+          <form id="revenue-estimator">
+            <div class="mb-3">
+              <label for="area" class="form-label">Location</label>
+              <select class="form-select cta-btn text-body fc-input" id="area">
+                <option value="">Select Area</option>
+                <option value="Lahore">Lahore</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="bedrooms" class="form-label">Bedrooms</label>
+              <select
+                class="form-select cta-btn text-body fc-input"
+                id="bedrooms"
+              >
+                <option value="">Select Bedrooms</option>
+                <option value="studio">Studio</option>
+                <option value="1">One Bed</option>
+                <option value="2">Two Beds</option>
+                <option value="3">Three Beds</option>
+                <option value="4">Four Beds</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="furnishing" class="form-label">Furnishing</label>
+              <select
+                class="form-select cta-btn text-body fc-input"
+                id="furnishing"
+              >
+                <option value="">Select Furnishing</option>
+                <option value="standard">Standard</option>
+                <option value="luxury">Luxury</option>
+              </select>
+            </div>
+            <div class="text-center">
+              <button
+                type="submit"
+                class="cta-btn fc-input-btn btn btn-dark"
+                style="width: 100%;"
+              >
+                Calculate
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="result">
+          <h2 class="text-body revenue-h mb-4">
+            Your
+            <span class="text-bold" style="color: #989549">Estimated Revenue</span>
+          </h2>
+          <div id="revenue-result" class="mb-3">
+            Your estimated revenue will be shown here.
+          </div>
+          <div id="formatted-result" class="formatted-result">
+            <!-- Formatted result will be displayed here -->
+          </div>
+        </div>
       </div>
 
       <section id="contact" class="contact section">
@@ -207,6 +318,7 @@
     <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
     <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script type="module" src="assets/js/estimate-revenue.js"></script>
 
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
