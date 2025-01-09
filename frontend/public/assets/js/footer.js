@@ -66,7 +66,7 @@ export function createFooter() {
                         <p class="mt-4">
                             <strong>Phone:</strong> <span>+92 300 045 4711</span>
                         </p>
-                        <p><strong>Email:</strong> <span>info@namuve.com</span></p>
+                        <p><strong>Email:</strong> <a href="mailto:info@namuve.com"><span>info@namuve.com</span></a></p>
                     </div>
                 </div>
             </div>
