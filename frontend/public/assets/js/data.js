@@ -101,6 +101,15 @@ export const roomDescriptions = [
   "Rest in our signature suite with upgraded amenities and elegant atmosphere.",
 ];
 
+// Add a mapping for virtual tour links
+export const virtualTourLinks = {
+  323227: "https://virtualtour4f-42.netlify.app/",
+  // Add other room IDs and their corresponding links here
+  // 288675: "https://example.com/virtual-tour-288675",
+  // 288676: "https://example.com/virtual-tour-288676",
+  // ...
+};
+
 export const LISTINGS = [
   { id: 288675, price: 40 }, { id: 288682, price: 40 }, { id: 288690, price: 40 },
   { id: 323229, price: 40 }, { id: 323261, price: 40 }, { id: 336255, price: 40 }, // Studio

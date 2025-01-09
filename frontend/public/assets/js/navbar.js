@@ -13,7 +13,7 @@ export function createNavbar() {
                         <li><a href="/" class="active">Home</a></li>
                         <li><a href="/about">About us</a></li>
                         <li class="dropdown">
-                            <a href="#"><span>Services</span><i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                            <a><span>Services</span><i class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
                                 <li><a href="/spaces">Spaces</a></li>
                                 <li><a href="/serve">Serve</a></li>
@@ -24,7 +24,7 @@ export function createNavbar() {
                         </li>
                         <li><a href="/listings">Rooms</a></li>
                         <li class="dropdown">
-                            <a href="#"><span>InsightsHub</span><i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                            <a><span>InsightsHub</span><i class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
                                 <li><a href="/blogs">Blogs / News</a></li>
                                 <li><a href="/faqs">FAQs</a></li>

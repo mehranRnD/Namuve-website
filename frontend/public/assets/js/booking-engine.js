@@ -1,3 +1,4 @@
+import { showRedAlert, showGreenAlert, showInfoAlert } from "./alert.js";
 import { idToImageUrlMap, LISTINGS } from "./data.js"; // Import the image URL map
 
 const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
@@ -78,7 +79,7 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
   console.log("Available Listings IDs:", availableListings);
 
   if (availableListings.length === 0) {
-    alert("No available listings for the selected dates.");
+    showInfoAlert("No available listings for the selected dates.");
   }
 
   return availableListings;
@@ -97,10 +98,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       const checkoutDate = document.getElementById("checkout").value;
       const guests = document.getElementById("guests").value;
 
-      if (!checkinDate || !checkoutDate || !guests) {
-        alert("Please fill in all the required fields.");
+      // Log checkin and checkout dates to the console
+
+      if (!checkinDate) {
+        showRedAlert("Please select a check-in date.");
         return;
       }
+      if (!checkoutDate) {
+        showRedAlert("Please select a check-out date.");
+        return;
+      }
+      if (!guests || parseInt(guests) < 1) {
+        showRedAlert("Please enter a valid number of guests.");
+        return;
+      }
+      
+      // If all details are valid, show green alert
+      showGreenAlert("Please wait while we fetch available listings.");
+      
 
       const availableListings = await checkAvailableListings(
         checkinDate,
@@ -118,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         window.location.href = `/booking-engine?${queryParams.toString()}`;
       } else {
-        alert("No available listings for the selected dates.");
+        showInfoAlert("No available listings for the selected dates.");
       }
     });
   }
@@ -136,6 +151,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       const listingDetailsPromises = listingIdsArray.map(fetchListingDetails);
       const listingDetails = await Promise.all(listingDetailsPromises);
 
+      const checkinDate = new URLSearchParams(window.location.search).get("checkinDate");
+      const checkoutDate = new URLSearchParams(window.location.search).get("checkoutDate");
+      const guests = new URLSearchParams(window.location.search).get("guests");
+
       listingsContainer.innerHTML = `
         <div class="row">
           <div class="col-lg-8">
@@ -145,15 +164,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                   .map((listing) => {
                     if (listing) {
                       const imageUrl = idToImageUrlMap[listing.id];
+                      const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
                       return `
                         <div class="col-lg-12 mb-4">
                           <div class="item" style="padding: 15px;">
                             <div class="row">
                               <div class="col-lg-4 col-sm-5">
                                 <div class="image">
-                                  <img src="${imageUrl}" alt="Listing Name: ${
-                        listing.name
-                      }" />
+                                  <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
                                 </div>
                               </div>
                               <div class="col-lg-8 col-sm-7">
@@ -165,16 +183,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                                     This listing is available for your selected dates.
                                   </p>
                                   <ul class="info">
-                                    <li><i class="fa fa-user"></i> Guests: ${
-                                      listing.guests || "N/A"
-                                    }</li>
-                                    <li><i class="fa fa-globe"></i> Location: ${
-                                      listing.location || "TBD"
-                                    }</li>
-                                    <li><i class="fa fa-home"></i> Price: Starting from $${
-                                      listing.price || "TBD"
-                                    }</li>
+                                    <li><i class="fa fa-user"></i> Guests: ${listing.guests || "N/A"}</li>
+                                    <li><i class="fa fa-globe"></i> Location: ${listing.location || "TBD"}</li>
+                                    <li><i class="fa fa-home"></i> Price: Starting from $${listing.price || "TBD"}</li>
                                   </ul>
+                                  <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
                                 </div>
                               </div>
                             </div>

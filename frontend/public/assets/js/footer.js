@@ -4,7 +4,7 @@ export function createFooter() {
             <div class="container footer-top">
                 <div class="row gy-4">
                     <div class="col-lg-3 col-md-12 footer-about">
-                        <a href="index.html" class="logo d-flex align-items-center">
+                        <a href="/" class="logo d-flex align-items-center">
                             <img
                                 src="assets/img/Namuve-logo-1.png"
                                 alt="Logo"
@@ -66,7 +66,7 @@ export function createFooter() {
                         <p class="mt-4">
                             <strong>Phone:</strong> <span>+92 300 045 4711</span>
                         </p>
-                        <p><strong>Email:</strong> <span>info@namuve.com</span></p>
+                        <p><strong>Email:</strong> <a href="mailto:info@namuve.com"><span>info@namuve.com</span></a></p>
                     </div>
                 </div>
             </div>
