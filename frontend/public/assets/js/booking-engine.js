@@ -1,3 +1,4 @@
+import { showRedAlert, showGreenAlert, showInfoAlert } from "./alert.js";
 import { idToImageUrlMap, LISTINGS } from "./data.js"; // Import the image URL map
 
 const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
@@ -78,7 +79,7 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
   console.log("Available Listings IDs:", availableListings);
 
   if (availableListings.length === 0) {
-    alert("No available listings for the selected dates.");
+    showInfoAlert("No available listings for the selected dates.");
   }
 
   return availableListings;
@@ -99,10 +100,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Log checkin and checkout dates to the console
 
-      if (!checkinDate || !checkoutDate || !guests) {
-        alert("Please fill in all the required fields.");
+      if (!checkinDate) {
+        showRedAlert("Please select a check-in date.");
         return;
       }
+      if (!checkoutDate) {
+        showRedAlert("Please select a check-out date.");
+        return;
+      }
+      if (!guests || parseInt(guests) < 1) {
+        showRedAlert("Please enter a valid number of guests.");
+        return;
+      }
+      
+      // If all details are valid, show green alert
+      showGreenAlert("Please wait while we fetch available listings.");
+      
 
       const availableListings = await checkAvailableListings(
         checkinDate,
@@ -120,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         window.location.href = `/booking-engine?${queryParams.toString()}`;
       } else {
-        alert("No available listings for the selected dates.");
+        showInfoAlert("No available listings for the selected dates.");
       }
     });
   }

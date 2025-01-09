@@ -1,4 +1,5 @@
 import { idToImageUrlMap, roomDescriptions, BASE_PRICES, LISTINGS_DATA, ROOM_DETAILS, virtualTourLinks } from "./data.js";
+import { showRedAlert } from './alert.js'; 
 
 let usdToPkrRate = 277.66; // Default rate
 let currentCurrency = "USD"; // Default currency
@@ -104,24 +105,24 @@ async function loadListings() {
     filterContainer.classList.add("container", "mb-5", "mt-4");
     filterContainer.innerHTML = `
         <div class="m-0 text-center">
-            <div class="btn-group py-3 gap-4 filter-buttons" role="group" aria-label="Room filter">
+            <div class="btn-group py-3 filter-buttons" role="group" aria-label="Room filter">
                 <button type="button" class="btn btn-filter btn-list-out active" data-category="All">
-                    <i class="fas fa-th-large me-2"></i>All
+                    <i class="fas fa-th-large me-2"></i>All (32)
                 </button>
                 <button type="button" class="btn btn-filter btn-list-out" data-category="Studio">
-                    <i class="fas fa-home me-2"></i>Studio
+                    <i class="fas fa-home me-2"></i>Studio (6)
                 </button>
                 <button type="button" class="btn btn-filter btn-list-out" data-category="1BR">
-                    <i class="fas fa-bed me-2"></i>1 Bedroom
+                    <i class="fas fa-bed me-2"></i>1 Bedroom (10)
                 </button>
                 <button type="button" class="btn btn-filter btn-list-out" data-category="2BR">
-                    <i class="fas fa-bed me-2"></i>2 Bedrooms
+                    <i class="fas fa-bed me-2"></i>2 Bedrooms (9)
                 </button>
                 <button type="button" class="btn btn-filter btn-list-out" data-category="2BR Premium">
-                    <i class="fas fa-star me-2"></i>2BR Premium
+                    <i class="fas fa-star me-2"></i>2BR Premium (4)
                 </button>
                 <button type="button" class="btn btn-filter btn-list-out" data-category="3BR">
-                    <i class="fas fa-bed me-2"></i>3 Bedrooms
+                    <i class="fas fa-bed me-2"></i>3 Bedrooms (3)
                 </button>
             </div>
         </div>
@@ -428,7 +429,7 @@ function openBookingModal(listingId) {
       const guests = guestsInput.value;
 
       if (!checkin || !checkout || !guests) {
-        showAlert(
+        showRedAlert(
           "Please fill in all fields before proceeding with the booking."
         );
         return;
@@ -457,48 +458,6 @@ function openBookingModal(listingId) {
       window.location.href = booknrentUrl;
     };
   }
-}
-
-function showAlert(message, type = "danger") {
-  // Remove any existing alerts
-  const existingAlert = document.querySelector(".booking-alert");
-  if (existingAlert) {
-    existingAlert.remove();
-  }
-
-  // Create alert element
-  const alertDiv = document.createElement("div");
-  alertDiv.className = `alert alert-${type} alert-dismissible fade show booking-alert`;
-  alertDiv.role = "alert";
-  alertDiv.innerHTML = `
-    <div class="d-flex align-items-center">
-      <i class="fas ${
-        type === "danger" ? "fa-exclamation-circle" : "fa-info-circle"
-      } me-2"></i>
-      <strong>${message}</strong>
-    </div>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  `;
-
-  // Add custom styles
-  alertDiv.style.position = "fixed";
-  alertDiv.style.top = "20px";
-  alertDiv.style.left = "50%";
-  alertDiv.style.transform = "translateX(-50%)";
-  alertDiv.style.zIndex = "9999";
-  alertDiv.style.minWidth = "280px";
-  alertDiv.style.maxWidth = "90%";
-  alertDiv.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
-  alertDiv.style.borderRadius = "8px";
-
-  // Add alert to the DOM
-  document.body.appendChild(alertDiv);
-
-  // Auto dismiss after 5 seconds
-  setTimeout(() => {
-    alertDiv.classList.remove("show");
-    setTimeout(() => alertDiv.remove(), 150);
-  }, 5000);
 }
 
 // Initialize when DOM is loaded

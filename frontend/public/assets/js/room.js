@@ -1,3 +1,4 @@
+import { showRedAlert } from "./alert.js";
 import { idToImageUrlMap, LISTINGS, virtualTourLinks } from "./data.js";
 
 let usdToPkrRate = 1;
@@ -147,7 +148,7 @@ const loadRooms = async () => {
               <i class="fas fa-video me-2"></i>Virtual Tour
             </button>
             <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${image.id}">
-              <i class="fas fa-calendar-check me-2"></i>Book NOW
+              <i class="fas fa-calendar-check me-2"></i>Book Now
             </button>
           </div>
         </div>
@@ -204,15 +205,15 @@ const loadRooms = async () => {
         const guests = guestsInput.value;
 
         if (!checkin) {
-          alert("Please select a check-in date.");
+          showRedAlert("Please select a check-in date.");
           return;
         }
         if (!checkout) {
-          alert("Please select a check-out date.");
+          showRedAlert("Please select a check-out date.");
           return;
         }
         if (!guests || parseInt(guests) < 1) {
-          alert("Please enter a valid number of guests.");
+          showRedAlert("Please enter a valid number of guests.");
           return;
         }
 
