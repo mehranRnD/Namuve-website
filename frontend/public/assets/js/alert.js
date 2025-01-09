@@ -72,7 +72,7 @@ export function showRedAlert(message, type = "danger") {
   
     // Add custom styles
     alertDiv.style.position = "fixed";
-    alertDiv.style.top = "20px";
+    alertDiv.style.top = "22px";
     alertDiv.style.left = "50%";
     alertDiv.style.transform = "translateX(-50%)";
     alertDiv.style.zIndex = "9999";
