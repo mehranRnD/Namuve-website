@@ -130,11 +130,7 @@ const loadRooms = async () => {
               <small class="fa fa-star"></small>
             </div>
           </div>
-          <div class="d-flex mb-3" style="justify-content: space-between !important;">
-            <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>3 Beds</small>
-            <small class="border-end me-3 pe-3"><i class="fa fa-bath me-2" style="color: #989549;"></i>2 Baths</small>
-            <small><i class="fa fa-wifi me-2" style="color: #989549;"></i>Wifi</small>
-          </div>
+          
           <p class="text-body mb-3" style="min-height: 48px !important;">${
             roomDescriptions[index]
           }</p>

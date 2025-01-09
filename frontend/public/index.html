@@ -88,99 +88,87 @@
         <div class="booking-engine-overlay animate__animated animate__fadeInUp">
           <div id="section-1">
             <div class="more-info">
-              <div class="row row-bet">
+              <form
+                id="booking-form"
+                class="row row-bet d-flex justify-content-between align-items-center p-3"
+              >
+                <!-- Location -->
                 <div class="col-lg-3 col-sm-6 col-6">
-                  <i class="fa fa-location-arrow"></i>
-                  <h4><span>Where</span><br>Select room</h4>
+                  <label for="location">
+                    <i class="fa fa-location-arrow"></i>
+                    <h4>Select room</h4>
+                  </label>
+                  <select class="form-select" id="location">
+                    <option value="Lahore">Lahore</option>
+                  </select>
                 </div>
+        
+                <!-- Check-in -->
                 <div class="col-lg-2 col-sm-6 col-6">
-                  <i class="fa fa-calendar" aria-hidden="true"></i>
-                  <h4><span>Check in</span><br>Add dates</em></h4>
+                  <label for="checkin">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <h4>Add Check-in date</h4>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="checkin"
+                    placeholder="Select check-in date"
+                    required
+                  />
                 </div>
+        
+                <!-- Check-out -->
                 <div class="col-lg-2 col-sm-6 col-6">
-                  <i class="fa fa-calendar" aria-hidden="true"></i>
-                  <h4><span>Check out</span><br>Add dates</h4>
+                  <label for="checkout">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <h4>Add Check-out date</h4>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="checkout"
+                    placeholder="Select check-out date"
+                    required
+                  />
                 </div>
+        
+                <!-- Guests -->
                 <div class="col-lg-2 col-sm-6 col-6">
-                  <i class="fa fa-users"></i>
-                  <h4><span>Who</span><br>Add guest</h4>
+                  <label for="guests">
+                    <i class="fa fa-users"></i>
+                    <h4>Add guest</h4>
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="guests"
+                    value="1"
+                    min="1"
+                    placeholder="Guests"
+                    required
+                  />
                 </div>
-                <div class="col-lg-2 col-sm-6 col-6">
-                  <!-- <button
-                  type="submit"
-                  class="btn btn-primary"
-                  id="search-button"
-                >
-                  Search
-                </button> -->
-                  <i class="fa fa-search">
-                    <a href="booking-engine.html"></a>
-                  </i>
+        
+                <!-- Search -->
+                <div class="col-lg-2 col-sm-6 col-6 text-center">
+                  <label for="search">
+                    <i class="fa fa-search"></i>
+                  </label>
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="search-button"
+                  >
+                    Search
+                  </button>
                 </div>
-                
-              </div>
+              </form>
             </div>
           </div>
         </div>
-
-        <div class="booking-engine-overlay animate__animated animate__fadeInUp mt-5">
-          <div class="container">
-            <form
-              id="booking-form"
-              class="d-flex justify-content-between align-items-center p-3"
-            >
-              <div>
-                <label for="location">Location</label>
-                <select class="form-select" id="location">
-                  <option value="Lahore">Lahore</option>
-                </select>
-              </div>
-              <div>
-                <label for="checkin">Check-in Date</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="checkin"
-                  placeholder="Select check-in date"
-                  required
-                />
-              </div>
-              <div>
-                <label for="checkout">Check-out Date</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="checkout"
-                  placeholder="Select check-out date"
-                  required
-                />
-              </div>
-              <div>
-                <label for="guests">Guests</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="guests"
-                  value="1"
-                  min="1"
-                  placeholder="Guests"
-                  required
-                />
-              </div>
-              <div>
-                <label for="search">Search for availability</label>
-                <button
-                  type="submit"
-                  class="btn"
-                  id="search-button"
-                >
-                  Search
-                </button>
-              </div>
-              <div id="alert-container"></div>
-            </form>
-          </div>
-        </div>
+        
+        
 
         <!-- /Booking Engine Overlay -->
 
