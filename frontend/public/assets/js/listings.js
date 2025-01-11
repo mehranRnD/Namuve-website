@@ -1,5 +1,12 @@
-import { idToImageUrlMap, roomDescriptions, BASE_PRICES, LISTINGS_DATA, ROOM_DETAILS, virtualTourLinks } from "./data.js";
-import { showRedAlert } from './alert.js'; 
+import {
+  idToImageUrlMap,
+  roomDescriptions,
+  BASE_PRICES,
+  LISTINGS_DATA,
+  ROOM_DETAILS,
+  virtualTourLinks,
+} from "./data.js";
+import { showInfoAlert, showRedAlert } from "./alert.js";
 
 let usdToPkrRate = 277.66; // Default rate
 let currentCurrency = "USD"; // Default currency
@@ -157,7 +164,9 @@ async function loadListings() {
       const roomDetails = getListingInfo(listing.id); // Fetch room details using the listing ID
 
       container.innerHTML = `
-  <div class="room-item shadow rounded overflow-hidden" data-listing-id="${image.id}" style="height: 600px !important;">
+  <div class="room-item shadow rounded overflow-hidden" data-listing-id="${
+    image.id
+  }" style="height: 600px !important;">
     <div class="position-relative" style="height: 300px !important;">
       <img class="img-fluid" src="${getImageUrlById(image.id)}" 
         alt="Listing Image ${image.id}" 
@@ -188,8 +197,12 @@ async function loadListings() {
         </div>
       </div>
       <div class="d-flex mb-3">
-        <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>${roomDetails.beds} Bed(s)</small>
-        <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #989549;"></i>${roomDetails.guests} Guests</small>
+        <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>${
+          roomDetails.beds
+        } Bed(s)</small>
+        <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #989549;"></i>${
+          roomDetails.guests
+        } Guests</small>
         <small><i class="fa fa-wifi me-2" style="color: #989549;"></i>Wifi</small>
       </div>
       <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${
@@ -354,7 +367,7 @@ function openBookingModal(listingId) {
 
         if (result.status === "reserved") {
           checkinInput.value = ""; // Clear the input if date is reserved
-          alert("This date is not available for booking.");
+          showInfoAlert("This date is not available for booking.");
         }
       }
     },
@@ -394,7 +407,7 @@ function openBookingModal(listingId) {
 
         if (result.status === "reserved") {
           checkoutInput.value = ""; // Clear the input if date is reserved
-          alert("This date is not available for booking.");
+          showInfoAlert("This date is not available for booking.");
         }
       }
     },
@@ -435,6 +448,8 @@ function openBookingModal(listingId) {
         return;
       }
 
+      // Call showInfoAlert after confirming booking details
+      showInfoAlert("Please wait while we redirect you to Booking form");
       // Check availability for both dates before proceeding
       const checkinData = await fetchCalendarData(listingId, checkin, checkin);
       const checkoutData = await fetchCalendarData(
@@ -443,8 +458,8 @@ function openBookingModal(listingId) {
         checkout
       );
 
-      const checkinStatus = checkAvailabilityStatus(checkinData, checkin);
-      const checkoutStatus = checkAvailabilityStatus(checkoutData, checkout);
+      // const checkinStatus = checkAvailabilityStatus(checkinData, checkin);
+      // const checkoutStatus = checkAvailabilityStatus(checkoutData, checkout);
 
       const booknrentUrl = `https://www.booknrent.com/checkout/${listingId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
 
