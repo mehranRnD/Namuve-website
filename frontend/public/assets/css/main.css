@@ -3728,3 +3728,50 @@ Visit Country Style
   filter: blur(2px); /* Adjust the blur effect as needed */
   opacity: 0.5; /* Optional: make blurred dates semi-transparent */
 }
+
+/* Estimate calculator */
+
+.container-cal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Align items to the top */
+  margin-top: 50px; /* Space from the top */
+}
+
+.calculator, .result {
+  background-color: white; /* White background for sections */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  padding: 20px; /* Padding inside the sections */
+  flex: 1; /* Take up equal space */
+  margin-right: 20px; /* Space between calculator and result */
+}
+.result {
+  margin-right: 0; /* Remove margin for the last element */
+}
+h2 {
+  color: #343a40; /* Darker text color for headings */
+}
+.cta-btn {
+  color: white; /* White text color */
+}
+.cta-btn:hover {
+  background-color: #495057; /* Darker on hover */
+}
+
+.sub-1 {
+  background-color: #060606;
+}
+
+.formatted-result {
+  background-color: #e9ecef; /* Light gray background for formatted result */
+  border-left: 5px solid #007bff; /* Blue left border */
+  padding: 15px; /* Padding inside the formatted result */
+  margin-top: 20px; /* Space above the formatted result */
+  border-radius: 5px; /* Rounded corners */
+}
+.price {
+  font-size: 2rem; /* Larger font size for price */
+  font-weight: bold; /* Bold font for emphasis */
+  color: #28a745; /* Green color for price */
+}
