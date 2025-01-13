@@ -135,54 +135,15 @@ h6 {
   transform: translate(-50%, -50%);
   width: 80%; /* Larger width */
   z-index: 10;
-  border: 2px solid #fff; /* Subtle border */
-  padding: 0px; /* More padding for better spacing */
-  background-color: rgba(0, 0, 0, 0.5); /* Transparent dark background for contrast */
+  padding-bottom: 0rem; /* More padding for better spacing */
 }
 
-.booking-engine-overlay .form-select,
+.booking-engine-overlay
 .booking-engine-overlay .form-control {
   max-width: 200px; /* Increased width for inputs */
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background-color: rgba(255, 255, 255, 0.9); /* Slight transparency for inputs */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  padding: 10px 30px; /* Added padding for better usability */
-  font-size: 14px; /* Increased font size */
+  
 }
 
-.booking-engine-overlay label {
-  color: #fff; /* White text for labels */
-  font-weight: bold;
-  font-size: 14px;
-  margin-bottom: 5px;
-  display: block; /* Display labels above inputs */
-}
-
-.booking-engine-overlay .btn {
-  background: #ff5722; /* Vibrant color for the button */
-  color: white;
-  font-weight: bold;
-  border: none;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, background-color 0.3s ease;
-  padding: 15px 55px; /* Larger button */
-  border-radius: 25px;
-  font-size: 16px; /* Slightly larger font */
-}
-
-.booking-engine-overlay .btn:hover {
-  background-color: #e64a19; /* Darker shade on hover */
-  transform: translateY(-3px); /* Lift on hover */
-}
-
-.booking-engine-overlay form {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start; /* Align labels and inputs properly */
-  gap: 20px; /* Increased spacing between inputs */
-  flex-wrap: wrap;
-}
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
@@ -3670,59 +3631,63 @@ Visit Country Style
 }
 
 /* booking engine */
-#section-1 .more-info {
-  margin: 0px;
-  background-color: #fff;
-  padding: 30px 60px;
-  border-radius: 61px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow for depth */
-  /* position: absolute; */
-  width: 100%;
-  left: 10%;
-  bottom: 130px;
-  display: inline-block;
+.form_book {
+  background: #fff;
+  padding: 25px 45px 25px 45px;
+  border-radius: 100px;
+  border: transparent;
 }
-#section-1 .more-info i {
-  color: #22b3c1;
-  font-size: 22px;
+
+.form_book .date {
+  color: #7e7e7e;
+  font-weight: bold;
+  font-size: 15px;
+  text-transform: uppercase;
+  padding-left: 17px;
+}
+
+.book_n {
+ border: inherit;
+ border-radius: 20px;
+ background-color: #eeeeee67;
+ width: 100%;
+ font-size: 16px;
+ height: auto;
+ line-height: normal;
+ padding: 10px 20px;
+ transition: ease-in all 0.5s;
+  -webkit-appearance: none !important;
+}
+
+.book_n:hover {
+  background-color: #eeeeee;
+  transition: ease-in all 0.5s;
+}
+
+
+.book_btn {
+  font-size: 18px;
+  background-color: #000;
+  color: #fff !important;
   width: 50px;
   height: 50px;
-  display: inline-block;
+  padding: 10px;
+  font-weight: 500;
+  margin: 10px;
   text-align: center;
-  line-height: 48px;
-  border: 1px solid #22b3c1;
-  border-radius: 50%;
-  float: left;
-  margin-right: 15px;
+  display: inline-block;
+  transition: ease-in all 0.5s;
+  border-radius: 100px;
 }
 
-#section-1 .more-info .row-bet {
-  display: flex;
-  justify-content: space-between;
-}
-
-#section-1 .more-info h4 {
-  text-align: left;
-  font-size: 20px;
-  color: #22b3c1;
-  font-weight: 700;
-  line-height: 28px;
-}
-#section-1 .more-info h4 span {
-  font-size: 15px;
-  color: #afafaf;
-  font-weight: 400;
-}
-#section-1 .main-button {
-  margin-top: 8px;
-  text-align: right;
-}
-#section-1 .main-button a:hover {
-  background-color: #22b3c1;
-  border-color: #22b3c1;
+.book_btn:hover {
+  background-color: #6e67067d;
   color: #fff;
-  opacity: 0.8;
+  transition: ease-in all 0.3s;
+  border: none;
 }
+
+
 
 .blurred {
   filter: blur(2px); /* Adjust the blur effect as needed */
@@ -3775,26 +3740,3 @@ h2 {
   font-weight: bold; /* Bold font for emphasis */
   color: #28a745; /* Green color for price */
 }
-/* more listings */
-.btn-more-listings {
-  background-color: transparent;
-  color: white;
-  width: auto;
-  border: 2px solid black;
-  border-radius: 50px;
-  padding: 10px 20px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.btn-more-listings:hover {
-  background-color: transparent;
-  color: black;
-  border-color: #989549;
-}
-
-
-

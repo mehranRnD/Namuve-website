@@ -80,89 +80,39 @@
       <section id="hero" class="hero section">
         <!--  Engine Overlay -->
         <div class="booking-engine-overlay animate__animated animate__fadeInUp">
-          <div id="section-1">
-            <div class="more-info">
-              <form
-                id="booking-form"
-                class="row row-bet d-flex justify-content-between align-items-center p-3"
-              >
-                <!-- Location -->
-                <div class="col-lg-3 col-sm-6 col-6">
-                  <label for="location">
-                    <i class="fa fa-location-arrow"></i>
-                    <h4>Select room</h4>
-                  </label>
-                  <select class="form-select" id="location">
-                    <option value="Lahore">Lahore</option>
-                  </select>
-                </div>
-        
-                <!-- Check-in -->
-                <div class="col-lg-2 col-sm-6 col-6">
-                  <label for="checkin">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                    <h4>Add Check-in date</h4>
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="checkin"
-                    placeholder="Select check-in date"
-                    required
-                  />
-                </div>
-        
-                <!-- Check-out -->
-                <div class="col-lg-2 col-sm-6 col-6">
-                  <label for="checkout">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                    <h4>Add Check-out date</h4>
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="checkout"
-                    placeholder="Select check-out date"
-                    required
-                  />
-                </div>
-        
-                <!-- Guests -->
-                <div class="col-lg-2 col-sm-6 col-6">
-                  <label for="guests">
-                    <i class="fa fa-users"></i>
-                    <h4>Add guest</h4>
-                  </label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="guests"
-                    value="1"
-                    min="1"
-                    placeholder="Guests"
-                    required
-                  />
-                </div>
-        
-                <!-- Search -->
-                <div class="col-lg-2 col-sm-6 col-6 text-center">
-                  <label for="search">
-                    <i class="fa fa-search"></i>
-                  </label>
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    id="search-button"
-                  >
-                    Search
-                  </button>
-                </div>
-              </form>
+          <div class="row">
+            <div class="col-12">
+               <form class="form_book">
+                  <div class="row">
+                      <div class="col-md-3">
+                        <label class="date">LOCATION</label>
+                        <select class="form-select book_n" id="location">
+                          <option value="Lahore">Lahore</option>
+                        </select>
+                    </div>
+                     <div class="col-md-3">
+                        <label class="date">ARRIVAL DATE</label>
+                        <input class="book_n"  type="date" >
+                     </div>
+                     <div class="col-md-3">
+                        <label class="date">DEPARTURE DATE</label>
+                        <input class="book_n"  type="date" >
+                     </div>
+                     <div class="col-md-2">
+                        <label class="date">PERSON</label>
+                        <input class="book_n" placeholder="2" type="type" name="2">
+                     </div>
+                     <div class="col-md-1">
+                        <button class="book_btn">
+                          <i class="fa fa-search"></i>
+                        </button>
+                     </div>
+                     
+                  </div>
+               </form>
             </div>
-          </div>
+         </div>
         </div>
-        
-        
 
         <!-- /Booking Engine Overlay -->
 
