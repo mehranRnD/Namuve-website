@@ -3512,7 +3512,7 @@ section,
   top: 20px; /* Adjust as needed */
 }
 /* Maintenance Alert Styles */
-/* #maintenance-alert {
+#maintenance-alert {
   position: fixed;
   top: 0; 
   left: 0;
@@ -3527,7 +3527,7 @@ section,
   transform: translateY(-100%); 
   opacity: 0; 
   animation: topSlam 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-} */
+}
 
 @keyframes topSlam {
   0% {
@@ -3775,3 +3775,26 @@ h2 {
   font-weight: bold; /* Bold font for emphasis */
   color: #28a745; /* Green color for price */
 }
+/* more listings */
+.btn-more-listings {
+  background-color: transparent;
+  color: white;
+  width: auto;
+  border: 2px solid black;
+  border-radius: 50px;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-more-listings:hover {
+  background-color: transparent;
+  color: black;
+  border-color: #989549;
+}
+
+
+
