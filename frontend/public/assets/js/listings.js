@@ -458,8 +458,8 @@ function openBookingModal(listingId) {
         checkout
       );
 
-      // const checkinStatus = checkAvailabilityStatus(checkinData, checkin);
-      // const checkoutStatus = checkAvailabilityStatus(checkoutData, checkout);
+      const checkinStatus = checkAvailabilityStatus(checkinData, checkin);
+      const checkoutStatus = checkAvailabilityStatus(checkoutData, checkout);
 
       const booknrentUrl = `https://www.booknrent.com/checkout/${listingId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
 
