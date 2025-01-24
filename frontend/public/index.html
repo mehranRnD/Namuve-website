@@ -6,7 +6,7 @@
     <title>Namuve</title>
     <meta name="description" content="Namuve website" />
     <meta name="keywords" content="" />
-    
+
     <link
       href="assets/vendor/bootstrap/css/bootstrap.min.css"
       rel="stylesheet"
@@ -63,11 +63,11 @@
 
   <body class="index-page">
     <!-- Maintenance Alert -->
-    <div id="maintenance-alert" role="alert">
+    <!-- <div id="maintenance-alert" role="alert">
       🚧 The website is currently under maintenance to enhance your experience. 
       For the best view, please use a laptop or PC. Thank you for your understanding and support! 
       – RnD Team BooknRent/Namuve
-    </div>
+    </div> -->
 
     <!-- Navbar will be inserted here -->
     <script type="module">
@@ -82,38 +82,49 @@
         <div class="booking-engine-overlay animate__animated animate__fadeInUp">
           <div class="row">
             <div class="col-12">
-               <form class="form_book">
-                  <div class="row">
-                      <div class="col-md-3">
-                        <label class="date">LOCATION</label>
-                        <select class="form-select book_n" id="location">
-                          <option value="Lahore">Lahore</option>
-                        </select>
-                    </div>
-                     <div class="col-md-3">
-                        <label class="date">ARRIVAL DATE</label>
-                        <input class="book_n"  type="date" >
-                     </div>
-                     <div class="col-md-3">
-                        <label class="date">DEPARTURE DATE</label>
-                        <input class="book_n"  type="date" >
-                     </div>
-                     <div class="col-md-2">
-                        <label class="date">PERSON</label>
-                        <input class="book_n" placeholder="2" type="type" name="2">
-                     </div>
-                     <div class="col-md-1">
-                        <button class="book_btn">
-                          <i class="fa fa-search"></i>
-                        </button>
-                     </div>
-                     
+              <form id="booking-form" class="form_book">
+                <div class="row">
+                  <!-- Location Dropdown -->
+                  <div class="col-md-3">
+                    <label class="date" for="location">LOCATION</label>
+                    <select class="form-select book_n" id="location">
+                      <option value="Lahore">Lahore</option>
+                    </select>
                   </div>
-               </form>
+                  <!-- Check-in Date -->
+                  <div class="col-md-3">
+                    <label class="date" for="checkin">ARRIVAL DATE</label>
+                    <input class="book_n" id="checkin" placeholder="Enter Check-in Date" type="date" required />
+                  </div>
+                  <!-- Check-out Date -->
+                  <div class="col-md-3">
+                    <label class="date" for="checkout">DEPARTURE DATE</label>
+                    <input class="book_n" id="checkout" placeholder="Enter Check-out Date" type="date" required />
+                  </div>
+                  <!-- Number of Guests -->
+                  <div class="col-md-2">
+                    <label class="date" for="guests">PERSON</label>
+                    <input
+                      class="book_n"
+                      id="guests"
+                      placeholder="Enter guests"
+                      type="number"
+                      min="1"
+                      required
+                    />
+                  </div>
+                  <!-- Submit Button -->
+                  <div class="col-md-1">
+                    <button type="submit" class="book_btn">
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-         </div>
+          </div>
         </div>
-
+        
         <!-- /Booking Engine Overlay -->
 
         <div class="container-fluid p-0 mb-0 position-relative">
@@ -475,13 +486,19 @@
                 <form id="revenue-estimator">
                   <div class="row justify-content-between">
                     <div class="col">
-                      <select class="form-select cta-btn text-body fc-input" id="area">
+                      <select
+                        class="form-select cta-btn text-body fc-input"
+                        id="area"
+                      >
                         <option value="">Area</option>
                         <option value="Lahore">Lahore</option>
                       </select>
                     </div>
                     <div class="col">
-                      <select class="form-select cta-btn text-body fc-input" id="bedrooms">
+                      <select
+                        class="form-select cta-btn text-body fc-input"
+                        id="bedrooms"
+                      >
                         <option value="">Bedrooms</option>
                         <option value="studio">Studio</option>
                         <option value="1">One Bed</option>
@@ -490,14 +507,26 @@
                       </select>
                     </div>
                     <div class="col">
-                      <select class="form-select cta-btn text-body fc-input" id="furnishing">
+                      <select
+                        class="form-select cta-btn text-body fc-input"
+                        id="furnishing"
+                      >
                         <option value="">Furnishing</option>
                         <option value="standard">Standard</option>
                         <option value="luxury">Luxury</option>
                       </select>
                     </div>
                     <div class="col">
-                      <button type="submit" class="cta-btn fc-input-btn" style="border: 1px solid #212529; width: 100%; text-align: center; background-color: black;">
+                      <button
+                        type="submit"
+                        class="cta-btn fc-input-btn"
+                        style="
+                          border: 1px solid #212529;
+                          width: 100%;
+                          text-align: center;
+                          background-color: black;
+                        "
+                      >
                         Calculate
                       </button>
                     </div>
