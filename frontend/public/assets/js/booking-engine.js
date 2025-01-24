@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       
       // If all details are valid, show green alert
-      showGreenAlert("Please wait while we fetch available listings.");
+      showGreenAlert("Please wait while we fetch available listings...");
       
 
       const availableListings = await checkAvailableListings(
