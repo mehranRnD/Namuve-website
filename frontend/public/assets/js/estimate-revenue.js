@@ -21,13 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const priceData = {
             "Lahore": {
-                studio: 1000,
+                Studio: 1000,
                 "1": 1500,
                 "2": 2000,
                 "3": 2500,
                 "4": 2350,
-                standard: 1200,
-                luxury: 1800,
+                Sandard: 1200,
+                Luxury: 1800,
             },
         };
 

@@ -170,8 +170,8 @@ const loadRooms = async () => {
 
       const calendarData = await fetchCalendarData(
         roomId,
-        "2024-01-01",
-        "2024-12-31"
+        "2025-01-01",
+        "2025-12-31"
       );
       const reservedDates = blurReservedDates(calendarData);
 
