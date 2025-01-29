@@ -156,71 +156,73 @@ document.addEventListener("DOMContentLoaded", async () => {
       const guests = new URLSearchParams(window.location.search).get("guests");
 
       listingsContainer.innerHTML = `
-        <div class="row">
-          <div class="col-lg-8">
-            <div class="items">
-              <div class="row">
-                ${listingDetails
-                  .map((listing) => {
-                    if (listing) {
-                      const imageUrl = idToImageUrlMap[listing.id];
-                      const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
-                      return `
-                        <div class="col-lg-12 mb-4">
-                          <div class="item" style="padding: 15px;">
-                            <div class="row">
-                              <div class="col-lg-4 col-sm-5">
-                                <div class="image">
-                                  <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
+      <div class="visit-country">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="items">
+                <div class="row">
+                  ${listingDetails
+                    .map((listing) => {
+                      if (listing) {
+                        const imageUrl = idToImageUrlMap[listing.id];
+                        const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
+                        return `
+                          <div class="col-lg-12 mb-4">
+                            <div class="item" style="padding: 15px;">
+                              <div class="row">
+                                <div class="col-lg-4 col-sm-5">
+                                  <div class="image">
+                                    <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
+                                  </div>
                                 </div>
-                              </div>
-                              <div class="col-lg-8 col-sm-7">
-                                <div class="right-content">
-                                  <h4>${listing.name}</h4>
-                                  <span>Available</span>
-                                  
-                                  <p>
-                                    This listing is available for your selected dates.
-                                  </p>
-                                  <ul class="info">
-                                    <li><i class="fa fa-user"></i> Guests: ${listing.guests || "N/A"}</li>
-                                    <li><i class="fa fa-globe"></i> Location: ${listing.location || "TBD"}</li>
-                                    <li><i class="fa fa-home"></i> Price: Starting from $${listing.price || "TBD"}</li>
-                                  </ul>
-                                  <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
+                                <div class="col-lg-8 col-sm-7">
+                                  <div class="right-content">
+                                    <h4>${listing.name}</h4>
+                                    <span>Available</span>
+                                    
+                                    <p>
+                                      This listing is available for your selected dates.
+                                    </p>
+                                    <ul class="info">
+                                      <li><i class="fa fa-user"></i> Guests: ${listing.guests || "N/A"}</li>
+                                      <li><i class="fa fa-globe"></i> Location: ${listing.location || "TBD"}</li>
+                                      <li><i class="fa fa-home"></i> Price: Starting from $${listing.price || "TBD"}</li>
+                                    </ul>
+                                    <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      `;
-                    }
-                    return "";
-                  })
-                  .join("")}
+                        `;
+                      }
+                      return "";
+                    })
+                    .join("")}
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="side-bar-map sticky-sidebar">
-              <div class="row">
-                <div class="col-lg-12">
-                  <div id="map">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.8439540732948!2d74.3334951754502!3d31.500972774222813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391904421ce9dde7%3A0x24a794a453d56e5a!2sThe%20Opus%20Luxury%20Residences!5e0!3m2!1sen!2s!4v1733138745085!5m2!1sen!2s"
-                      width="600"
-                      height="450"
-                      style="border: 0"
-                      allowfullscreen=""
-                      loading="lazy"
-                      referrerpolicy="no-referrer-when-downgrade"
-                    ></iframe>
+            <div class="col-lg-4">
+              <div class="side-bar-map sticky-sidebar">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div id="map">
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.8439540732948!2d74.3334951754502!3d31.500972774222813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391904421ce9dde7%3A0x24a794a453d56e5a!2sThe%20Opus%20Luxury%20Residences!5e0!3m2!1sen!2s!4v1733138745085!5m2!1sen!2s"
+                        style="border: 0"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                      ></iframe>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
       `;
     } else {
       console.error("Available listings container not found.");
