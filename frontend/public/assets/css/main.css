@@ -3527,7 +3527,7 @@ Visit Country Style
 }
 
 .visit-country .last-item {
-  border-bottom: none;
+  border-bottom: none;            
 }
 
 .visit-country .item .image img {
@@ -3550,12 +3550,12 @@ Visit Country Style
   right: 0;
   top: 0;
 }
-
+     
 .visit-country .item .right-content .main-button a:hover {
   background-color: #22b3c1;
   border-color: #22b3c1;
   color: #fff;
-  opacity: 0.8;
+  opacity: 0.8;          
 }
 
 .visit-country .item .right-content p {
