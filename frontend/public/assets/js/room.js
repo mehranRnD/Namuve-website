@@ -130,7 +130,11 @@ const loadRooms = async () => {
               <small class="fa fa-star"></small>
             </div>
           </div>
-          
+          <div class="d-flex mb-3" style="justify-content: space-between !important;">
+            <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>3 Beds</small>
+            <small class="border-end me-3 pe-3"><i class="fa fa-bath me-2" style="color: #989549;"></i>2 Baths</small>
+            <small><i class="fa fa-wifi me-2" style="color: #989549;"></i>Wifi</small>
+          </div>
           <p class="text-body mb-3" style="min-height: 48px !important;">${
             roomDescriptions[index]
           }</p>
@@ -151,41 +155,107 @@ const loadRooms = async () => {
       </div>
     `;
     roomList.appendChild(roomItem);
+
+    const bookNowBtn = roomItem.querySelector(".book-now-btn");
+    bookNowBtn.addEventListener("click", async () => {
+      const roomId = image.id;
+      const modalElement = document.getElementById("calendar-popup");
+      modalElement.dataset.roomId = roomId;
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+
+      document.getElementById("checkin").value = "";
+      document.getElementById("checkout").value = "";
+      document.getElementById("guests").value = "1";
+
+      const calendarData = await fetchCalendarData(
+        roomId,
+        "2025-01-01",
+        "2025-12-31"
+      );
+      const reservedDates = blurReservedDates(calendarData);
+
+      // Initialize flatpickr for checkin and checkout
+      flatpickr("#checkin", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        disable: reservedDates,
+        onChange: (selectedDates, dateStr) => {
+          document.getElementById("checkin").dataset.selectedDate = dateStr;
+        },
+      });
+
+      flatpickr("#checkout", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        disable: reservedDates,
+        onChange: (selectedDates, dateStr) => {
+          document.getElementById("checkout").dataset.selectedDate = dateStr;
+        },
+      });
+
+      const confirmBookingBtn = document.getElementById("confirm-booking");
+      confirmBookingBtn.onclick = () => {
+        const checkinInput = document.getElementById("checkin");
+        const checkoutInput = document.getElementById("checkout");
+        const guestsInput = document.getElementById("guests");
+
+        const checkin = checkinInput.dataset.selectedDate;
+        const checkout = checkoutInput.dataset.selectedDate;
+        const guests = guestsInput.value;
+
+        if (!checkin) {
+          showRedAlert("Please select a check-in date.");
+          return;
+        }
+        if (!checkout) {
+          showRedAlert("Please select a check-out date.");
+          return;
+        }
+        if (!guests || parseInt(guests) < 1) {
+          showRedAlert("Please enter a valid number of guests.");
+          return;
+        }
+
+        const booknrentUrl = `https://www.booknrent.com/checkout/${roomId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
+
+        // Clear the form inputs
+        checkinInput.value = "";
+        checkoutInput.value = "";
+        guestsInput.value = "1";
+        checkinInput.dataset.selectedDate = "";
+        checkoutInput.dataset.selectedDate = "";
+
+        modal.hide();
+        window.location.href = booknrentUrl;
+      };
+    });
+
+    const virtualTourBtn = roomItem.querySelector(".virtual-tour");
+    virtualTourBtn.addEventListener("click", () => {
+      const roomId = image.id; // Get the room ID
+      const tourLink = virtualTourLinks[roomId]; // Get the corresponding virtual tour link
+
+      if (tourLink) {
+        // Redirect to the virtual tour link if it exists
+        window.location.href = tourLink;
+      } else {
+        // Handle cases where the virtual tour link is not available
+        alert("Virtual tour is not available for this room.");
+      }
+    });
   });
-
-  // Add a button below all the listings
-if (!document.getElementById("view-all-listings-btn-container")) {
-  // Create a parent div for the button
-  const viewAllListingsContainer = document.createElement("div");
-  viewAllListingsContainer.id = "view-all-listings-btn-container";
-  viewAllListingsContainer.className = "text-center mt-4"; // Center the button and add spacing
-
-  // Create the button
-  const viewAllListingsBtn = document.createElement("button");
-  viewAllListingsBtn.id = "view-all-listings-btn";
-  viewAllListingsBtn.className = "btn-more-listings px-5 py-3 rounded-pill";
-  viewAllListingsBtn.style.backgroundColor = "#989549";
-  viewAllListingsBtn.style.border = "none";
-  viewAllListingsBtn.style.color = "white";
-  viewAllListingsBtn.style.fontWeight = "bold";
-  viewAllListingsBtn.textContent = "Visit All Listings";
-
-  // Add a click event listener to redirect to /listings
-  viewAllListingsBtn.addEventListener("click", () => {
-    window.location.href = "/listings";
-  });
-
-  // Append the button to the parent div
-  viewAllListingsContainer.appendChild(viewAllListingsBtn);
-
-  // Append the parent div to the room list container
-  roomList.appendChild(viewAllListingsContainer);
-}
-
 
   updateRoomPrices(); // Call to update prices after rooms are loaded
-};
 
+  const currencySelector = document.getElementById("currencySelector");
+  if (currencySelector) {
+    currencySelector.addEventListener("change", (event) => {
+      currentCurrency = event.target.value;
+      updateRoomPrices(); // Update prices when currency changes
+    });
+  }
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   loadRooms();
