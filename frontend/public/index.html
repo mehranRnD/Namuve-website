@@ -64,9 +64,9 @@
   <body class="index-page">
     <!-- Maintenance Alert -->
     <div id="maintenance-alert" role="alert">
-      🚧 The website is currently under maintenance to enhance your experience. 
-      For the best view, please use a laptop or PC. Thank you for your understanding and support! 
-      – RnD Team BooknRent/Namuve
+      🚧 The website is currently under maintenance to enhance your experience.
+      For the best view, please use a laptop or PC. Thank you for your
+      understanding and support! – RnD Team BooknRent/Namuve
     </div>
 
     <!-- Navbar will be inserted here -->
@@ -95,12 +95,24 @@
                   <!-- Check-in Date -->
                   <div class="col-md-3">
                     <label class="date" for="checkin">ARRIVAL DATE</label>
-                    <input class="book_n" id="checkin" placeholder="Enter Check-in Date" type="date" required />
+                    <input
+                      class="book_n"
+                      id="checkin"
+                      placeholder="Enter Check-in Date"
+                      type="date"
+                      required
+                    />
                   </div>
                   <!-- Check-out Date -->
                   <div class="col-md-3">
                     <label class="date" for="checkout">DEPARTURE DATE</label>
-                    <input class="book_n" id="checkout" placeholder="Enter Check-out Date" type="date" required />
+                    <input
+                      class="book_n"
+                      id="checkout"
+                      placeholder="Enter Check-out Date"
+                      type="date"
+                      required
+                    />
                   </div>
                   <!-- Number of Guests -->
                   <div class="col-md-2">
@@ -125,7 +137,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- /Booking Engine Overlay -->
 
         <div class="container-fluid p-0 mb-0 position-relative">
@@ -1203,8 +1215,7 @@
 
             <div class="col-lg-6">
               <form
-                action="forms/contact.php"
-                method="post"
+                id="contactForm"
                 class="php-email-form"
                 data-aos="fade-up"
                 data-aos-delay="200"
@@ -1214,6 +1225,7 @@
                     <input
                       type="text"
                       name="name"
+                      id="name"
                       class="form-control"
                       placeholder="Your Name"
                       required
@@ -1222,8 +1234,9 @@
                   <div class="col-md-6">
                     <input
                       type="email"
-                      class="form-control"
                       name="email"
+                      id="email"
+                      class="form-control"
                       placeholder="Your Email"
                       required
                     />
@@ -1231,25 +1244,33 @@
                   <div class="col-12">
                     <input
                       type="text"
-                      class="form-control"
                       name="subject"
+                      id="subject"
+                      class="form-control"
                       placeholder="Subject"
                       required
                     />
                   </div>
                   <div class="col-12">
                     <textarea
-                      class="form-control"
                       name="message"
+                      id="message"
+                      class="form-control"
                       rows="6"
                       placeholder="Message"
                       required
                     ></textarea>
                   </div>
                   <div class="col-12 text-center">
-                    <div class="loading" style="display: none">Loading</div>
-                    <div class="error-message" style="display: none"></div>
-                    <div class="sent-message" style="display: none">
+                    <div class="loading" style="display: none">Loading...</div>
+                    <div
+                      class="error-message"
+                      style="display: none; color: red"
+                    ></div>
+                    <div
+                      class="sent-message"
+                      style="display: none; color: green"
+                    >
                       Your message has been sent. Thank you!
                     </div>
                     <button type="submit">Send Message</button>
@@ -1318,6 +1339,51 @@
         });
       });
     </script>
+    <script>
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent form from refreshing page
+
+          const loading = document.querySelector(".loading");
+          const errorMessage = document.querySelector(".error-message");
+          const successMessage = document.querySelector(".sent-message");
+
+          loading.style.display = "block";
+          errorMessage.style.display = "none";
+          successMessage.style.display = "none";
+
+          const formData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            subject: document.getElementById("subject").value,
+            message: document.getElementById("message").value,
+          };
+
+          try {
+            const response = await fetch("http://localhost:3000/api/contact", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+            loading.style.display = "none";
+
+            if (response.ok) {
+              successMessage.style.display = "block";
+              document.getElementById("contactForm").reset();
+            } else {
+              errorMessage.innerText = result.error || "Something went wrong.";
+              errorMessage.style.display = "block";
+            }
+          } catch (error) {
+            loading.style.display = "none";
+            errorMessage.innerText = "Failed to send message. Try again later.";
+            errorMessage.style.display = "block";
+          }
+        });
+    </script>
 
     <!-- Scroll Top -->
     <a
@@ -1344,7 +1410,7 @@
     <script type="module" src="assets/js/script.js"></script>
     <script type="module" src="assets/js/room.js"></script>
     <script type="module" src="assets/js/booking-engine.js"></script>
-    <script src="assets/js/contact.js"></script>
+    <script type="module" src="/assets/js/contact-form.js"></script>
     <script src="assets/js/estimate-revenue.js"></script>
   </body>
 </html>
