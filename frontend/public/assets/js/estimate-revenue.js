@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "2": 2000,
                 "3": 2500,
                 "4": 2350,
-                Sandard: 1200,
+                Standard: 1200,
                 Luxury: 1800,
             },
         };
