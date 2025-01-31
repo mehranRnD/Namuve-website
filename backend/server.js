@@ -27,28 +27,27 @@ class HostawayListingManager {
     this.app.use(express.json());
 // Contact Us form handler
 this.app.post("/api/contact", async (req, res) => {
-  const { name, email, subject, message } = req.body;
+    const { name, email, subject, message } = req.body;
 
   if (!name || !email || !subject || !message) {
-      return res.status(400).json({ error: "All fields are required" });
+    return res.status(400).json({ error: "All fields are required" });
   }
 
   try {
-      const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-              user: process.env.EMAIL,
-              pass: process.env.EMAIL_PASSWORD
-          },
-      });
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL || "mehranali9492@gmail.com", // Your email
+        pass: process.env.EMAIL_PASSWORD || "perhydrocyclopentanophenanthrene" // Your app password
+      },
+    });
 
-      const mailOptions = {
-          from: process.env.EMAIL, // Use your email as sender
-          replyTo: email, // Use user's email as reply-to
-          to: process.env.EMAIL,
-          subject: `Contact Form: ${subject}`,
-          text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-      };
+    const mailOptions = {
+      from: email,
+      to: "mehranali9492@gmail.com",
+      subject: `Contact Form: ${subject}`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+    };
 
     await transporter.sendMail(mailOptions);
     res.json({ success: "Email sent successfully" });
@@ -60,11 +59,6 @@ this.app.post("/api/contact", async (req, res) => {
     // Serve static files
     this.app.use(express.static(path.join(__dirname, "../frontend/public")));
     this.app.use("/", routes);
-
-
-
-    
-
     this.startRoutes();
   }
 
