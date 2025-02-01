@@ -104,7 +104,6 @@ export const roomDescriptions = [
 // Add a mapping for virtual tour links
 export const virtualTourLinks = {
   323227: "https://virtualtour4f-42.netlify.app/",
-  // Add other room IDs and their corresponding links here
   // 288675: "https://example.com/virtual-tour-288675",
   // 288676: "https://example.com/virtual-tour-288676",
   // ...

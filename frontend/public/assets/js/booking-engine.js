@@ -1,5 +1,5 @@
 import { showRedAlert, showGreenAlert, showInfoAlert } from "./alert.js";
-import { idToImageUrlMap, LISTINGS } from "./data.js"; // Import the image URL map
+import { idToImageUrlMap, LISTINGS, roomDescriptions } from "./data.js"; // Import the image URL map
 
 const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
 
@@ -112,10 +112,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         showRedAlert("Please enter a valid number of guests.");
         return;
       }
-      
+
       // If all details are valid, show green alert
       showGreenAlert("Please wait while we fetch available listings...");
-      
+
 
       const availableListings = await checkAvailableListings(
         checkinDate,
@@ -136,6 +136,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         showInfoAlert("No available listings for the selected dates.");
       }
     });
+  }
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+  }
+
+  // Shuffle the descriptions once
+  shuffleArray(roomDescriptions);
+  let currentIndex = 0;
+
+  // Function to get the next description without repeating
+  function getNextDescription() {
+    if (currentIndex >= roomDescriptions.length) {
+      currentIndex = 0; // Reset and shuffle again to avoid duplicates
+      shuffleArray(roomDescriptions);
+    }
+    return roomDescriptions[currentIndex++];
   }
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -162,48 +181,40 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="col-lg-8">
               <div class="items">
                 <div class="row">
-                  ${listingDetails
-                    .map((listing) => {
-                      if (listing) {
-                        const imageUrl = idToImageUrlMap[listing.id];
-                        const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
-                        return `
-                          <div class="col-lg-12 mb-4">
-                            <div class="item" style="padding: 15px;">
-                              <div class="row">
-                                <div class="col-lg-4 col-sm-5">
-                                  <div class="image">
-                                    <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
-                                  </div>
-                                </div>
-                                <div class="col-lg-8 col-sm-7">
-                                  <div class="right-content">
-                                    <h4>${listing.name}</h4>
-                                    <span>Available</span>
-                                    
-                                    <p>
-                                      This listing is available for your selected dates.
-                                    </p>
-                                    <ul class="info">
-                                      <li><i class="fa fa-user"></i> Guests: ${listing.guests || "N/A"}</li>
-                                      <li><i class="fa fa-globe"></i> Location: ${listing.location || "TBD"}</li>
-                                      <li><i class="fa fa-home"></i> Price: Starting from $${listing.price || "TBD"}</li>
-                                    </ul>
-                                    <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        `;
-                      }
-                      return "";
-                    })
-                    .join("")}
+                  ${listingDetails.map((listing) => {
+        if (listing) {
+          const imageUrl = idToImageUrlMap[listing.id];
+          const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
+          return `
+                 <div class="col-lg-12 mb-4">
+                  <div class="item" style="padding: 15px;">
+                    <div class="row">
+                      <div class="col-lg-4 col-sm-5">
+                        <div class="image">
+                          <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
+                        </div>
+                      </div>
+                    <div class="col-lg-8 col-sm-7">
+                   <div class="right-content">
+                  <h4>${listing.name}</h4>
+                  <span>Description: ${getNextDescription()}</span>
+                  <ul class="info">
+                    <li></i>Price: Starting from $${listing.price || "TBD"}</li>
+                  </ul>
+                  <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
+                  <a class="btn btn-light"> View Details</a>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-lg-4">
+                  </div>
+               </div>
+          </div>`;
+        }
+        return "";
+      }).join("")}
+   </div>
+      </div>
+        </div>
+           <div class="col-lg-4">
               <div class="side-bar-map sticky-sidebar">
                 <div class="row">
                   <div class="col-lg-12">
