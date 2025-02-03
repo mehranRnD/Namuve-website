@@ -2,11 +2,11 @@ export function createNavbar() {
     const headerHTML = `
           <header id="header" class="header d-flex align-items-center fixed-top">
               <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
-                  <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
-                      <div class="img-cover-logo">
-                          <img src="assets/img/BNR-logo (1).png" alt="Namuve Logo" />
-                      </div>
-                  </a>
+                  <div class="logo">
+               <a href="/" class="img-cover-logo">
+             <img src="assets/img/Namuve-logo-1.png" alt="Namuve Logo">
+               </a>
+               </div>
                   <nav id="navmenu" class="navmenu">
                       <ul>
                           <li><a href="/" class="active">Home</a></li>
@@ -34,6 +34,7 @@ export function createNavbar() {
                           <li><a href="/estimate-revenue">Estimate Revenue</a></li>
                           <li><a href="/team">Teams</a></li>
                           <li><a href="/contact">Contact</a></li>
+  
                           <!-- Currency Selector -->
                           <li>
                               <select id="currencySelector" class="form-select">
@@ -47,23 +48,26 @@ export function createNavbar() {
               </div>
           </header>
       `;
+
     // Create a function to insert the navbar
     document.body.insertAdjacentHTML("afterbegin", headerHTML);
+
     // Set active nav item based on the current page
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll("#navmenu a");
+
     navLinks.forEach((link) => {
-      // If the link matches the current path, mark it as active
-      if (link.getAttribute("href") === currentPath) {
-        link.classList.add("active");
-        // Check if the link is inside a dropdown and set the dropdown as active
-        const dropdown = link.closest(".dropdown");
-        if (dropdown) {
-          const dropdownLink = dropdown.querySelector("a");
-          dropdownLink.classList.add("active");
+        // If the link matches the current path, mark it as active
+        if (link.getAttribute("href") === currentPath) {
+            link.classList.add("active");
+            // Check if the link is inside a dropdown and set the dropdown as active
+            const dropdown = link.closest(".dropdown");
+            if (dropdown) {
+                const dropdownLink = dropdown.querySelector("a");
+                dropdownLink.classList.add("active");
+            }
+        } else {
+            link.classList.remove("active");
         }
-      } else {
-        link.classList.remove("active");
-      }
     });
-  }
+}

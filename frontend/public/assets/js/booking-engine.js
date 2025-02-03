@@ -1,5 +1,5 @@
 import { showRedAlert, showGreenAlert, showInfoAlert } from "./alert.js";
-import { idToImageUrlMap, LISTINGS, roomDescriptions } from "./data.js"; // Import the image URL map
+import { idToImageUrlMap, LISTINGS, roomDescriptions, LISTINGS_DATA } from "./data.js"; // Import the image URL map
 
 const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
 
@@ -175,6 +175,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       const guests = new URLSearchParams(window.location.search).get("guests");
 
       listingsContainer.innerHTML = `
+      <div class="m-0 text-center">
+              <div class="btn-group py-3 filter-buttons" role="group" aria-label="Room filter">
+                <button type="button" class="btn btn-filter btn-list-out active" data-category="All">
+                  <i class="fas fa-th-large me-2"></i>All 
+                </button>
+                <button type="button" class="btn btn-filter btn-list-out" data-category="Studio">
+                  <i class="fas fa-home me-2"></i>Studio 
+                </button>
+                <button type="button" class="btn btn-filter btn-list-out" data-category="1BR">
+                  <i class="fas fa-bed me-2"></i>1 Bedroom 
+                </button>
+                <button type="button" class="btn btn-filter btn-list-out" data-category="2BR">
+                  <i class="fas fa-bed me-2"></i>2 Bedrooms 
+                </button>
+                <button type="button" class="btn btn-filter btn-list-out" data-category="2BR Premium">
+                  <i class="fas fa-star me-2"></i>2BR Premium 
+                </button>
+                <button type="button" class="btn btn-filter btn-list-out" data-category="3BR">
+                  <i class="fas fa-bed me-2"></i>3 Bedrooms 
+                </button>
+              </div>
+            </div>
       <div class="visit-country">
         <div class="container">
           <div class="row">
