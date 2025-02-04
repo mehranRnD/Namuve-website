@@ -4,7 +4,7 @@ export function createNavbar() {
               <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
                   <div class="logo">
                <a href="/" class="img-cover-logo">
-             <img src="assets/img/Namuve-logo-1.png" alt="Namuve Logo">
+             <img src="assets/img/BNR-logo (1).png" alt="Namuve Logo">
                </a>
                </div>
                   <nav id="navmenu" class="navmenu">
