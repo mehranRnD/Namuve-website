@@ -137,6 +137,36 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
+
+// Function to filter listings
+function filterListings(category) {
+  const allListings = document.querySelectorAll(".listing-item"); // Select all listing elements
+  if (allListings.length === 0) {
+    console.error("No listings found to filter.");
+    return;
+  }
+
+  allListings.forEach((listing) => {
+    const listingId = parseInt(listing.getAttribute("data-id")); // Get listing ID
+    if (category === "All" || (LISTINGS_DATA[category] && LISTINGS_DATA[category].includes(listingId))) {
+      listing.style.display = "block"; // Show matching listings
+    } else {
+      listing.style.display = "none"; // Hide non-matching listings
+    }
+  });
+}
+
+
+document.addEventListener("click", (event) => {
+  if (event.target.classList.contains("btn-filter")) {
+    document.querySelectorAll(".btn-filter").forEach((btn) => btn.classList.remove("active")); // Remove active class from all buttons
+    event.target.classList.add("active"); // Add active class to clicked button
+    const category = event.target.getAttribute("data-category"); // Get category from button
+    filterListings(category); // Apply filtering
+  }
+});
+
+
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -163,80 +193,75 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (availableListings) {
     const listingIdsArray = availableListings.split(",").map(Number);
     const listingsContainer = document.getElementById("available-listings");
-
+  
     if (listingsContainer) {
       listingsContainer.innerHTML = "<p>Loading available listings...</p>";
-
+  
       const listingDetailsPromises = listingIdsArray.map(fetchListingDetails);
       const listingDetails = await Promise.all(listingDetailsPromises);
-
-      const checkinDate = new URLSearchParams(window.location.search).get("checkinDate");
-      const checkoutDate = new URLSearchParams(window.location.search).get("checkoutDate");
-      const guests = new URLSearchParams(window.location.search).get("guests");
-
+  
+      // Render Listings (this is already correct)
       listingsContainer.innerHTML = `
-      <div class="m-0 text-center">
-              <div class="btn-group py-3 filter-buttons" role="group" aria-label="Room filter">
-                <button type="button" class="btn btn-filter btn-list-out active" data-category="All">
-                  <i class="fas fa-th-large me-2"></i>All 
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="Studio">
-                  <i class="fas fa-home me-2"></i>Studio 
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="1BR">
-                  <i class="fas fa-bed me-2"></i>1 Bedroom 
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="2BR">
-                  <i class="fas fa-bed me-2"></i>2 Bedrooms 
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="2BR Premium">
-                  <i class="fas fa-star me-2"></i>2BR Premium 
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="3BR">
-                  <i class="fas fa-bed me-2"></i>3 Bedrooms 
-                </button>
-              </div>
-            </div>
-      <div class="visit-country">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-8">
-              <div class="items">
-                <div class="row">
+        <div class="m-0 text-center">
+          <div class="btn-group py-3 filter-buttons" role="group" aria-label="Room filter">
+            <button type="button" class="btn btn-filter btn-list-out active" data-category="All">
+              <i class="fas fa-th-large me-2"></i>All 
+            </button>
+            <button type="button" class="btn btn-filter btn-list-out" data-category="Studio">
+              <i class="fas fa-home me-2"></i>Studio 
+            </button>
+            <button type="button" class="btn btn-filter btn-list-out" data-category="1BR">
+              <i class="fas fa-bed me-2"></i>1 Bedroom 
+            </button>
+            <button type="button" class="btn btn-filter btn-list-out" data-category="2BR">
+              <i class="fas fa-bed me-2"></i>2 Bedrooms 
+            </button>
+            <button type="button" class="btn btn-filter btn-list-out" data-category="2BR Premium">
+              <i class="fas fa-star me-2"></i>2BR Premium 
+            </button>
+            <button type="button" class="btn btn-filter btn-list-out" data-category="3BR">
+              <i class="fas fa-bed me-2"></i>3 Bedrooms 
+            </button>
+          </div>
+        </div>
+        <div class="visit-country">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8">
+                <div class="items">
+                  <div class="row">
                   ${listingDetails.map((listing) => {
-        if (listing) {
-          const imageUrl = idToImageUrlMap[listing.id];
-          const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
-          return `
-                 <div class="col-lg-12 mb-4">
-                  <div class="item" style="padding: 15px;">
-                    <div class="row">
-                      <div class="col-lg-4 col-sm-5">
-                        <div class="image">
-                          <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
-                        </div>
-                      </div>
-                    <div class="col-lg-8 col-sm-7">
-                   <div class="right-content">
-                  <h4>${listing.name}</h4>
-                  <span>Description: ${getNextDescription()}</span>
-                  <ul class="info">
-                    <li></i>Price: Starting from $${listing.price || "TBD"}</li>
-                  </ul>
-                  <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
-                  <a class="btn btn-light"> View Details</a>
+                    if (listing) {
+                      const imageUrl = idToImageUrlMap[listing.id];
+                      return `
+                        <div class="col-lg-12 mb-4 listing-item" data-id="${listing.id}">
+                          <div class="item" style="padding: 15px;">
+                            <div class="row">
+                              <div class="col-lg-4 col-sm-5">
+                                <div class="image">
+                                  <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
+                                </div>
+                              </div>
+                              <div class="col-lg-8 col-sm-7">
+                                <div class="right-content">
+                                  <h4>${listing.name}</h4>
+                                  <span>Description: ${getNextDescription()}</span>
+                                  <ul class="info">
+                                    <li>Price: Starting from $${listing.price || "TBD"}</li>
+                                  </ul>
+                                  <a class="btn btn-dark">Book Now</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>`;
+                    }
+                    return "";
+                  }).join("")}
                   </div>
                 </div>
-                  </div>
-               </div>
-          </div>`;
-        }
-        return "";
-      }).join("")}
-   </div>
-      </div>
-        </div>
-           <div class="col-lg-4">
+              </div>
+              <div class="col-lg-4">
               <div class="side-bar-map sticky-sidebar">
                 <div class="row">
                   <div class="col-lg-12">
@@ -262,3 +287,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 });
+            
