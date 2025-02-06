@@ -186,9 +186,12 @@ document.addEventListener("click", (event) => {
     }
     return roomDescriptions[currentIndex++];
   }
-
-  const urlParams = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search);
   const availableListings = urlParams.get("availableListings");
+  // Add these lines to get the dates and guests
+  const checkinDate = urlParams.get("checkinDate");
+  const checkoutDate = urlParams.get("checkoutDate");
+  const guests = urlParams.get("guests");
 
   if (availableListings) {
     const listingIdsArray = availableListings.split(",").map(Number);
@@ -200,7 +203,7 @@ document.addEventListener("click", (event) => {
       const listingDetailsPromises = listingIdsArray.map(fetchListingDetails);
       const listingDetails = await Promise.all(listingDetailsPromises);
   
-      // Render Listings (this is already correct)
+      // Render Listings - now with properly defined dates
       listingsContainer.innerHTML = `
         <div class="m-0 text-center">
           <div class="btn-group py-3 filter-buttons" role="group" aria-label="Room filter">
@@ -233,6 +236,7 @@ document.addEventListener("click", (event) => {
                   ${listingDetails.map((listing) => {
                     if (listing) {
                       const imageUrl = idToImageUrlMap[listing.id];
+                      const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
                       return `
                         <div class="col-lg-12 mb-4 listing-item" data-id="${listing.id}">
                           <div class="item" style="padding: 15px;">
@@ -249,7 +253,7 @@ document.addEventListener("click", (event) => {
                                   <ul class="info">
                                     <li>Price: Starting from $${listing.price || "TBD"}</li>
                                   </ul>
-                                  <a class="btn btn-dark">Book Now</a>
+                                  <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
                                 </div>
                               </div>
                             </div>

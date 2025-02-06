@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * Mobile nav toggle
    */
   const mobileNavToggleBtn = document.querySelector(".mobile-nav-toggle");
+  
   if (mobileNavToggleBtn) {
     function mobileNavToogle() {
       document.querySelector("body").classList.toggle("mobile-nav-active");
@@ -33,8 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
       mobileNavToggleBtn.classList.toggle("bi-x");
     }
     mobileNavToggleBtn.addEventListener("click", mobileNavToogle);
-  } else {
-    console.warn("Mobile nav toggle button not found.");
   }
 
   /**
