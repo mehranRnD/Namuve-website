@@ -28,7 +28,7 @@ function getListingInfo(listingId) {
 async function fetchExchangeRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/f1672b88bf550c2ce88410bc/latest/USD"
+      "https://v6.exchangerate-api.com/v6/b49dc61ade0263c2b8d7fea8/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
