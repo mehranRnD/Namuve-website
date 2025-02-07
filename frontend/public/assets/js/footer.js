@@ -13,7 +13,7 @@ export function createFooter() {
                             />
                         </a>
                         <p>
-                            Namuve is your trusted partner for short-term rentals, offering
+                            BooknRent is your trusted partner for short-term rentals, offering
                             comfortable, stylish, and well-equipped properties. We redefine
                             convenience and hospitality, ensuring unforgettable stays for
                             every guest.

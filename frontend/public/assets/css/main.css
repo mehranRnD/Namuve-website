@@ -86,7 +86,6 @@ h6 {
   font-family: var(--title-font);
 }
 
-
 /* PHP Email Form Messages
 ------------------------------*/
 .php-email-form .error-message {
@@ -138,12 +137,9 @@ h6 {
   padding-bottom: 0rem; /* More padding for better spacing */
 }
 
-.booking-engine-overlay
-.booking-engine-overlay .form-control {
+.booking-engine-overlay .booking-engine-overlay .form-control {
   max-width: 200px; /* Increased width for inputs */
-  
 }
-
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
@@ -156,7 +152,6 @@ h6 {
     gap: 15px; /* Adjust spacing for smaller screens */
   }
 }
-
 
 .form-inline {
   display: flex;
@@ -234,15 +229,13 @@ h6 {
   z-index: 997;
 }
 .logo {
-  display: flex; 
+  display: flex;
   align-items: center;
 }
 
 .logo a {
   display: inline-block; /* Ensures only the logo itself is clickable */
 }
-
-
 
 .header .logo {
   line-height: 1;
@@ -251,15 +244,13 @@ h6 {
 .header .logo .img-cover-logo {
   width: 100%;
   height: auto;
-  
 }
 
 .header .logo img {
-  width: 119px; 
+  width: 119px;
   height: auto;
   margin-left: 20px;
 }
-
 
 .header .logo h1 {
   font-size: 24px;
@@ -961,12 +952,11 @@ section,
 }
 
 @media (max-width: 768px) {
-
   .hero {
     width: 100%;
     min-height: 0vh;
     padding-top: 70px !important;
-}
+  }
 
   .carousel-caption {
     padding-top: 0px;
@@ -990,7 +980,7 @@ section,
     display: inline-block;
     transition: ease-in all 0.5s;
     border-radius: 100px;
-}
+  }
 
   .form_book .date {
     font-size: 12px !important;
@@ -1007,7 +997,7 @@ section,
     padding-right: 0px;
   }
 
-  .hero .carousel-caption{
+  .hero .carousel-caption {
     padding-left: 0px !important;
     padding-right: 0px !important;
   }
@@ -1028,7 +1018,12 @@ section,
     margin-bottom: 0px !important;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-size: 20px !important;
     margin-top: 2rem !important;
   }
@@ -1044,33 +1039,31 @@ section,
 
   .call-to-action {
     padding: 0px !important;
-}
+  }
 
   .call-to-action h3 {
     font-size: 24px;
-}
+  }
 
-.hero img {
-  padding-top: 0px;
-  height: 100vh;
-}
+  .hero img {
+    padding-top: 0px;
+    height: 100vh;
+  }
 
-.carousel-item .carousel-caption {
-  display: flex;
-  justify-content: flex-start !important;
-}
+  .carousel-item .carousel-caption {
+    display: flex;
+    justify-content: flex-start !important;
+  }
 
-.about .icon-box {
-  padding: 35px 30px !important;
-}
+  .about .icon-box {
+    padding: 35px 30px !important;
+  }
 
-.about .icon-box i {
+  .about .icon-box i {
     width: 55px !important;
     height: 55px !important;
     font-size: 22px !important;
-}
-
-
+  }
 }
 
 /*--------------------------------------------------------------
@@ -3148,7 +3141,6 @@ section,
   color: #fff;
 }
 
-
 /* Calculator CSS */
 .cf-div {
   background-color: rgba(255, 255, 255, 99%);
@@ -3284,7 +3276,6 @@ section,
   border-radius: 10px;
 }
 
-
 /*--------------------------------------------------------------
 /** 7.8 Video Section
 --------------------------------------------------------------*/
@@ -3307,12 +3298,9 @@ section,
   justify-content: center !important;
 }
 
-
 .video .video-player a {
   position: relative;
 }
-
-
 
 @media (max-width: 600px) {
   .video .video-player img.text-pattern {
@@ -3321,7 +3309,6 @@ section,
     margin: 0 auto;
   }
 }
-
 
 /*--------------------------------------------------------------
 # Features Section
@@ -3392,7 +3379,7 @@ section,
 /*--------------------------------------------------------------
 # Features Details Section
 --------------------------------------------------------------*/
-.features-details .features-item+.features-item {
+.features-details .features-item + .features-item {
   margin-top: 60px;
 }
 
@@ -3444,7 +3431,6 @@ section,
 .features-details .features-item img {
   border-radius: 15px;
 }
-
 
 /*--------------------------------------------------------------
 # Testimonials Section
@@ -3555,18 +3541,18 @@ section,
 /* Maintenance Alert Styles */
 #maintenance-alert {
   position: fixed;
-  top: 0; 
+  top: 0;
   left: 0;
   right: 0;
-  background-color: #ffcc00; 
-  color: #000; 
+  background-color: #ffcc00;
+  color: #000;
   padding: 10px;
   text-align: center;
   z-index: 1000;
   font-size: 14px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transform: translateY(-100%); 
-  opacity: 0; 
+  transform: translateY(-100%);
+  opacity: 0;
   animation: topSlam 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
 
@@ -3614,12 +3600,11 @@ Visit Country Style
 }
 
 .visit-country .last-item {
-  border-bottom: none;            
+  border-bottom: none;
 }
 
 .visit-country .item .image {
   width: 100%;
- 
 }
 
 .visit-country .item .image img {
@@ -3648,12 +3633,12 @@ Visit Country Style
   right: 0;
   top: 0;
 }
-     
+
 .visit-country .item .right-content .main-button a:hover {
   background-color: #22b3c1;
   border-color: #22b3c1;
   color: #fff;
-  opacity: 0.8;          
+  opacity: 0.8;
 }
 
 .visit-country .item .right-content p {
@@ -3669,7 +3654,7 @@ Visit Country Style
 .visit-country .item .right-content ul li {
   display: inline-block;
   width: 29%;
-  color: #AFAF36;
+  color: #afaf36;
   font-size: 14px;
 }
 
@@ -3679,6 +3664,8 @@ Visit Country Style
 
 .visit-country .item .right-content ul li:last-child {
   text-align: right;
+  display: inline-block; /* Ensure inline display */
+  white-space: nowrap; /* Prevent line break */
 }
 
 .visit-country .item .right-content ul li i {
@@ -3710,7 +3697,7 @@ Visit Country Style
   font-size: 18px;
   font-weight: 500;
   border-radius: 50%;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .visit-country ul.page-numbers li a:hover {
@@ -3745,22 +3732,21 @@ Visit Country Style
 }
 
 .book_n {
- border: inherit;
- border-radius: 20px;
- background-color: #eeeeee67;
- width: 100%;
- font-size: 16px;
- height: auto;
- line-height: normal;
- padding: 10px 20px;
- transition: ease-in all 0.5s;
+  border: inherit;
+  border-radius: 20px;
+  background-color: #eeeeee67;
+  width: 100%;
+  font-size: 16px;
+  height: auto;
+  line-height: normal;
+  padding: 10px 20px;
+  transition: ease-in all 0.5s;
 }
 
 .book_n:hover {
   background-color: #eeeeee;
   transition: ease-in all 0.5s;
 }
-
 
 .book_btn {
   font-size: 18px;
@@ -3784,8 +3770,6 @@ Visit Country Style
   border: none;
 }
 
-
-
 .blurred {
   filter: blur(2px); /* Adjust the blur effect as needed */
   opacity: 0.5; /* Optional: make blurred dates semi-transparent */
@@ -3800,7 +3784,8 @@ Visit Country Style
   margin-top: 50px; /* Space from the top */
 }
 
-.calculator, .result {
+.calculator,
+.result {
   background-color: white; /* White background for sections */
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -3913,6 +3898,8 @@ Visit Country Style
 
 .visit-country .item .right-content ul li:last-child {
   text-align: right;
+  display: inline-block; /* Ensure inline display */
+  white-space: nowrap; /* Prevent line break */
 }
 
 .visit-country .item .right-content ul li i {
@@ -3944,7 +3931,7 @@ Visit Country Style
   font-size: 18px;
   font-weight: 500;
   border-radius: 50%;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .visit-country ul.page-numbers li a:hover {
@@ -3961,4 +3948,3 @@ Visit Country Style
 .visit-country ul.page-numbers li:last-child a {
   border: none;
 }
-
