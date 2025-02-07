@@ -6,11 +6,60 @@ const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
 // Extract the listing IDs from the array
 const LISTING_IDS = LISTINGS.map((listing) => listing.id);
 
+let usdToPkrRate = 277.66; // Fallback rate
+
+// Function to fetch USD to PKR exchange rate
+async function fetchConversionRate() {
+  try {
+    const response = await fetch(
+      "https://v6.exchangerate-api.com/v6/b49dc61ade0263c2b8d7fea8/latest/USD"
+    );
+    const data = await response.json();
+    usdToPkrRate = data.conversion_rates.PKR;
+  } catch (error) {
+    console.error("Failed to fetch USD to PKR rate:", error);
+  }
+}
+
 // Function to get the price for a specific listing ID
 const getPriceById = (listingId) => {
   const listing = LISTINGS.find((l) => l.id === listingId);
   return listing ? listing.price : "N/A";
 };
+
+// Function to update all listing prices based on selected currency
+function updatePrices(currency) {
+  document.querySelectorAll(".listing-item").forEach((listing) => {
+    const listingId = parseInt(listing.getAttribute("data-id"));
+    const priceElement = listing.querySelector(".info li"); // Select price <li> inside .info
+
+    if (priceElement) {
+      const basePrice = getPriceById(listingId);
+      let convertedPrice = basePrice;
+
+      if (currency === "PKR") {
+        convertedPrice = (basePrice * usdToPkrRate).toFixed(0); // Convert USD to PKR
+      } else {
+        convertedPrice = basePrice; // Keep USD
+      }
+
+      priceElement.innerHTML = `Price: Starting from ${currency} ${convertedPrice}`;
+    }
+  });
+}
+
+// Event listener for currency selection
+document.addEventListener("DOMContentLoaded", async () => {
+  await fetchConversionRate(); // Fetch exchange rate when page loads
+
+  const currencySelector = document.getElementById("currencySelector");
+
+  if (currencySelector) {
+    currencySelector.addEventListener("change", (event) => {
+      updatePrices(event.target.value);
+    });
+  }
+});
 
 // Function to fetch calendar data for a specific listing
 async function fetchCalendarData(listingId, startDate, endDate) {
