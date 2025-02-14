@@ -121,6 +121,25 @@
             </h1>
           </div>
 
+          <!-- Add this occupancy section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Today's Occupancy</h5>
+            <div id="occupancy-status" class="d-flex justify-content-between">
+              <div>
+                <span class="badge bg-success">Available: <span id="available-count">0</span></span>
+              </div>
+              <div>
+                <span class="badge bg-danger">Reserved: <span id="reserved-count">0</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
           <div id="loading" class="loading">Loading listings...</div>
         </div>
         <div id="error" class="error" style="display: none"></div>

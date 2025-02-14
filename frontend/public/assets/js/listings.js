@@ -92,7 +92,48 @@ async function fetchCalendarData(listingId, startDate, endDate) {
     return null;
   }
 }
+const calendarDataCache = {};
 
+async function checkDailyOccupancy() {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const allListings = getAllListingIds();
+
+
+    // Fetch calendar data for all listings in parallel
+    const fetchPromises = allListings.map(async (listingId) => {
+      if (!calendarDataCache[listingId]) {
+        calendarDataCache[listingId] = fetchCalendarData(listingId, today, today);
+      }
+      return calendarDataCache[listingId];
+    });
+
+    // Wait for all promises to resolve
+    const calendarDataResults = await Promise.all(fetchPromises);
+
+    // Count available and reserved listings
+    let availableCount = 0;
+    let reservedCount = 0;
+
+    calendarDataResults.forEach((calendarData) => {
+      const status = checkAvailabilityStatus(calendarData, today);
+      if (status && status.status === 'reserved') {
+        reservedCount++;
+      } else {
+        availableCount++;
+      }
+    });
+
+    // Update the UI
+    document.getElementById('available-count').textContent = availableCount;
+    document.getElementById('reserved-count').textContent = reservedCount;
+  } catch (error) {
+    console.error('Error checking daily occupancy:', error);
+    // Show error state
+    document.getElementById('available-count').textContent = 'Error';
+    document.getElementById('reserved-count').textContent = 'Error';
+  }
+}
 // Function to load listings
 async function loadListings() {
   const gallery = document.getElementById("gallery");
@@ -101,8 +142,11 @@ async function loadListings() {
 
   try {
     loading.style.display = "block";
+    checkDailyOccupancy();
+
     await fetchConversionRate();
     const listings = await getListingData();
+
 
     // Replace the hardcoded images array with getAllListingIds()
     const images = getAllListingIds().map((id) => ({ id: id.toString() }));
@@ -334,6 +378,8 @@ const checkAvailabilityStatus = (calendarData, selectedDate) => {
     price: dateEntry.price,
   };
 };
+
+
 
 // Function to open booking modal
 function openBookingModal(listingId) {

@@ -60,7 +60,6 @@
     <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
 
     <!-- Main CSS File -->
-     <link rel="stylesheet" href="assets/css/template.css">
     <link href="assets/css/main.css" rel="stylesheet" />
   </head>
   <body class="index-page">
@@ -90,7 +89,7 @@
         if (availableListings) {
           // Convert the string of listing IDs into an array
           const listingIdsArray = availableListings.split(",");
-          console.log("Available Listings:", listingIdsArray);
+          // console.log("Available Listings:", listingIdsArray);
 
           // Dynamically display the listing IDs on the page
           const listingsContainer =
@@ -104,7 +103,7 @@
             </ul>
           `;
         } else {
-          console.log("No available listings found.");
+          // console.log("No available listings found.");
           document.getElementById("available-listings").innerHTML =
             "<p>No available listings found for your selected dates.</p>";
         }

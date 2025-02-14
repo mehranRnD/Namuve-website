@@ -3948,3 +3948,16 @@ Visit Country Style
 .visit-country ul.page-numbers li:last-child a {
   border: none;
 }
+
+#occupancy-status {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+#occupancy-status .badge {
+  font-size: 1rem;
+  padding: 8px 15px;
+  margin: 0 5px;
+}
+
