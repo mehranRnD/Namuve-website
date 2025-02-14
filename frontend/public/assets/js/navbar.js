@@ -22,7 +22,6 @@ export function createNavbar() {
                               </ul>
                           </li>
                           <li><a href="/listings">Rooms</a></li>
-                        //   <li><a href="/gallery">Gallery</a></li>
                           <li class="dropdown">
                               <a><span>InsightsHub</span><i class="bi bi-chevron-down toggle-dropdown"></i></a>
                               <ul>
