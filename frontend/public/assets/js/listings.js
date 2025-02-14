@@ -232,7 +232,7 @@ async function loadListings() {
         <h5 class="mb-0" style="max-width: 70% !important; font-size: 1.1rem !important;">${
           listing ? listing.name : "Loading..."
         }</h5>
-        <div class="ps-2 d-flex" style="color: #989549;">
+        <div class="ps-2 d-flex" style="color: #ffc107;">
           <small class="fa fa-star" style="margin: 0 1px !important;"></small>
           <small class="fa fa-star" style="margin: 0 1px !important;"></small>
           <small class="fa fa-star" style="margin: 0 1px !important;"></small>
