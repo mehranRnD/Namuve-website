@@ -93,28 +93,6 @@ async function fetchCalendarData(listingId, startDate, endDate) {
   }
 }
 
- /// Function to fetch reviews
-async function fetchReviews() {
-  try {
-    const response = await fetch('http://localhost:3000/api/reviews');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-    return [];
-  }
-}
-
-// Fetch and log reviews
-const reviews = await fetchReviews();
-console.log("Listing Reviews:", reviews.map(review => ({
-  id: review.id,
-  rating: review.raiting,
-  listingMapId: review.listingMapId
-})));
 // Function to load listings
 async function loadListings() {
   const gallery = document.getElementById("gallery");
@@ -160,7 +138,7 @@ async function loadListings() {
                 </div>
                 <div class="col-6 col-sm-4 col-md-auto">
                     <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR Premium">
-                        <i class="fas fa-star me-2"></i>2 BR Premium (4)
+                        <i class="fas fa-star me-2"></i>2BR Premium (4)
                     </button>
                 </div>
                 <div class="col-6 col-sm-4 col-md-auto">
