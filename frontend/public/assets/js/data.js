@@ -27,7 +27,7 @@ export const idToImageUrlMap = {
   288688:
     "https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/80066-288688-7eZx1--qu6kw1rw5Jeo2R3qC4PKmGD0uGULZmim4HWM4-66e170a62bc05-small",
   288689:
-    "https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/80066-288689-9Gi--EJf6Rhns3kfYwgf46-JEZjzr682-CtPj2gqZNd8-66b6326044c92-small",
+    "https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/80066-288689-bCL--YmRc3H35JUjtzGVAgJj3adnBUg--fhIKfiz8MOrs-67a09ef08adba-small",
   288690:
     "https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/80066-288690-yK4nZYUVUq4ZG0zvV7dlgpPoMhl6QVUjTWYK3Sh3oBo-67122fcc6b26f-small",
   288691:

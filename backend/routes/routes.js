@@ -2,10 +2,8 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import axios from "axios";
-import dotenv from "dotenv";
 
 const router = express.Router();
-dotenv.config();
 // Derive __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -82,20 +80,28 @@ router.get("/uniform", (req, res) => {
 router.get("/terms-and-conditions", (req, res) => {
   res.sendFile(path.join(publicDir, "terms-and-conditions.html"));
 });
+
 router.get("/team", (req, res) => {
   res.sendFile(path.join(publicDir, "team.html"));
 });
+
 router.get("/booking-engine", (req, res) => {
   res.sendFile(path.join(publicDir, "booking-engine.html"));
 });
 
+
+router.get("/gallery", (req, res) => {
+  res.sendFile(path.join(publicDir, "gallery.html"));
+});
+
+
+
+
 // Add API routes
 router.get("/api/listings", async (req, res) => {
   try {
-    const apiBaseUrl =
-      process.env.HOSTAWAY_API_URL || "https://api.hostaway.com/v1/listings";
+    const apiBaseUrl = "https://api.hostaway.com/v1/listings";
     const authToken =
-      process.env.AUTHORIZATION_TOKEN ||
       "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6IjZkODk5MWMyZTI4MGQ0NDg3NmNhNDUyZmYxMWU5ZTcxNDFhNDJhMGIzMmViNzA3ZTQyMDFhYjY4OWQ3NDc2Yjk0NDZlZjA2NTZhY2QzMDkxIiwiaWF0IjoxNzIzOTk0NTQxLjcxOTMyNiwibmJmIjoxNzIzOTk0NTQxLjcxOTMyNywiZXhwIjoyMDM5NTI3MzQxLjcxOTMzMSwic3ViIjoiIiwic2NvcGVzIjpbImdlbmVyYWwiXSwic2VjcmV0SWQiOjM5NDM0fQ.aCE9HtgvxqTLuftdSe3I75s8DocQoBz949WG-NTot-qIzWRmruShmqkZNs8rtA_CyNNocOr_fahkXZBK3hHxQ4G6QxX9z8acQ_mJ68Wz5YKT39A6gAmu--5Ux_W6xdMpzb8J6f4SrdDJneC3RIWweT3KvZ832VIm1AmQDgHgJ7k";
     const response = await axios.get(apiBaseUrl, {
       headers: {
@@ -113,14 +119,14 @@ router.get("/api/listings", async (req, res) => {
     const listings =
       data?.status === "success" && Array.isArray(data.result)
         ? data.result.map((listing) => ({
-            id: listing.id || Date.now().toString(),
-            name: listing.name || "Unnamed Listing",
-            description: listing.description || "No description available",
-            address: listing.address || "Address not provided",
-            price: listing.price || 0,
-            houseRules: listing.houseRules || "No specific house rules",
-            imageUrl: listing.imageUrl || "https://via.placeholder.com/300",
-          }))
+          id: listing.id || Date.now().toString(),
+          name: listing.name || "Unnamed Listing",
+          description: listing.description || "No description available",
+          address: listing.address || "Address not provided",
+          price: listing.price || 0,
+          houseRules: listing.houseRules || "No specific house rules",
+          imageUrl: listing.imageUrl || "https://via.placeholder.com/300",
+        }))
         : [];
 
     res.json(listings);
@@ -132,11 +138,8 @@ router.get("/api/listings", async (req, res) => {
 router.get("/api/listings/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const apiBaseUrl =
-      process.env.HOSTAWAY_API_URL || "https://api.hostaway.com/v1/listings";
-    const authToken =
-      process.env.AUTHORIZATION_TOKEN ||
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6IjZkODk5MWMyZTI4MGQ0NDg3NmNhNDUyZmYxMWU5ZTcxNDFhNDJhMGIzMmViNzA3ZTQyMDFhYjY4OWQ3NDc2Yjk0NDZlZjA2NTZhY2QzMDkxIiwiaWF0IjoxNzIzOTk0NTQxLjcxOTMyNiwibmJmIjoxNzIzOTk0NTQxLjcxOTMyNywiZXhwIjoyMDM5NTI3MzQxLjcxOTMzMSwic3ViIjoiIiwic2NvcGVzIjpbImdlbmVyYWwiXSwic2VjcmV0SWQiOjM5NDM0fQ.aCE9HtgvxqTLuftdSe3I75s8DocQoBz949WG-NTot-qIzWRmruShmqkZNs8rtA_CyNNocOr_fahkXZBK3hHxQ4G6QxX9z8acQ_mJ68Wz5YKT39A6gAmu--5Ux_W6xdMpzb8J6f4SrdDJneC3RIWweT3KvZ832VIm1AmQDgHgJ7k";
+    const apiBaseUrl = "https://api.hostaway.com/v1/listings";
+    const authToken ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6IjZkODk5MWMyZTI4MGQ0NDg3NmNhNDUyZmYxMWU5ZTcxNDFhNDJhMGIzMmViNzA3ZTQyMDFhYjY4OWQ3NDc2Yjk0NDZlZjA2NTZhY2QzMDkxIiwiaWF0IjoxNzIzOTk0NTQxLjcxOTMyNiwibmJmIjoxNzIzOTk0NTQxLjcxOTMyNywiZXhwIjoyMDM5NTI3MzQxLjcxOTMzMSwic3ViIjoiIiwic2NvcGVzIjpbImdlbmVyYWwiXSwic2VjcmV0SWQiOjM5NDM0fQ.aCE9HtgvxqTLuftdSe3I75s8DocQoBz949WG-NTot-qIzWRmruShmqkZNs8rtA_CyNNocOr_fahkXZBK3hHxQ4G6QxX9z8acQ_mJ68Wz5YKT39A6gAmu--5Ux_W6xdMpzb8J6f4SrdDJneC3RIWweT3KvZ832VIm1AmQDgHgJ7k";
 
     const response = await axios.get(apiBaseUrl, {
       headers: {
@@ -154,14 +157,14 @@ router.get("/api/listings/:id", async (req, res) => {
     const listings =
       data?.status === "success" && Array.isArray(data.result)
         ? data.result.map((listing) => ({
-            id: listing.id || Date.now().toString(),
-            name: listing.name || "Unnamed Listing",
-            description: listing.description || "No description available",
-            address: listing.address || "Address not provided",
-            price: listing.price || 0,
-            houseRules: listing.houseRules || "No specific house rules",
-            imageUrl: listing.imageUrl || "https://via.placeholder.com/300",
-          }))
+          id: listing.id || Date.now().toString(),
+          name: listing.name || "Unnamed Listing",
+          description: listing.description || "No description available",
+          address: listing.address || "Address not provided",
+          price: listing.price || 0,
+          houseRules: listing.houseRules || "No specific house rules",
+          imageUrl: listing.imageUrl || "https://via.placeholder.com/300",
+        }))
         : [];
 
     const listing = listings.find((l) => l.id.toString() === id);

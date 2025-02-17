@@ -118,14 +118,14 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
 
       if (isAvailable) {
         availableListings.push(listingId);
-        console.log(`This listing is available and ID is ${listingId}`);
+        // console.log(`This listing is available and ID is ${listingId}`);
       }
     }
   });
 
   await Promise.all(fetchPromises);
 
-  console.log("Available Listings IDs:", availableListings);
+  // console.log("Available Listings IDs:", availableListings);
 
   if (availableListings.length === 0) {
     showInfoAlert("No available listings for the selected dates.");
@@ -247,7 +247,13 @@ const urlParams = new URLSearchParams(window.location.search);
     const listingsContainer = document.getElementById("available-listings");
   
     if (listingsContainer) {
-      listingsContainer.innerHTML = "<p>Loading available listings...</p>";
+      listingsContainer.innerHTML = `
+        <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+          <div class="spinner-border " role="status" style="width: 3rem; height: 3rem; color: #989549">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      `;
   
       const listingDetailsPromises = listingIdsArray.map(fetchListingDetails);
       const listingDetails = await Promise.all(listingDetailsPromises);
