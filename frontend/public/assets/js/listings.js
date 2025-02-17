@@ -173,7 +173,8 @@ async function loadListings() {
         style="width: 100% !important; 
         height: 300px !important; 
         object-fit: cover !important;" />
-      <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #989549;">
+      <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" 
+      style="background-color: #6b7560;">
         Starting from ${
           currentCurrency === "USD"
             ? `$${getBasePriceByListingId(image.id)}`
@@ -197,13 +198,13 @@ async function loadListings() {
         </div>
       </div>
       <div class="d-flex mb-3">
-        <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>${
+        <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #6b7560;"></i>${
           roomDetails.beds
         } Bed(s)</small>
-        <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #989549;"></i>${
+        <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #6b7560;"></i>${
           roomDetails.guests
         } Guests</small>
-        <small><i class="fa fa-wifi me-2" style="color: #989549;"></i>Wifi</small>
+        <small><i class="fa fa-wifi me-2" style="color: #6b7560;"></i>Wifi</small>
       </div>
       <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${
         roomDescriptions[images.findIndex((img) => img.id === image.id)]
@@ -211,13 +212,13 @@ async function loadListings() {
       <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
         <a href="/listings-details?id=${image.id}" 
           class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
-          style="background-color: #989549; border: none;">
+          style="background-color: #6C757D; border: none;">
           <i class="fas fa-info-circle me-2"></i>View Details
         </a>
         <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
           <i class="fas fa-video me-2"></i>Virtual Tour
         </button>
-        <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn">
+        <button style="background-color: #6b7560; border: #6b7560;" class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn">
           <i class="fas fa-calendar-check me-2"></i>Book Now
         </button>
       </div>

@@ -113,7 +113,7 @@ const loadRooms = async () => {
       <div class="room-item shadow rounded overflow-hidden" style="height: 100% !important;">
         <div class="position-relative">
           <img class="img-fluid" src="${imageUrl}" alt="Room Image ${image.id}" style="width: 100%; height: 250px; object-fit: cover;" />
-          <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #02886f;">
+          <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6b7560;">
             ${listing ? `Starting from $${listing.price}` : "Price not available"}
           </small>
         </div>
@@ -137,13 +137,13 @@ const loadRooms = async () => {
           <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
             <a href="/listings-details?id=${image.id}" 
               class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
-              style="background-color: #84c3b7; border: none;">
+              style="background-color: #6C757D; border: none;">
               <i class="fas fa-info-circle me-2"></i>View Details
             </a>
             <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
               <i class="fas fa-video me-2"></i>Virtual Tour
             </button>
-            <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${image.id}">
+            <button style="background-color: #6b7560; border: #6b7560;" class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" data-room-id="${image.id}">
               <i class="fas fa-calendar-check me-2"></i>Book Now
             </button>
           </div>
