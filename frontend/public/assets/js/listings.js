@@ -92,48 +92,29 @@ async function fetchCalendarData(listingId, startDate, endDate) {
     return null;
   }
 }
-const calendarDataCache = {};
 
-async function checkDailyOccupancy() {
+ /// Function to fetch reviews
+async function fetchReviews() {
   try {
-    const today = new Date().toISOString().split('T')[0];
-    const allListings = getAllListingIds();
-
-
-    // Fetch calendar data for all listings in parallel
-    const fetchPromises = allListings.map(async (listingId) => {
-      if (!calendarDataCache[listingId]) {
-        calendarDataCache[listingId] = fetchCalendarData(listingId, today, today);
-      }
-      return calendarDataCache[listingId];
-    });
-
-    // Wait for all promises to resolve
-    const calendarDataResults = await Promise.all(fetchPromises);
-
-    // Count available and reserved listings
-    let availableCount = 0;
-    let reservedCount = 0;
-
-    calendarDataResults.forEach((calendarData) => {
-      const status = checkAvailabilityStatus(calendarData, today);
-      if (status && status.status === 'reserved') {
-        reservedCount++;
-      } else {
-        availableCount++;
-      }
-    });
-
-    // Update the UI
-    document.getElementById('available-count').textContent = availableCount;
-    document.getElementById('reserved-count').textContent = reservedCount;
+    const response = await fetch('http://localhost:3000/api/reviews');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error checking daily occupancy:', error);
-    // Show error state
-    document.getElementById('available-count').textContent = 'Error';
-    document.getElementById('reserved-count').textContent = 'Error';
+    console.error("Error fetching reviews:", error);
+    return [];
   }
 }
+
+// Fetch and log reviews
+const reviews = await fetchReviews();
+console.log("Listing Reviews:", reviews.map(review => ({
+  id: review.id,
+  rating: review.raiting,
+  listingMapId: review.listingMapId
+})));
 // Function to load listings
 async function loadListings() {
   const gallery = document.getElementById("gallery");
@@ -142,7 +123,7 @@ async function loadListings() {
 
   try {
     loading.style.display = "block";
-    checkDailyOccupancy();
+    // checkDailyOccupancy();
 
     await fetchConversionRate();
     const listings = await getListingData();
@@ -155,26 +136,38 @@ async function loadListings() {
     const filterContainer = document.createElement("div");
     filterContainer.classList.add("container", "mb-5", "mt-4");
     filterContainer.innerHTML = `
-        <div class="m-0 text-center">
-            <div class="btn-group py-3 filter-buttons" role="group" aria-label="Room filter">
-                <button type="button" class="btn btn-filter btn-list-out active" data-category="All">
-                    <i class="fas fa-th-large me-2"></i>All (32)
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="Studio">
-                    <i class="fas fa-home me-2"></i>Studio (6)
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="1BR">
-                    <i class="fas fa-bed me-2"></i>1 Bedroom (10)
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="2BR">
-                    <i class="fas fa-bed me-2"></i>2 Bedrooms (9)
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="2BR Premium">
-                    <i class="fas fa-star me-2"></i>2BR Premium (4)
-                </button>
-                <button type="button" class="btn btn-filter btn-list-out" data-category="3BR">
-                    <i class="fas fa-bed me-2"></i>3 Bedrooms (3)
-                </button>
+                <div class="m-0 text-center">
+            <div class="row g-2 py-3 justify-content-center filter-buttons">
+                <div class="col-6 col-sm-4 col-md-auto">
+                    <button type="button" class="btn btn-filter btn-list-out w-100 active" data-category="All">
+                        <i class="fas fa-th-large me-2"></i>All (32)
+                    </button>
+                </div>
+                <div class="col-6 col-sm-4 col-md-auto">
+                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="Studio">
+                        <i class="fas fa-home me-2"></i>Studio (6)
+                    </button>
+                </div>
+                <div class="col-6 col-sm-4 col-md-auto">
+                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="1BR">
+                        <i class="fas fa-bed me-2"></i>1BR (10)
+                    </button>
+                </div>
+                <div class="col-6 col-sm-4 col-md-auto">
+                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR">
+                        <i class="fas fa-bed me-2"></i>2BR (9)
+                    </button>
+                </div>
+                <div class="col-6 col-sm-4 col-md-auto">
+                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR Premium">
+                        <i class="fas fa-star me-2"></i>2 BR Premium (4)
+                    </button>
+                </div>
+                <div class="col-6 col-sm-4 col-md-auto">
+                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="3BR">
+                        <i class="fas fa-bed me-2"></i>3BR (3)
+                    </button>
+                </div>
             </div>
         </div>
     `;

@@ -89,13 +89,21 @@ router.get("/booking-engine", (req, res) => {
   res.sendFile(path.join(publicDir, "booking-engine.html"));
 });
 
-
 router.get("/gallery", (req, res) => {
   res.sendFile(path.join(publicDir, "gallery.html"));
 });
 
+router.get("/blog-one", (req, res) => {
+  res.sendFile(path.join(publicDir, "blog-one.html"));
+});
 
+router.get("/blog-two", (req, res) => {
+  res.sendFile(path.join(publicDir, "blog-two.html"));
+});
 
+router.get("/blog-three", (req, res) => {
+  res.sendFile(path.join(publicDir, "blog-three.html"));
+});
 
 // Add API routes
 router.get("/api/listings", async (req, res) => {

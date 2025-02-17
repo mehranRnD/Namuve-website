@@ -6,7 +6,7 @@ export function createFooter() {
                     <div class="col-lg-3 col-md-12 footer-about">
                         <a href="/" class="logo d-flex align-items-center">
                             <img
-                                src="assets/img/Bnr-logo-2.png"
+                                src="assets/img/Namuve-logo-1.png"
                                 alt="Logo"
                                 class="me-3"
                                 style="height: 80px; width: auto"
