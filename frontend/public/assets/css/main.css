@@ -38,6 +38,7 @@
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
 
+
 .light-background {
   --background-color: #f9f9f9;
   --surface-color: #ffffff;
@@ -89,6 +90,15 @@ h6 {
   color: var(--heading-color);
   font-family: var(--title-font);
 }
+
+.carousel-item {
+  box-shadow: rgba(255, 255, 255, 0.924) 30px 30px 60px 12px inset, rgba(255, 255, 255, 0.937) 0px 18px 36px 18px inset;
+}
+
+.carousel-item img{
+  box-shadow: rgba(255, 255, 255, 0.924) 30px 30px 60px 12px inset, rgba(255, 255, 255, 0.937) 0px 18px 36px 18px inset;
+}
+
 
 /* PHP Email Form Messages
 ------------------------------*/
@@ -892,6 +902,7 @@ section,
   object-fit: cover;
   z-index: 1;
   padding-top: 7.2rem;
+  box-shadow: 0px -20px 300px rgba(0, 0, 0, 1);
 }
 
 .hero:before {
@@ -956,26 +967,35 @@ section,
 }
 
 @media (max-width: 768px) {
+  .header {
+    color: var(--default-color);
+    background-color: var(--background-color);
+    padding: 18px 0;
+    transition: all 0.5s;
+    z-index: 997;
+  }
+
   .header .logo img {
     width: 115px;
     height: auto;
-    margin: 0px !important;
+    margin-left: 0px !important;
+    margin-top: -8px !important;
   } 
 
   .hero {
     width: 100%;
     min-height: 0vh;
-    padding-top: 96px !important;
+    padding-top: 84px !important;
   }
 
   .carousel-caption {
-    padding-top: 0px;
+    padding-top: 20px;
     padding-bottom: 0px;
   }
 
   .form_book {
     background: #fff;
-    padding: 15px 14px 15px 14px !important;
+    padding: 14px !important;
     border-radius: 20px !important;
     border: transparent;
     margin-bottom: 4rem !important;
@@ -983,15 +1003,16 @@ section,
 
   .booking-engine-overlay {
     position: absolute;
-    top: 45%;
+    top: 47%;
+    bottom: 10% !important;
     transform: translate(-50%, -50%);
-    width: 80%;
+    width: 90%;
     z-index: 10;
     padding-bottom: 0rem;
 }
 
   .book_btn {
-    font-size: 14px !important;
+    font-size: 12px !important;
     background-color: #000;
     color: #fff !important;
     width: 100% !important;
@@ -1006,7 +1027,7 @@ section,
   }
 
   .form_book .date {
-    font-size: 10px !important;
+    font-size: 12px !important;
     text-transform: uppercase;
     padding-left: 10px !important;
   }
@@ -1038,7 +1059,7 @@ section,
   }
 
   .hero h1 {
-    font-size: 20px !important;
+    font-size: 24px !important;
     padding-left: 0px !important;
     padding-right: 0px !important;
     margin-bottom: 0px !important;
@@ -1069,12 +1090,12 @@ section,
   }
 
   .call-to-action p {
-    font-size: 14px !important;
+    font-size: 12px !important;
     padding-top: 1rem;
   }
 
   .call-to-action {
-    padding: 0px !important;
+    padding: 15px !important;
   }
 
   .call-to-action h3 {
@@ -1096,7 +1117,7 @@ section,
 
 
   .about .icon-box {
-    padding: 35px 30px !important;
+    padding: 22px !important;
   }
 
   .about .icon-box i {
@@ -1104,6 +1125,178 @@ section,
     height: 55px !important;
     font-size: 22px !important;
   }
+
+  .clients .client-logo img {
+    padding: 20px 40px;
+    width: 79% !important;
+    transition: 0.3s;
+    opacity: 0.5;
+    filter: grayscale(100);
+  }
+
+  .clients {
+    padding: 0px !important;
+    margin-bottom: 1.8rem !important;
+  }
+
+  .sm-space h1{
+    font-size: 24px !important;
+    margin-bottom: 1.2rem !important;
+  }
+
+  section, .section {
+    color: var(--default-color);
+    background-color: var(--background-color);
+    padding: 25px 0;
+    scroll-margin-top: 98px;
+    overflow: clip;
+  }
+
+  .services .service-item {
+    position: relative;
+    padding-top: 20px !important;
+  }
+
+  .services .service-item .icon {
+    margin-right: 25px !important;
+  }
+
+  .about-page {
+    margin-top: 5.5rem !important;
+    padding: 0px !important;
+  }
+
+  .services .service-item .icon i {
+    color: color-mix(in srgb, var(--default-color), transparent 30%);
+    font-size: 40px !important;
+    transition: ease-in-out 0.3s;
+    z-index: 2;
+    position: relative;
+  }
+
+  .services .service-item .icon:before {
+    position: absolute;
+    content: "";
+    height: 25px !important;
+    width: 25px !important;
+    background: #989549c4;
+    border-radius: 50px;
+    z-index: 1;
+    bottom: -3px !important;
+    right: -3px !important;
+    transition: 0.3s;
+  }
+
+  .stats {
+    position: relative;
+    padding: 50px 0 !important;
+  }
+
+  .stats .stats-item {
+    padding: 0px !important;
+    width: 100%;
+  }
+
+  .stats .stats-item span {
+    font-size: 30px !important;
+    display: block;
+    color: var(--default-color);
+    font-weight: 700;
+  }
+
+  .section-title {
+    text-align: center;
+    padding-bottom: 50px !important;
+    position: relative;
+  }
+
+  .services .service-item .description {
+    line-height: 15px !important;
+    font-size: 14px;
+  }
+
+  .features .features-item h3 {
+    font-weight: 700;
+    font-size: 24px !important;
+  }
+
+  .features .features-item ul {
+    list-style: none;
+    font-size: 12px !important;
+    padding: 0;
+  }
+
+  .features .features-item .btn-get-started {
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+    padding: 8px 30px 10px 30px;
+    border-radius: 4px;
+    font-size: 12px !important;
+  }
+
+  .recent-posts article {
+    background: var(--surface-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 15px !important;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .recent-posts .title a {
+    color: var(--heading-color);
+    transition: 0.3s;
+    font-size: 18px !important;
+  }
+
+  .cf-div {
+    background-color: rgba(255, 255, 255, 99%);
+    padding: 10px !important;
+    border-radius: 10px !important;
+    border: 1px solid #21252970;
+  }
+
+  .revenue-estimator {
+    display: flex;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .call-to-action .cta-btn {
+    border: inherit;
+    border-radius: 20px;
+    background-color: #eeeeee67;
+    width: 100%;
+    font-size: 12px !important;
+    height: auto;
+    line-height: normal;
+    padding: 8px 11px !important;
+    transition: ease-in all 0.5s;
+}
+
+.revenue-h {
+  font-size: 24px !important;
+}
+
+.section-title h2 {
+  font-size: 24px !important;
+  font-weight: 700;
+  position: relative;
+}
+
+.btn-list-out {
+  background-color: #495057 !important;
+  color: white !important;
+  border-radius: 30px !important;
+  padding: 11px !important;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+  font-size: 10px;
+  width: 100% !important;
+}
+
+
+
 }
 
 /*--------------------------------------------------------------
@@ -1135,7 +1328,7 @@ section,
 
 @media (max-width: 640px) {
   .clients .client-logo img {
-    padding: 20px;
+    padding: 10px;
   }
 }
 
@@ -1233,6 +1426,11 @@ section,
 .about .icon-boxes .col-md-6:nth-child(2) .icon-box,
 .about .icon-boxes .col-md-6:nth-child(4) .icon-box {
   margin-top: -40px;
+}
+
+.title .read-more a {
+  color: #989549 !important;
+  border-bottom: 1px #989549 solid !important;
 }
 
 @media (max-width: 768px) {
@@ -1386,6 +1584,27 @@ section,
   .features .features-item + .features-item {
     margin-top: 40px;
   }
+}
+
+.about .content h3 {
+  font-size: 1rem !important;
+  line-height: normal;
+  font-weight: 700;
+}
+
+.about .content .read-more {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  font-family: var(--heading-font);
+  font-weight: 500;
+  font-size: 12px !important;
+  letter-spacing: 1px;
+  padding: 12px 24px;
+  border-radius: 5px;
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .features .features-item h3 {
@@ -1932,7 +2151,7 @@ section,
 
 .call-to-action p {
   color: var(--default-color);
-  font-size: 18px !important;
+  font-size: 18px;
 }
 
 .about-txt {
@@ -1951,18 +2170,17 @@ section,
 }
 
 .call-to-action .cta-btn {
-  font-family: var(--heading-font);
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: 1px;
-  display: inline-block;
-  padding: 12px 40px;
-  border-radius: 5px;
-  transition: 0.5s;
-  margin: 10px;
-  border: 2px solid var(--contrast-color);
-  color: var(--contrast-color);
+    border: 1px #eeeeee67 solid !important;
+    border-radius: 20px;
+    background-color: #eeeeee67;
+    width: 100%;
+    font-size: 16px;
+    height: auto;
+    line-height: normal;
+    padding: 10px 20px;
+    transition: ease-in all 0.5s;
 }
+
 
 .call-to-action .cta-btn:hover {
   background: var(--accent-color);
@@ -3190,7 +3408,7 @@ section,
 }
 
 .revenue-h {
-  font-size: 3rem !important;
+  font-size: 3rem;
 }
 
 .fc-input {
@@ -3225,9 +3443,9 @@ section,
   background-color: #495057 !important;
   color: white !important;
   border-radius: 30px !important;
-  padding: 10px 32px !important;
-  margin-right: 5px !important;
-  margin-left: px !important;
+  padding: 10px 32px;
+  margin-right: 5px;
+  margin-left: 0px;
 }
 
 :hover.btn-list-out {
