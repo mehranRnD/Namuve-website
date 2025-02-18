@@ -150,7 +150,7 @@ async function loadListings() {
     filterContainer.classList.add("container", "mb-5", "mt-4", );
     filterContainer.innerHTML = `
       <div class="m-0 text-center">
-        <div class="row g-2 py-3 justify-content-center filter-buttons">
+        <div class="row g-2 py-3 justify-content-center filter-buttons revenue-estimator">
           <div class="col-6 col-sm-4 col-md-auto">
             <button type="button" class="btn btn-filter btn-list-out w-100 active" data-category="All">
               <i class="fas fa-th-large me-2"></i>All (32)
