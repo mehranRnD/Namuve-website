@@ -956,10 +956,16 @@ section,
 }
 
 @media (max-width: 768px) {
+  .header .logo img {
+    width: 115px;
+    height: auto;
+    margin: 0px !important;
+  } 
+
   .hero {
     width: 100%;
     min-height: 0vh;
-    padding-top: 70px !important;
+    padding-top: 96px !important;
   }
 
   .carousel-caption {
@@ -969,17 +975,30 @@ section,
 
   .form_book {
     background: #fff;
-    padding: 18px 20px 18px 20px !important;
+    padding: 15px 14px 15px 14px !important;
     border-radius: 20px !important;
     border: transparent;
     margin-bottom: 4rem !important;
   }
 
+  .booking-engine-overlay {
+    position: absolute;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    z-index: 10;
+    padding-bottom: 0rem;
+}
+
   .book_btn {
     font-size: 14px !important;
+    background-color: #000;
+    color: #fff !important;
     width: 100% !important;
-    margin-top: 10px !important;
-    padding: 0px;
+    height: 30px !important;
+    padding: 5px !important;
+    font-weight: 500;
+    margin: 10px 0px !important;
     text-align: center;
     display: inline-block;
     transition: ease-in all 0.5s;
@@ -987,7 +1006,7 @@ section,
   }
 
   .form_book .date {
-    font-size: 12px !important;
+    font-size: 10px !important;
     text-transform: uppercase;
     padding-left: 10px !important;
   }
@@ -995,6 +1014,18 @@ section,
   .book_n {
     font-size: 10px !important;
   }
+
+  .book_n {
+    border: inherit;
+    border-radius: 20px;
+    background-color: #eeeeee67;
+    width: 100%;
+    font-size: 16px;
+    height: auto;
+    line-height: normal;
+    padding: 8px 11px !important;
+    transition: ease-in all 0.5s;
+}
 
   .sm-space {
     padding-left: 0px;
@@ -1018,7 +1049,7 @@ section,
   }
 
   .hero p {
-    font-size: 10px !important;
+    font-size: 12px !important;
     margin-bottom: 0px !important;
   }
 
@@ -1028,12 +1059,13 @@ section,
   h4,
   h5,
   h6 {
-    font-size: 20px !important;
-    margin-top: 2rem !important;
+    font-size: 22px;
+    color: #060606;
+    margin-top: 0rem !important;
   }
 
   p {
-    font-size: 13px !important;
+    font-size: 11px !important;
   }
 
   .call-to-action p {
@@ -1057,7 +1089,11 @@ section,
   .carousel-item .carousel-caption {
     display: flex;
     justify-content: flex-start !important;
+    align-items: center !important;
+    right: 0%;
+    left: 0%;
   }
+
 
   .about .icon-box {
     padding: 35px 30px !important;
@@ -3533,7 +3569,6 @@ section,
 /* index carousel */
 .carousel-item .carousel-caption {
   display: flex;
-  justify-content: center !important;
   align-items: center !important;
 }
 
