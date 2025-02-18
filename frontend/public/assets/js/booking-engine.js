@@ -12,7 +12,7 @@ let usdToPkrRate = 277.66; // Fallback rate
 async function fetchConversionRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/b49dc61ade0263c2b8d7fea8/latest/USD"
+      "https://v6.exchangerate-api.com/v6/5137852015813f31040c7f33/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;

@@ -18,7 +18,7 @@ const getAllListingIds = () => Object.values(LISTINGS_DATA).flat();
 async function fetchConversionRate() { 
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/b49dc61ade0263c2b8d7fea8/latest/USD"
+      "https://v6.exchangerate-api.com/v6/5137852015813f31040c7f33/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
@@ -93,6 +93,44 @@ async function fetchCalendarData(listingId, startDate, endDate) {
   }
 }
 
+// Add this function to fetch reviews
+async function fetchHostawayReviews() {
+  try {
+    const response = await fetch("https://api.hostaway.com/v1/reviews", {
+      headers: {
+        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Extract and log the required fields
+    if (data.result) {
+      data.result.forEach(review => {
+        console.log({
+          id: review.id,
+          rating: review.rating,
+          listingMapId: review.listingMapId,
+          reservationId: review.reservationId,
+          channelId: review.channelId,
+
+        });
+      });
+    }
+
+    return data.result || [];
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    return [];
+  }
+}
+
+
 // Function to load listings
 async function loadListings() {
   const gallery = document.getElementById("gallery");
@@ -101,53 +139,50 @@ async function loadListings() {
 
   try {
     loading.style.display = "block";
-    // checkDailyOccupancy();
-
+    await fetchHostawayReviews();
     await fetchConversionRate();
     const listings = await getListingData();
 
-
-    // Replace the hardcoded images array with getAllListingIds()
     const images = getAllListingIds().map((id) => ({ id: id.toString() }));
 
     // Add filter buttons with active state handling
     const filterContainer = document.createElement("div");
     filterContainer.classList.add("container", "mb-5", "mt-4");
     filterContainer.innerHTML = `
-                <div class="m-0 text-center">
-            <div class="row g-2 py-3 justify-content-center filter-buttons">
-                <div class="col-6 col-sm-4 col-md-auto">
-                    <button type="button" class="btn btn-filter btn-list-out w-100 active" data-category="All">
-                        <i class="fas fa-th-large me-2"></i>All (32)
-                    </button>
-                </div>
-                <div class="col-6 col-sm-4 col-md-auto">
-                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="Studio">
-                        <i class="fas fa-home me-2"></i>Studio (6)
-                    </button>
-                </div>
-                <div class="col-6 col-sm-4 col-md-auto">
-                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="1BR">
-                        <i class="fas fa-bed me-2"></i>1BR (10)
-                    </button>
-                </div>
-                <div class="col-6 col-sm-4 col-md-auto">
-                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR">
-                        <i class="fas fa-bed me-2"></i>2BR (9)
-                    </button>
-                </div>
-                <div class="col-6 col-sm-4 col-md-auto">
-                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR Premium">
-                        <i class="fas fa-star me-2"></i>2BR Premium (4)
-                    </button>
-                </div>
-                <div class="col-6 col-sm-4 col-md-auto">
-                    <button type="button" class="btn btn-filter btn-list-out w-100" data-category="3BR">
-                        <i class="fas fa-bed me-2"></i>3BR (3)
-                    </button>
-                </div>
-            </div>
+      <div class="m-0 text-center">
+        <div class="row g-2 py-3 justify-content-center filter-buttons">
+          <div class="col-6 col-sm-4 col-md-auto">
+            <button type="button" class="btn btn-filter btn-list-out w-100 active" data-category="All">
+              <i class="fas fa-th-large me-2"></i>All (32)
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-md-auto">
+            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="Studio">
+              <i class="fas fa-home me-2"></i>Studio (6)
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-md-auto">
+            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="1BR">
+              <i class="fas fa-bed me-2"></i>1BR (10)
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-md-auto">
+            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR">
+              <i class="fas fa-bed me-2"></i>2BR (9)
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-md-auto">
+            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR Premium">
+              <i class="fas fa-star me-2"></i>2BR Premium (4)
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-md-auto">
+            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="3BR">
+              <i class="fas fa-bed me-2"></i>3BR (3)
+            </button>
+          </div>
         </div>
+      </div>
     `;
     gallery.parentNode.insertBefore(filterContainer, gallery);
 
@@ -178,6 +213,8 @@ async function loadListings() {
       // Get room details
       const roomDetails = getListingInfo(listing.id); // Fetch room details using the listing ID
 
+      
+
       container.innerHTML = `
   <div class="room-item shadow rounded overflow-hidden" data-listing-id="${
     image.id
@@ -203,13 +240,6 @@ async function loadListings() {
         <h5 class="mb-0" style="max-width: 70% !important; font-size: 1.1rem !important;">${
           listing ? listing.name : "Loading..."
         }</h5>
-        <div class="ps-2 d-flex" style="color: #ffc107;">
-          <small class="fa fa-star" style="margin: 0 1px !important;"></small>
-          <small class="fa fa-star" style="margin: 0 1px !important;"></small>
-          <small class="fa fa-star" style="margin: 0 1px !important;"></small>
-          <small class="fa fa-star" style="margin: 0 1px !important;"></small>
-          <small class="fa fa-star" style="margin: 0 1px !important;"></small>
-        </div>
       </div>
       <div class="d-flex mb-3">
         <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>${
@@ -276,6 +306,8 @@ async function loadListings() {
   }
 }
 
+
+
 // Helper function to get room type and base price by listing ID
 function getListingInfo(listingId) {
   listingId = Number(listingId);
@@ -303,6 +335,7 @@ function filterListings(category) {
 
   // First, fade out all listings
   allListings.forEach((container) => {
+    container.style.transition = "opacity 0.3s ease, transform 0.3s ease";
     container.style.opacity = "0";
     container.style.transform = "scale(0.95)";
   });
@@ -329,6 +362,8 @@ function filterListings(category) {
           }, 50);
         } else {
           container.style.display = "none";
+          container.style.opacity = "0";
+          container.style.transform = "scale(0.95)";
         }
       }
     });
