@@ -993,6 +993,24 @@ section,
     padding-bottom: 0px;
   }
 
+  .carousel-control-prev-icon {
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 0%;
+  }
+
+  .carousel-control-next-icon, .carousel-control-prev-icon {
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 0%;
+  }
+
   .form_book {
     background: #fff;
     padding: 14px !important;
@@ -1096,6 +1114,7 @@ section,
 
   .call-to-action {
     padding: 15px !important;
+    padding: 15px !important;
   }
 
   .call-to-action h3 {
@@ -1111,6 +1130,7 @@ section,
     display: flex;
     justify-content: flex-start !important;
     align-items: center !important;
+    margin-top: 2rem;
     right: 0%;
     left: 0%;
   }
@@ -1329,8 +1349,18 @@ section,
 @media (max-width: 640px) {
   .clients .client-logo img {
     padding: 10px;
+    padding: 10px;
   }
+
+  .clients .client-logo img {
+    max-width: 75%;
+    transition: 0.3s;
+    opacity: 0.5;
+    filter: grayscale(100);
 }
+}
+
+
 
 /*--------------------------------------------------------------
 # About Section
