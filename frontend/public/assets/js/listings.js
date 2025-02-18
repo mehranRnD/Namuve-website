@@ -147,7 +147,7 @@ async function loadListings() {
 
     // Add filter buttons with active state handling
     const filterContainer = document.createElement("div");
-    filterContainer.classList.add("container", "mb-5", "mt-4");
+    filterContainer.classList.add("container", "mb-5", "mt-4", );
     filterContainer.innerHTML = `
       <div class="m-0 text-center">
         <div class="row g-2 py-3 justify-content-center filter-buttons">
