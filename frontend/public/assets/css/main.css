@@ -1317,6 +1317,7 @@ section,
 
 
 
+
 }
 
 /*--------------------------------------------------------------
@@ -3481,6 +3482,9 @@ section,
 :hover.btn-list-out {
   background-color: #212529 !important;
   color: white !important;
+}
+.btn-list-out i{
+  color: #989549;
 }
 
 .icon-box .bi:hover {
