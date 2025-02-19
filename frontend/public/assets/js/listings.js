@@ -15,7 +15,7 @@ let currentCurrency = "USD"; // Default currency
 const getAllListingIds = () => Object.values(LISTINGS_DATA).flat();
 
 // Function to fetch USD to PKR conversion rate
-async function fetchConversionRate() { 
+async function fetchConversionRate() {
   try {
     const response = await fetch(
       "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD"
@@ -98,12 +98,15 @@ async function fetchHostawayReviews() {
   try {
     const listingIds = getAllListingIds();
     const reviewsPromises = listingIds.map(async (listingId) => {
-      const response = await fetch(`https://api.hostaway.com/v1/reviews?listingMapIds=${listingId}`, {
-        headers: {
-         Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc`,
-         "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://api.hostaway.com/v1/reviews?listingMapIds=${listingId}`,
+        {
+          headers: {
+            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -114,8 +117,8 @@ async function fetchHostawayReviews() {
     const reviewsData = await Promise.all(reviewsPromises);
 
     // Extract and log the required fields
-    const ratings = reviewsData.flatMap(data => data.result || []);
-    ratings.forEach(review => {
+    const ratings = reviewsData.flatMap((data) => data.result || []);
+    ratings.forEach((review) => {
       console.log({
         id: review.id,
         rating: review.rating,
@@ -144,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Function to map ratings to listings
 function mapRatingsToListings(ratings) {
   const ratingMap = {};
-  ratings.forEach(rating => {
+  ratings.forEach((rating) => {
     if (rating.listingMapId && rating.rating !== undefined) {
       ratingMap[rating.listingMapId] = rating.rating;
     }
@@ -157,10 +160,17 @@ function mapRatingsToListings(ratings) {
 function ratingToStars(rating) {
   const stars = Math.floor(rating / 2);
   const halfStars = rating % 2 === 1 ? 1 : 0;
-  const fullStars = Array.from({ length: stars }, () => '<span class="fa fa-star"></span>');
-  const halfStar = halfStars > 0 ? '<span class="fa fa-star-half-alt"></span>' : '';
-  const emptyStars = Array.from({ length: 5 - stars - halfStars }, () => '<span class="fa fa-star-o"></span>');
-  return fullStars.join('') + halfStar + emptyStars.join('');
+  const fullStars = Array.from(
+    { length: stars },
+    () => '<span class="fa fa-star"></span>'
+  );
+  const halfStar =
+    halfStars > 0 ? '<span class="fa fa-star-half-alt"></span>' : "";
+  const emptyStars = Array.from(
+    { length: 5 - stars - halfStars },
+    () => '<span class="fa fa-star-o"></span>'
+  );
+  return fullStars.join("") + halfStar + emptyStars.join("");
 }
 
 // Function to load listings
@@ -182,7 +192,7 @@ async function loadListings() {
     // Add filter buttons with active state handling
     const filterContainer = document.createElement("div");
     filterContainer.classList.add("container", "mb-5", "mt-4");
-    
+
     gallery.parentNode.insertBefore(filterContainer, gallery);
 
     // Add click handlers for filter buttons
@@ -217,39 +227,57 @@ async function loadListings() {
       console.log(`Rating for listing ${image.id}:`, rating); // Debug log
 
       container.innerHTML = `
-        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${image.id}" style="height: 600px !important;">
+        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${
+          image.id
+        }" style="height: 600px !important;">
           <div class="position-relative" style="height: 300px !important;">
-            <img class="img-fluid" src="${getImageUrlById(image.id)}" alt="Listing Image ${image.id}" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
-            <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #989549;">
-              Starting from ${
-                currentCurrency === "USD"
-                  ? `$${getBasePriceByListingId(image.id)}`
-                  : `₨${(getBasePriceByListingId(image.id) * usdToPkrRate).toFixed(2).toLocaleString()}`
-              }
+            <img class="img-fluid" src="${getImageUrlById(
+              image.id
+            )}" alt="Listing Image ${
+        image.id
+      }" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
+<small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6B7560; border: 1px #6B7560 solid;">              Starting from ${
+        currentCurrency === "USD"
+          ? `$${getBasePriceByListingId(image.id)}`
+          : `₨${(getBasePriceByListingId(image.id) * usdToPkrRate)
+              .toFixed(2)
+              .toLocaleString()}`
+      }
             </small>
           </div>
           <div class="p-4 mt-2" style="height: 300px !important; display: flex !important; flex-direction: column !important;">
             <div class="d-flex justify-content-between mb-3" style="align-items: center !important;">
-              <h5 class="mb-0" style="max-width: 70% !important; font-size: 1.1rem !important;">${listing ? listing.name : "Loading..."}</h5>
+              <h5 class="mb-0" style="max-width: 70% !important; font-size: 1.1rem !important;">${
+                listing ? listing.name : "Loading..."
+              }</h5>
               <div class="ps-2 d-flex" style="color: #ffc107;">
                 ${ratingToStars(rating)}
               </div>
             </div>
             <div class="d-flex mb-3">
-                <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>${roomDetails.beds} Bed(s)</small>
-                <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #989549;"></i>${roomDetails.guests} Guests</small>
-                <small><i class="fa fa-wifi me-2" style="color: #989549;"></i>Wifi</small>
+                <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #212429;"></i>${
+                  roomDetails.beds
+                } Bed(s)</small>
+                <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #212429;"></i>${
+                  roomDetails.guests
+                } Guests</small>
+                <small><i class="fa fa-wifi me-2" style="color: #212429;"></i>Wifi</small>
             </div>
-            <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${roomDescriptions[images.findIndex((img) => img.id === image.id)]}</p>
+            <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${
+              roomDescriptions[images.findIndex((img) => img.id === image.id)]
+            }</p>
             <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
-                <a href="/listings-details?id=${image.id}" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #989549; border: none;">
+                <a href="/listings-details?id=${
+                  image.id
+                }" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #6c757e; border: none;">
                     <i class="fas fa-info-circle me-2"></i>View Details
                 </a>
                 <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
                     <i class="fas fa-video me-2"></i>Virtual Tour
                 </button>
-                <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn">
-                    <i class="fas fa-calendar-check me-2"></i>Book Now
+                <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn"
+                 style="background-color: #6B7560; border: 1px #6B7560 solid; ">
+                <i class="fas fa-calendar-check me-2"></i>Book Now
                 </button>
             </div>
           </div>
@@ -366,7 +394,7 @@ const checkAvailabilityStatus = (calendarData, selectedDate) => {
     status: dateEntry.status,
     price: dateEntry.price,
   };
-}
+};
 
 // Function to open booking modal
 function openBookingModal(listingId) {
