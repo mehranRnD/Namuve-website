@@ -18,7 +18,7 @@ const getAllListingIds = () => Object.values(LISTINGS_DATA).flat();
 async function fetchConversionRate() { 
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/5137852015813f31040c7f33/latest/USD"
+      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
@@ -93,43 +93,75 @@ async function fetchCalendarData(listingId, startDate, endDate) {
   }
 }
 
-// Add this function to fetch reviews
+// Function to fetch reviews and ratings from Hostaway API
 async function fetchHostawayReviews() {
   try {
-    const response = await fetch("https://api.hostaway.com/v1/reviews", {
-      headers: {
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc`,
-        "Content-Type": "application/json"
+    const listingIds = getAllListingIds();
+    const reviewsPromises = listingIds.map(async (listingId) => {
+      const response = await fetch(`https://api.hostaway.com/v1/reviews?listingMapIds=${listingId}`, {
+        headers: {
+         Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc`,
+         "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      return await response.json();
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    // Wait for all promises to resolve
+    const reviewsData = await Promise.all(reviewsPromises);
 
-    const data = await response.json();
-    
     // Extract and log the required fields
-    if (data.result) {
-      data.result.forEach(review => {
-        console.log({
-          id: review.id,
-          rating: review.rating,
-          listingMapId: review.listingMapId,
-          reservationId: review.reservationId,
-          channelId: review.channelId,
-
-        });
+    const ratings = reviewsData.flatMap(data => data.result || []);
+    ratings.forEach(review => {
+      console.log({
+        id: review.id,
+        rating: review.rating,
+        listingMapId: review.listingMapId,
+        reservationId: review.reservationId,
+        listingName: review.listingName,
       });
-    }
+    });
 
-    return data.result || [];
+    return ratings;
   } catch (error) {
     console.error("Error fetching reviews:", error);
     return [];
   }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const mobileDropdown = document.getElementById("mobileFilterDropdown");
+  if (mobileDropdown) {
+    mobileDropdown.addEventListener("change", function () {
+      const category = this.value;
+      filterListings(category);
+    });
+  }
+});
+// Function to map ratings to listings
+function mapRatingsToListings(ratings) {
+  const ratingMap = {};
+  ratings.forEach(rating => {
+    if (rating.listingMapId && rating.rating !== undefined) {
+      ratingMap[rating.listingMapId] = rating.rating;
+    }
+  });
+  console.log("Rating Map:", ratingMap); // Debug log
+  return ratingMap;
+}
+
+// Function to convert rating to star representation
+function ratingToStars(rating) {
+  const stars = Math.floor(rating / 2);
+  const halfStars = rating % 2 === 1 ? 1 : 0;
+  const fullStars = Array.from({ length: stars }, () => '<span class="fa fa-star"></span>');
+  const halfStar = halfStars > 0 ? '<span class="fa fa-star-half-alt"></span>' : '';
+  const emptyStars = Array.from({ length: 5 - stars - halfStars }, () => '<span class="fa fa-star-o"></span>');
+  return fullStars.join('') + halfStar + emptyStars.join('');
+}
 
 // Function to load listings
 async function loadListings() {
@@ -139,7 +171,9 @@ async function loadListings() {
 
   try {
     loading.style.display = "block";
-    await fetchHostawayReviews();
+    const ratings = await fetchHostawayReviews();
+    const ratingMap = mapRatingsToListings(ratings);
+
     await fetchConversionRate();
     const listings = await getListingData();
 
@@ -147,43 +181,8 @@ async function loadListings() {
 
     // Add filter buttons with active state handling
     const filterContainer = document.createElement("div");
-    filterContainer.classList.add("container", "mb-5", "mt-4", );
-    filterContainer.innerHTML = `
-      <div class="m-0 text-center">
-        <div class="row g-2 py-3 justify-content-center filter-buttons revenue-estimator">
-          <div class="col-6 col-sm-4 col-md-auto">
-            <button type="button" class="btn btn-filter btn-list-out w-100 active" data-category="All">
-              <i class="fas fa-th-large me-2"></i>All (32)
-            </button>
-          </div>
-          <div class="col-6 col-sm-4 col-md-auto">
-            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="Studio">
-              <i class="fas fa-home me-2"></i>Studio (6)
-            </button>
-          </div>
-          <div class="col-6 col-sm-4 col-md-auto">
-            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="1BR">
-              <i class="fas fa-bed me-2"></i>1BR (10)
-            </button>
-          </div>
-          <div class="col-6 col-sm-4 col-md-auto">
-            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR">
-              <i class="fas fa-bed me-2"></i>2BR (9)
-            </button>
-          </div>
-          <div class="col-6 col-sm-4 col-md-auto">
-            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="2BR Premium">
-              <i class="fas fa-star me-2"></i>2BR Premium (4)
-            </button>
-          </div>
-          <div class="col-6 col-sm-4 col-md-auto">
-            <button type="button" class="btn btn-filter btn-list-out w-100" data-category="3BR">
-              <i class="fas fa-bed me-2"></i>3BR (3)
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
+    filterContainer.classList.add("container", "mb-5", "mt-4");
+    
     gallery.parentNode.insertBefore(filterContainer, gallery);
 
     // Add click handlers for filter buttons
@@ -213,64 +212,49 @@ async function loadListings() {
       // Get room details
       const roomDetails = getListingInfo(listing.id); // Fetch room details using the listing ID
 
-      
+      // Get rating from ratingMap
+      const rating = ratingMap[image.id] || 0;
+      console.log(`Rating for listing ${image.id}:`, rating); // Debug log
 
       container.innerHTML = `
-  <div class="room-item shadow rounded overflow-hidden" data-listing-id="${
-    image.id
-  }" style="height: 600px !important;">
-    <div class="position-relative" style="height: 300px !important;">
-      <img class="img-fluid" src="${getImageUrlById(image.id)}" 
-        alt="Listing Image ${image.id}" 
-        style="width: 100% !important; 
-        height: 300px !important; 
-        object-fit: cover !important;" />
-      <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6b7560; border: 1px #6b7560 solid;">
-        Starting from ${
-          currentCurrency === "USD"
-            ? `$${getBasePriceByListingId(image.id)}`
-            : `₨${(getBasePriceByListingId(image.id) * usdToPkrRate)
-                .toFixed(2)
-                .toLocaleString()}`
-        }
-      </small>
-    </div>
-    <div class="p-4 mt-2" style="height: 300px !important; display: flex !important; flex-direction: column !important;">
-      <div class="d-flex justify-content-between mb-3" style="align-items: center !important;">
-        <h5 class="mb-0" style="max-width: 70% !important; font-size: 1.1rem !important;">${
-          listing ? listing.name : "Loading..."
-        }</h5>
-      </div>
-      <div class="d-flex mb-3">
-        <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #212429;"></i>${
-          roomDetails.beds
-        } Bed(s)</small>
-        <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #212429;"></i>${
-          roomDetails.guests
-        } Guests</small>
-        <small><i class="fa fa-wifi me-2" style="color: #212429;"></i>Wifi</small>
-      </div>
-      <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${
-        roomDescriptions[images.findIndex((img) => img.id === image.id)]
-      }</p>
-      <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
-        <a href="/listings-details?id=${image.id}" 
-          class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
-          style="background-color: #6c757e; border: none;">
-          <i class="fas fa-info-circle me-2"></i>View Details
-        </a>
-        <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
-          <i class="fas fa-video me-2"></i>Virtual Tour
-        </button>
-        <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" 
-        style="background-color: #6b7560; border: 1px #6b7560 solid; ">
-          <i class="fas fa-calendar-check me-2"></i>Book Now
-        </button>
-      </div>
-    </div>
-  </div>
-`;
-
+        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${image.id}" style="height: 600px !important;">
+          <div class="position-relative" style="height: 300px !important;">
+            <img class="img-fluid" src="${getImageUrlById(image.id)}" alt="Listing Image ${image.id}" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
+            <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #989549;">
+              Starting from ${
+                currentCurrency === "USD"
+                  ? `$${getBasePriceByListingId(image.id)}`
+                  : `₨${(getBasePriceByListingId(image.id) * usdToPkrRate).toFixed(2).toLocaleString()}`
+              }
+            </small>
+          </div>
+          <div class="p-4 mt-2" style="height: 300px !important; display: flex !important; flex-direction: column !important;">
+            <div class="d-flex justify-content-between mb-3" style="align-items: center !important;">
+              <h5 class="mb-0" style="max-width: 70% !important; font-size: 1.1rem !important;">${listing ? listing.name : "Loading..."}</h5>
+              <div class="ps-2 d-flex" style="color: #ffc107;">
+                ${ratingToStars(rating)}
+              </div>
+            </div>
+            <div class="d-flex mb-3">
+                <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #989549;"></i>${roomDetails.beds} Bed(s)</small>
+                <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #989549;"></i>${roomDetails.guests} Guests</small>
+                <small><i class="fa fa-wifi me-2" style="color: #989549;"></i>Wifi</small>
+            </div>
+            <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${roomDescriptions[images.findIndex((img) => img.id === image.id)]}</p>
+            <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
+                <a href="/listings-details?id=${image.id}" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #989549; border: none;">
+                    <i class="fas fa-info-circle me-2"></i>View Details
+                </a>
+                <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
+                    <i class="fas fa-video me-2"></i>Virtual Tour
+                </button>
+                <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn">
+                    <i class="fas fa-calendar-check me-2"></i>Book Now
+                </button>
+            </div>
+          </div>
+        </div>
+      `;
       gallery.appendChild(container);
 
       // Add event listener for the virtual tour button
@@ -306,8 +290,6 @@ async function loadListings() {
     loading.style.display = "none";
   }
 }
-
-
 
 // Helper function to get room type and base price by listing ID
 function getListingInfo(listingId) {
@@ -384,9 +366,7 @@ const checkAvailabilityStatus = (calendarData, selectedDate) => {
     status: dateEntry.status,
     price: dateEntry.price,
   };
-};
-
-
+}
 
 // Function to open booking modal
 function openBookingModal(listingId) {

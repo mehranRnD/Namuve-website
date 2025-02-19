@@ -4388,3 +4388,16 @@ Visit Country Style
 }
 
 
+/* Hide dropdown on desktop */
+@media (min-width: 768px) {
+  #mobileFilterDropdown {
+    display: none;
+  }
+}
+
+/* Show dropdown on mobile */
+@media (max-width: 767px) {
+  .filter-buttons {
+    display: none;
+  }
+}
