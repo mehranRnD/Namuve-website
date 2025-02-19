@@ -264,6 +264,7 @@ h6 {
   width: 155px;
   height: auto;
   margin-left: 20px;
+  margin-top: -8px;
 }
 
 .header .logo h1 {
@@ -483,7 +484,7 @@ h6 {
   .navmenu a,
   .navmenu a:focus {
     color: var(--nav-dropdown-color);
-    padding: 10px 20px;
+    padding: 7px 19px;
     font-family: var(--nav-font);
     font-size: 17px;
     font-weight: 500;
@@ -967,6 +968,16 @@ section,
 }
 
 @media (max-width: 768px) {
+  #currencySelector {
+    padding: 10px 20px;
+    margin: 14px 14px;
+    font-size: 13px;
+  }
+
+  .form-select {
+    width: 90% !important;
+  }
+
   .header {
     color: var(--default-color);
     background-color: var(--background-color);
@@ -1021,13 +1032,13 @@ section,
 
   .booking-engine-overlay {
     position: absolute;
-    top: 47%;
+    top: 42%;
     bottom: 10% !important;
     transform: translate(-50%, -50%);
     width: 90%;
     z-index: 10;
     padding-bottom: 0rem;
-}
+  }
 
   .book_btn {
     font-size: 12px !important;
@@ -1058,7 +1069,7 @@ section,
     border: inherit;
     border-radius: 20px;
     background-color: #eeeeee67;
-    width: 100%;
+    width: 100% !important;
     font-size: 16px;
     height: auto;
     line-height: normal;
@@ -1130,10 +1141,25 @@ section,
     display: flex;
     justify-content: flex-start !important;
     align-items: center !important;
-    margin-top: 2rem;
+    margin-top: 0rem ;
     right: 0%;
     left: 0%;
   }
+
+  .section-title h2:before, .section-title h2:after {
+    content: "";
+    width: 0px;
+    height: 0px;
+    background: var(--accent-color);
+    display: inline-block;
+  }
+
+  .footer .footer-links {
+    margin-bottom: 15px;
+  }
+
+  
+
 
 
   .about .icon-box {
@@ -1296,6 +1322,8 @@ section,
 
 .revenue-h {
   font-size: 24px !important;
+  padding-top: 0.4rem;
+  margin-bottom: 20px;
 }
 
 .section-title h2 {
@@ -1315,7 +1343,34 @@ section,
   width: 100% !important;
 }
 
+.calculator, .result {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  flex: 1;
+  margin-right: 0px !important;
+  width: 100% !important;
+}
 
+.revenue-estimator  .cta-btn {
+  border: inherit;
+  border-radius: 20px;
+  background-color: #eeeeee67;
+  width: 100% !important;
+  font-size: 12px !important;
+  height: auto;
+  line-height: normal;
+  padding: 8px 11px !important;
+  transition: ease-in all 0.5s;
+}
+
+.calculator .revenue-estimator-calculator .date {
+  font-size: 12px !important;
+  text-transform: uppercase;
+  padding-left: 10px !important;
+  margin-bottom: 4px !important;
+}
 
 }
 
@@ -3441,6 +3496,34 @@ section,
   font-size: 3rem;
 }
 
+.revenue-estimator .cta-btn {
+  border: 1px #eeeeee67 solid !important;
+  border-radius: 20px;
+  background-color: #eeeeee67;
+  width: 100%;
+  font-size: 16px;
+  height: auto;
+  line-height: normal;
+  padding: 10px 20px;
+  transition: ease-in all 0.5s;
+}
+
+.revenue-estimator .btn-dark {
+  margin-top: 1rem !important;
+  background-color: #060606;
+  border: none;
+  color: #fff;
+}
+
+.calculator .revenue-estimator-calculator .date {
+  color: #7e7e7e;
+  font-weight: bold;
+  font-size: 15px;
+  text-transform: uppercase;
+  padding-left: 17px;
+  margin-bottom: 10px;
+}
+
 .fc-input {
   background-color: #edededac;
   color: white;
@@ -3476,6 +3559,10 @@ section,
   padding: 10px 32px;
   margin-right: 5px;
   margin-left: 0px;
+}
+
+.btn-list-out i {
+  color: #989549 !important;
 }
 
 :hover.btn-list-out {
@@ -4099,7 +4186,7 @@ h2 {
 
 .formatted-result {
   background-color: #e9ecef; /* Light gray background for formatted result */
-  border-left: 5px solid #007bff; /* Blue left border */
+  border-left: 5px solid #6b7560; /* Blue left border */
   padding: 15px; /* Padding inside the formatted result */
   margin-top: 20px; /* Space above the formatted result */
   border-radius: 5px; /* Rounded corners */
