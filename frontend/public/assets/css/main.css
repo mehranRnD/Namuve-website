@@ -99,6 +99,11 @@ h6 {
   box-shadow: rgba(255, 255, 255, 0.924) 30px 30px 60px 12px inset, rgba(255, 255, 255, 0.937) 0px 18px 36px 18px inset;
 }
 
+.text-da {
+  color: #000000;
+  font-weight: 600;
+}
+
 
 /* PHP Email Form Messages
 ------------------------------*/
@@ -970,13 +975,45 @@ section,
 @media (max-width: 768px) {
   #currencySelector {
     padding: 10px 20px;
-    margin: 14px 14px;
+    margin: 14px 12px;
     font-size: 13px;
   }
 
   .form-select {
     width: 90% !important;
   }
+
+  .carousel-item .text-da {
+    color: #000000;
+    font-weight: 600 !important;
+  }
+
+  .flatpickr-calendar {
+    width: 50% !important;
+    font-size: 12px !important;
+  }
+
+  .alert-success {
+    font-size: 12px !important;
+  }
+
+  strong {
+    font-size: 12px !important;
+  }
+
+  .about-images img {
+    width: 100% !important;
+  }
+
+  .about .content ul li {
+    padding-bottom: 10px;
+    font-size: 12px !important;
+  } 
+
+  .bi-check-circle::before {
+    content: "\f26b";
+    font-size: 14px !important;
+  } 
 
   .header {
     color: var(--default-color);
@@ -1372,6 +1409,37 @@ section,
   margin-bottom: 4px !important;
 }
 
+.available-listings {
+  margin-top: -70px !important;
+}
+
+.visit-country .item {
+  position: relative;
+  margin-bottom: 30px;
+  padding: 5px !important;
+  border-bottom: 1px solid #eee;
+}
+
+.visit-country .item .right-content h4 {
+  font-size: 20px !important;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+
+.visit-country .item .right-content span {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 12px !important;
+  color: #353a40;
+  display: block;
+}
+
+.visit-country .item .right-content ul {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0px !important;
+}
+
 
 }
 
@@ -1409,7 +1477,7 @@ section,
   }
 
   .clients .client-logo img {
-    max-width: 75%;
+    max-width: 65%;
     transition: 0.3s;
     opacity: 0.5;
     filter: grayscale(100);
@@ -4230,13 +4298,16 @@ Visit Country Style
 }
 
 .visit-country .item .right-content h4 {
-  font-size: 20px;
-  margin-bottom: 5px;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 0px;
 }
 
 .visit-country .item .right-content span {
-  font-size: 15px;
-  color: #afafaf;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #353a40;
   display: block;
 }
 
@@ -4276,6 +4347,8 @@ Visit Country Style
 
 .visit-country .item .right-content ul li:last-child {
   text-align: right;
+  color: #6b7560;
+  font-weight: 600;
   display: inline-block; /* Ensure inline display */
   white-space: nowrap; /* Prevent line break */
 }
