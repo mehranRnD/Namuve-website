@@ -15,7 +15,7 @@ const roomDescriptions = [
 async function fetchConversionRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b3/latest/USD"
+      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
