@@ -102,39 +102,75 @@ async function fetchHostawayReviews() {
         `https://api.hostaway.com/v1/reviews?listingMapIds=${listingId}`,
         {
           headers: {
-            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc`,
+            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc`, // Replace with your actual token
             "Content-Type": "application/json",
           },
         }
       );
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       return await response.json();
     });
 
-    // Wait for all promises to resolve
+    // Wait for all review promises to resolve
     const reviewsData = await Promise.all(reviewsPromises);
 
-    // Extract and log the required fields
-    const ratings = reviewsData.flatMap((data) => data.result || []);
-    ratings.forEach((review) => {
-      console.log({
-        id: review.id,
-        rating: review.rating,
-        listingMapId: review.listingMapId,
-        reservationId: review.reservationId,
-        listingName: review.listingName,
+    // Initialize an empty map to store ratings
+    const ratingMap = {};
+
+    // Extract ratings with status 'guest-to-host' and map to listing IDs
+    reviewsData.forEach((data) => {
+      (data.result || []).forEach((review) => {
+        if (
+          review.rating !== null &&
+          review.rating >= 1 &&
+          review.rating <= 10 &&
+          review.type === "guest-to-host"
+        ) {
+          if (!ratingMap[review.listingMapId]) {
+            ratingMap[review.listingMapId] = [];
+          }
+          ratingMap[review.listingMapId].push(review.rating);
+        }
       });
     });
 
-    return ratings;
+    // Log the filtered rating map to the console
+    console.log("Rating Map:", ratingMap);
+
+    return ratingMap;
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    return [];
+    return {};
   }
 }
 
+// Function to map ratings to average ratings per listing
+function mapRatingsToListings(ratingMap) {
+  const mappedRatings = {};
+
+  Object.keys(ratingMap).forEach((listingId) => {
+    const ratings = ratingMap[listingId];
+    if (Array.isArray(ratings) && ratings.length > 0) {
+      const averageRating =
+        ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+      mappedRatings[listingId] = averageRating;
+    }
+  });
+
+  return mappedRatings;
+}
+
+// Function to handle DOM content loading
+document.addEventListener("DOMContentLoaded", async () => {
+  const ratings = await fetchHostawayReviews();
+  const mappedRatings = mapRatingsToListings(ratings);
+  console.log("Mapped Ratings:", mappedRatings);
+});
+
+// Function to handle mobile filter dropdown changes
 document.addEventListener("DOMContentLoaded", () => {
   const mobileDropdown = document.getElementById("mobileFilterDropdown");
   if (mobileDropdown) {
@@ -144,17 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-// Function to map ratings to listings
-function mapRatingsToListings(ratings) {
-  const ratingMap = {};
-  ratings.forEach((rating) => {
-    if (rating.listingMapId && rating.rating !== undefined) {
-      ratingMap[rating.listingMapId] = rating.rating;
-    }
-  });
-  console.log("Rating Map:", ratingMap); // Debug log
-  return ratingMap;
-}
 
 // Function to convert rating to star representation
 function ratingToStars(rating) {
@@ -172,6 +197,7 @@ function ratingToStars(rating) {
   );
   return fullStars.join("") + halfStar + emptyStars.join("");
 }
+
 
 // Function to load listings
 async function loadListings() {
