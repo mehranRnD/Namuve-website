@@ -908,7 +908,7 @@ section,
   object-fit: cover;
   z-index: 1;
   padding-top: 7.2rem;
-  box-shadow: 0px -20px 300px rgba(0, 0, 0, 1);
+  /* box-shadow: 0px -20px 300px rgba(0, 0, 0, 1); */
 }
 
 .hero:before {
@@ -977,6 +977,12 @@ section,
     padding: 10px 20px;
     margin: 14px 12px;
     font-size: 13px;
+  }
+
+  .about .content h3 {
+    font-size: 1rem !important;
+    line-height: normal;
+    font-weight: 700;
   }
 
   .form-select {
@@ -1194,9 +1200,6 @@ section,
   .footer .footer-links {
     margin-bottom: 15px;
   }
-
-  
-
 
 
   .about .icon-box {
@@ -1738,12 +1741,6 @@ section,
   .features .features-item + .features-item {
     margin-top: 40px;
   }
-}
-
-.about .content h3 {
-  font-size: 1rem !important;
-  line-height: normal;
-  font-weight: 700;
 }
 
 .about .content .read-more {
