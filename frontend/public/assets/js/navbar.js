@@ -85,38 +85,31 @@ export function createNavbar() {
               </div>
             </header>
       `;
-
   // Insert navbar into the DOM first
   document.body.insertAdjacentHTML("afterbegin", headerHTML);
-
   // Now select elements after they exist
   const mobileNavToggle = document.querySelector(".mobile-nav-toggle");
   const navMenu = document.querySelector("#navmenu");
-
   if (mobileNavToggle && navMenu) {
     mobileNavToggle.addEventListener("click", function (e) {
       e.preventDefault();
       document.body.classList.toggle("mobile-nav-active");
       this.classList.toggle("bi-list");
       this.classList.toggle("bi-x");
-
       // Accessibility improvements
       const isExpanded = this.getAttribute("aria-expanded") === "true";
       this.setAttribute("aria-expanded", !isExpanded);
       navMenu.setAttribute("aria-hidden", isExpanded);
     });
-
     // Initialize ARIA attributes
     mobileNavToggle.setAttribute("aria-label", "Toggle navigation menu");
     mobileNavToggle.setAttribute("aria-expanded", "false");
     mobileNavToggle.setAttribute("aria-controls", "navmenu");
     navMenu.setAttribute("aria-hidden", "true");
   }
-
   // Set active nav item based on the current page
   const currentPath = window.location.pathname;
   const navLinks = document.querySelectorAll("#navmenu a");
-
   navLinks.forEach((link) => {
     if (link.getAttribute("href") === currentPath) {
       link.classList.add("active");
