@@ -1,5 +1,7 @@
 import { showRedAlert } from "./alert.js";
 import { idToImageUrlMap, LISTINGS, virtualTourLinks } from "./data.js";
+import { fetchHostawayReviews, mapRatingsToListings, ratingToStars } from "./listings.js";
+
 let usdToPkrRate = 1;
 let currentCurrency = "USD"; // Default currency
 // Descriptions for the rooms
@@ -35,7 +37,7 @@ const getListingData = async () => {
   }
 };
 // Images array with IDs for room data
-const images = [{ id: "288723" }, { id: "288675" }, { id: "288678" }];
+const images = [{ id: "288675" }, { id: "305069" }, { id: "288723" }];
 // Function to update room prices based on selected currency
 function updateRoomPrices() {
   const roomItems = document.querySelectorAll(".room-item");
@@ -83,6 +85,9 @@ const loadRooms = async () => {
   if (!roomList) {
     return;
   }
+  // Fetch ratings
+  const ratings = await fetchHostawayReviews();
+  const ratingMap = mapRatingsToListings(ratings);
   await fetchConversionRate();
   const listings = await getListingData();
   images.forEach((image, index) => {
@@ -91,7 +96,12 @@ const loadRooms = async () => {
     );
     const imageUrl =
       idToImageUrlMap[image.id] || "https://via.placeholder.com/300";
-    const roomItem = document.createElement("div");
+
+      // Get rating for this room
+    const rating = ratingMap[image.id] || 0;
+    const starsHTML = ratingToStars(rating);
+
+   const roomItem = document.createElement("div");
     roomItem.classList.add("col-lg-4", "col-md-6", "wow", "fadeInUp");
     roomItem.setAttribute("data-wow-delay", `${0.1 * (index + 1)}s`);
     roomItem.innerHTML = `
@@ -108,11 +118,7 @@ const loadRooms = async () => {
               listing ? listing.name : "Loading..."
             }</h5>
             <div class="ps-2 d-flex star-one" style="color: #FFC107; width: 40% !important; justify-content: flex-end !important;">
-              <small class="fa fa-star" style="margin-right: 2px !important;"></small>
-              <small class="fa fa-star" style="margin-right: 2px !important;"></small>
-              <small class="fa fa-star" style="margin-right: 2px !important;"></small>
-              <small class="fa fa-star" style="margin-right: 2px !important;"></small>
-              <small class="fa fa-star"></small>
+              ${starsHTML}
             </div>
           </div>
           <p class="text-body mb-3" style="min-height: 48px !important;">${

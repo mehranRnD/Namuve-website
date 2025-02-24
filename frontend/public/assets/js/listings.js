@@ -127,18 +127,21 @@ async function fetchHostawayReviews() {
           review.rating !== null &&
           review.rating >= 1 &&
           review.rating <= 10 &&
-          review.type === "guest-to-host"
-        ) {
+          review.type === "guest-to-host" &&
+          review.channelId === 2018 && 2005
+           ) {
           if (!ratingMap[review.listingMapId]) {
             ratingMap[review.listingMapId] = [];
           }
           ratingMap[review.listingMapId].push(review.rating);
+
         }
+        
       });
     });
 
     // Log the filtered rating map to the console
-    console.log("Rating Map:", ratingMap);
+    // console.log("Rating Map:", ratingMap);
 
     return ratingMap;
   } catch (error) {
@@ -567,3 +570,5 @@ document.addEventListener("DOMContentLoaded", loadListings);
 
 // Make filterListings available globally
 window.filterListings = filterListings;
+
+export { fetchHostawayReviews, mapRatingsToListings, ratingToStars };

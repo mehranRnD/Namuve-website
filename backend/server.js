@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import nodemailer from "nodemailer";
 import routes from "./routes/routes.js";
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -18,7 +17,8 @@ class HostawayListingManager {
     this.listings = [];
 
     // Initialize token
-    this.authToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc"
+    this.authToken =
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc";
 
     // Middleware
     this.app.use(cors());
@@ -30,6 +30,10 @@ class HostawayListingManager {
     this.startRoutes();
   }
 
+  async getAccessToken() {
+    // Implement token refresh logic if needed
+  }
+
   startRoutes() {
     this.app.get("/test-token", (req, res) => {
       res.json({
@@ -37,6 +41,7 @@ class HostawayListingManager {
         token: this.authToken,
       });
     });
+
     this.app.get("/api/listings", async (req, res) => {
       try {
         if (!this.authToken) {
@@ -50,18 +55,23 @@ class HostawayListingManager {
           },
         });
 
-        let listings = typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+        let listings =
+          typeof response.data === "string"
+            ? JSON.parse(response.data)
+            : response.data;
 
-        // Check if listings data exists and format it
-        listings = listings.map(listing => {
+        listings = listings.map((listing) => {
           return {
             id: listing.id,
             name: listing.name,
-            imageUrl: listing.images && listing.images.length > 0 ? listing.images[0].url : null, // Extract first image URL if available
-            caption: listing.caption || listing.name,  // Use caption or fallback to name
+            imageUrl:
+              listing.images && listing.images.length > 0
+                ? listing.images[0].url
+                : null,
+            caption: listing.caption || listing.name,
             vrboCaption: listing.vrboCaption || null,
             airbnbCaption: listing.airbnbCaption || null,
-            sortOrder: listing.sortOrder || 0
+            sortOrder: listing.sortOrder || 0,
           };
         });
 
@@ -86,7 +96,10 @@ class HostawayListingManager {
           },
         });
 
-        const listing = typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+        const listing =
+          typeof response.data === "string"
+            ? JSON.parse(response.data)
+            : response.data;
         res.json(listing);
       } catch (error) {
         console.error("Listing Detail Fetch Error:", error.message);
@@ -103,23 +116,73 @@ class HostawayListingManager {
         const listingId = req.params.id;
         const { startDate, endDate } = req.query;
 
-        const response = await axios.get(`${this.apiBaseUrl}/${listingId}/calendar`, {
-          headers: {
-            Authorization: this.authToken,
-            "Content-Type": "application/json",
-          },
-          params: {
-            startDate,
-            endDate,
-            includeResources: true,
-          },
-        });
+        const response = await axios.get(
+          `${this.apiBaseUrl}/${listingId}/calendar`,
+          {
+            headers: {
+              Authorization: this.authToken,
+              "Content-Type": "application/json",
+            },
+            params: {
+              startDate,
+              endDate,
+              includeResources: true,
+            },
+          }
+        );
 
-        const calendarData = typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+        const calendarData =
+          typeof response.data === "string"
+            ? JSON.parse(response.data)
+            : response.data;
         res.json(calendarData);
       } catch (error) {
         console.error("Calendar Fetch Error:", error.message);
         res.status(500).json({ error: "Failed to fetch calendar data" });
+      }
+    });
+
+    this.app.post("/api/available-listings", async (req, res) => {
+      console.log("Received POST request at /api/available-listings");
+      try {
+        if (!this.authToken) {
+          await this.getAccessToken();
+        }
+    
+        const { checkinDate, checkoutDate } = req.body;
+        const listingIds = req.body.listingIds;
+    
+        console.log("checkinDate:", checkinDate);
+        console.log("checkoutDate:", checkoutDate);
+        console.log("listingIds:", listingIds);
+    
+        const fetchPromises = listingIds.map(async (listingId) => {
+          const response = await axios.get(`${this.apiBaseUrl}/${listingId}/calendar`, {
+            headers: {
+              Authorization: this.authToken,
+              "Content-Type": "application/json",
+            },
+            params: {
+              startDate: checkinDate,
+              endDate: checkoutDate,
+              includeResources: true,
+            },
+          });
+    
+          const calendarData = typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+          return { listingId, calendarData };
+        });
+    
+        const results = await Promise.all(fetchPromises);
+    
+        const availableListings = results.filter(result => {
+          return result.calendarData.some(entry => entry.status === "available");
+        }).map(result => result.listingId);
+    
+        res.json(availableListings);
+      } catch (error) {
+        console.error("Available Listings Fetch Error:", error.message);
+        res.status(500).json({ error: "Failed to fetch available listings" });
       }
     });
   }
