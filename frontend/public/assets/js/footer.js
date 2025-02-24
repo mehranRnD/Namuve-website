@@ -73,7 +73,7 @@ export function createFooter() {
 
             <div class="container copyright text-center mt-4">
                 <p>
-                    © <span>Copyright</span> <strong class="sitename">BooknRent</strong>
+                    © <span>Copyright</span> <strong class="sitename">Namuve</strong>
                     <span>All Rights Reserved</span>
                 </p>
             </div>
