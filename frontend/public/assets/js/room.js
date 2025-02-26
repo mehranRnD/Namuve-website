@@ -37,7 +37,7 @@ const getListingData = async () => {
   }
 };
 // Images array with IDs for room data
-const images = [{ id: "288675" }, { id: "305069" }, { id: "288723" }];
+const images = [{ id: "288675" }, { id: "288676" }, { id: "288723" }];
 // Function to update room prices based on selected currency
 function updateRoomPrices() {
   const roomItems = document.querySelectorAll(".room-item");
@@ -95,7 +95,7 @@ const loadRooms = async () => {
       (listing) => listing.id.toString() === image.id.toString()
     );
     const imageUrl =
-      idToImageUrlMap[image.id] || "https://via.placeholder.com/300";
+      idToImageUrlMap[image.id] || "https://dummyimage.com/300x300/000/fff";
 
       // Get rating for this room
     const rating = ratingMap[image.id] || 0;
@@ -184,11 +184,11 @@ const loadRooms = async () => {
         const checkout = checkoutInput.dataset.selectedDate;
         const guests = guestsInput.value;
         if (!checkin) {
-          showRedAlert("Please select a check-in date.");
+          showRedAlert("Please enter a check-in date.");
           return;
         }
         if (!checkout) {
-          showRedAlert("Please select a check-out date.");
+          showRedAlert("Please enter a check-out date.");
           return;
         }
         if (!guests || parseInt(guests) < 1) {

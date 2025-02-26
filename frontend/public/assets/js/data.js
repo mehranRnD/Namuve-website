@@ -65,7 +65,6 @@ export const idToImageUrlMap = {
   336255:
     "https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/80066-336255-uIRNwEnXNYD-hjk4oZAG6ESB0VQKEfmCNdpjoEtoyTU-674eb1fae01c1-small",
 };
-
 export const roomDescriptions = [
   "Experience the ultimate luxury in our spacious suite, featuring elegant decor and modern amenities.",
   "Enjoy a cozy and comfortable stay in this beautifully designed room, perfect for relaxation.",
@@ -99,7 +98,26 @@ export const roomDescriptions = [
   "Stay in our executive suite with business facilities and relaxation space.",
   "Experience our premium room with city views and contemporary styling.",
   "Rest in our signature suite with upgraded amenities and elegant atmosphere.",
+  "Stay in our deluxe penthouse with breathtaking city skyline views and top-tier luxury.",
+  "Experience the charm of our heritage suite, blending classic elegance with modern comforts.",
+  "Relax in our waterfront suite, offering stunning views and a serene atmosphere.",
+  "Unwind in our spa-inspired suite with a private jacuzzi and wellness amenities.",
+  "Enjoy our rooftop terrace suite, featuring an expansive outdoor space and panoramic cityscapes.",
+  "Stay in our ultra-modern smart room, equipped with cutting-edge automation and personalized settings.",
+  "Experience rustic charm in our countryside retreat, surrounded by nature and tranquility.",
+  "Rest in our artist's loft, featuring curated artwork, high ceilings, and a creative ambiance.",
+  "Discover our tropical oasis suite, adorned with lush greenery and resort-style furnishings.",
+  "Relax in our grand suite with an opulent four-poster bed and lavish decor.",
+  "Unwind in our sunlit atrium room, designed to enhance natural light and spaciousness.",
+  "Enjoy our mountain-view retreat, featuring cozy interiors and breathtaking scenery.",
+  "Stay in our cinematic suite, complete with an in-room home theater system for ultimate entertainment.",
+  "Experience unparalleled elegance in our imperial suite, featuring handcrafted furnishings and bespoke service.",
+  "Discover our enchanted forest room, a nature-inspired sanctuary with botanical elements.",
+  "Relax in our lagoon-view villa, offering exclusive access to a tranquil water escape.",
+  "Unwind in our yacht-inspired suite, designed with nautical decor and oceanic ambiance.",
+  "Enjoy our ultra-luxury estate suite, featuring private butler service and VIP amenities."
 ];
+
 
 // Add a mapping for virtual tour links
 export const virtualTourLinks = {
@@ -118,7 +136,7 @@ export const LISTINGS = [
   { id: 323258, price: 48 }, // 1BR
   { id: 288677, price: 57 }, { id: 288684, price: 57 }, { id: 288687, price: 57 },
   { id: 288977, price: 57 }, { id: 288689, price: 57 }, { id: 288685, price: 57 },
-  { id: 288683, price: 57 }, { id: 306543, price: 57 }, { id: 288724, price: 57 }, // 2BR
+  { id: 288683, price: 57 }, { id: 306543, price: 57 }, { id: 288724, price: 57 }, { id: 363431, price: 57 },// 2BR
   { id: 305055, price: 78 }, { id: 309909, price: 78 }, { id: 323227, price: 78 },
   { id: 288688, price: 78 }, // 2BR Premium
   { id: 288686, price: 65 }, { id: 305327, price: 65 }, { id: 288676, price: 65 }, // 3BR
@@ -140,7 +158,7 @@ export const LISTINGS_DATA = {
     323258,
   ],
   "2BR": [
-    288677, 288684, 288687, 288977, 288689, 288685, 288683, 306543, 288724,
+    288677, 288684, 288687, 288977, 288689, 288685, 288683, 306543, 288724, 363431
   ],
   "2BR Premium": [305055, 309909, 323227, 288688],
   "3BR": [288686, 305327, 288676],

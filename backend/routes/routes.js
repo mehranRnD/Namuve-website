@@ -133,7 +133,7 @@ router.get("/api/listings", async (req, res) => {
           address: listing.address || "Address not provided",
           price: listing.price || 0,
           houseRules: listing.houseRules || "No specific house rules",
-          imageUrl: listing.imageUrl || "https://via.placeholder.com/300",
+          imageUrl: listing.imageUrl || "https://dummyimage.com/300x300/000/fff",
         }))
         : [];
 
@@ -171,7 +171,7 @@ router.get("/api/listings/:id", async (req, res) => {
           address: listing.address || "Address not provided",
           price: listing.price || 0,
           houseRules: listing.houseRules || "No specific house rules",
-          imageUrl: listing.imageUrl || "https://via.placeholder.com/300",
+          imageUrl: listing.imageUrl || "https://dummyimage.com/300x300/000/fff",
         }))
         : [];
 

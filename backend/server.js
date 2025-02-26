@@ -30,9 +30,6 @@ class HostawayListingManager {
     this.startRoutes();
   }
 
-  async getAccessToken() {
-    // Implement token refresh logic if needed
-  }
 
   startRoutes() {
     this.app.get("/test-token", (req, res) => {

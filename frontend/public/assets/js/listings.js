@@ -30,7 +30,7 @@ async function fetchConversionRate() {
 
 // Function to get image URL by ID
 function getImageUrlById(id) {
-  return idToImageUrlMap[id] || "https://via.placeholder.com/300";
+  return idToImageUrlMap[id] || "https://dummyimage.com/300x300/000/fff";
 }
 
 // Function to fetch listings data from the server
@@ -170,7 +170,7 @@ function mapRatingsToListings(ratingMap) {
 document.addEventListener("DOMContentLoaded", async () => {
   const ratings = await fetchHostawayReviews();
   const mappedRatings = mapRatingsToListings(ratings);
-  console.log("Mapped Ratings:", mappedRatings);
+  // console.log("Mapped Ratings:", mappedRatings);
 });
 
 // Function to handle mobile filter dropdown changes
@@ -276,7 +276,7 @@ async function loadListings() {
           </div>
           <div class="p-4 mt-2" style="height: 300px !important; display: flex !important; flex-direction: column !important;">
             <div class="d-flex justify-content-between mb-3" style="align-items: center !important;">
-              <h5 class="mb-0" style="max-width: 70% !important; font-size: 1.1rem !important;">${
+              <h5 class="mb-0" style="max-width: 70% !important; font-size: 20px !important;">${
                 listing ? listing.name : "Loading..."
               }</h5>
               <div class="ps-2 d-flex" style="color: #ffc107;">

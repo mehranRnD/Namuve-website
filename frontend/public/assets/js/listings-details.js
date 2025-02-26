@@ -1,5 +1,5 @@
 import { idToImageUrlMap, BASE_PRICES, LISTINGS_DATA, ROOM_DETAILS } from "./data.js";
-
+import { fetchHostawayReviews, mapRatingsToListings, ratingToStars } from "./listings.js";
 let currentListing = null;
 let usdToPkrRate = 277.66; // Default rate
 
@@ -28,7 +28,7 @@ function getListingInfo(listingId) {
 async function fetchExchangeRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b3/latest/USD"
+      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
@@ -54,6 +54,44 @@ function updatePrice(currency) {
     priceElement.textContent = `$${basePrice}`;
   }
 }
+
+// Function to get the listing ID from URL parameters
+function getListingIdFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('id');
+}
+
+// Function to display rating
+async function displayListingRating() {
+  const listingId = getListingIdFromUrl();
+  if (!listingId) {
+    console.error('No listing ID found in URL');
+    return;
+  }
+
+  try {
+    // Fetch all reviews
+    const ratings = await fetchHostawayReviews();
+    const ratingMap = mapRatingsToListings(ratings);
+
+    // Get rating for this specific listing
+    const rating = ratingMap[listingId] || 0;
+    const starsHTML = ratingToStars(rating);
+
+    // Find the rating container and update it
+    const ratingContainer = document.getElementById('listing-rating');
+    if (ratingContainer) {
+      ratingContainer.innerHTML = starsHTML;
+    }
+  } catch (error) {
+    console.error('Error fetching and displaying rating:', error);
+  }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  displayListingRating();
+});
 
 async function fetchListingDetails() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -90,42 +128,43 @@ async function fetchListingDetails() {
 
     const listingInfo = getListingInfo(listingId);
     const initialPrice = `$${listingInfo.basePrice}`;
+    // Fetch and display the rating
+    const ratings = await fetchHostawayReviews();
+    const ratingMap = mapRatingsToListings(ratings);
+    const rating = ratingMap[listingId] || 0;
+    const starsHTML = ratingToStars(rating);
+
 
     listingDetailsContainer.innerHTML = `
-            <div class="listing-content">
-                <img src="${
-                  idToImageUrlMap[listingId] ||
-                  "https://via.placeholder.com/250"
-                }" 
-                     class="listing-image" alt="Listing Image" />
-                <h2>${listing.name || "N/A"}</h2>
-                <div class="icons">
-                    <span>
-                        <i class="fa-solid fa-building"></i> 
-                        ${listingInfo.roomType} 
-                        <i class="fa-solid fa-arrow-right ms-1" style="font-size: 0.8em; opacity: 0.7;"></i>
-                    </span>
-                    <span>
-                        <i class="fa-solid fa-bed"></i> 
-                        ${listingInfo.beds} Bed(s) 
-                    </span>
-                    <span>
-                        <i class="fa-solid fa-users"></i> 
-                        ${listingInfo.guests} Guests 
-                    </span>
-                </div>
-                <p><strong>Description:</strong> ${
-                  listing.description || "No description available"
-                }</p>
-                <p><strong>House Rules:</strong> ${
-                  listing.houseRules || "No specific house rules"
-                }</p>
-                <p><strong>Address:</strong> ${
-                  listing.address || "Address not provided"
-                }</p>
-                <p><strong>Price:</strong> Starting from <span class="price-display">${initialPrice}</span></p>
-            </div>
-        `;
+      <div class="listing-content">
+    <img src="${idToImageUrlMap[listingId] || "https://via.placeholder.com/250"}" 
+         class="listing-image" alt="Listing Image" />
+    <div class="name-rating-container">
+      <h2 class="listing-name">${listing.name || "N/A"}</h2>
+      <div class="star-rating">${starsHTML}</div>
+    </div>
+    <div class="icons">
+          <span>
+            <i class="fa-solid fa-building"></i> 
+            ${listingInfo.roomType} 
+            <i class="fa-solid fa-arrow-right ms-1" style="font-size: 0.8em; opacity: 0.7;"></i>
+          </span>
+          <span>
+            <i class="fa-solid fa-bed"></i> 
+            ${listingInfo.beds} Bed(s) 
+          </span>
+          <span>
+            <i class="fa-solid fa-users"></i> 
+            ${listingInfo.guests} Guests 
+          </span>
+        </div>
+        <p><strong>Description:</strong> ${listing.description || "No description available"}</p>
+        <p><strong>House Rules:</strong> ${listing.houseRules || "No specific house rules"}</p>
+        <p><strong>Address:</strong> ${listing.address || "Address not provided"}</p>
+        <p><strong>Price:</strong> Starting from <span class="price-display">${initialPrice}</span></p>
+      </div>
+    `;
+
 
     // Show the containers
     listingDetailsContainer.style.display = "block";

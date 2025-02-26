@@ -19,7 +19,6 @@ export function createNavbar() {
                     <li class="nav-item dropdown">
                       <a
                         class="nav-link dropdown-toggle"
-                        href="/services"
                         id="servicesDropdown"
                         role="button"
                         data-toggle="dropdown"
@@ -45,7 +44,6 @@ export function createNavbar() {
                     <li class="nav-item dropdown">
                       <a
                         class="nav-link dropdown-toggle"
-                        href="/insightshub"
                         id="insightshubDropdown"
                         role="button"
                         data-toggle="dropdown"
