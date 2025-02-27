@@ -52,10 +52,13 @@
   --contrast-color: #ffffff;
 }
 
-.star-one {
-  color:  #989549;
-}
 
+.rating-stars {
+  color: #FFC107; /* Gold color for stars */
+  font-size: 0.9em;
+  margin-left: 10px;
+  display: inline-block; /* Ensure stars appear in a row */
+}
 /* Smooth scroll */
 :root {
   scroll-behavior: smooth;

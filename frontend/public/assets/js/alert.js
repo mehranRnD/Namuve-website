@@ -148,5 +148,5 @@ export function showRedAlert(message, type = "danger") {
       // Fade out
       alertDiv.style.opacity = "0"; // Set opacity to 0
       setTimeout(() => alertDiv.remove(), 500); // Remove after fade out
-    }, 3000);
+    }, 4000);
   }

@@ -202,14 +202,22 @@ function ratingToStars(rating) {
 }
 
 
-// Function to load listings
 async function loadListings() {
+  // Ensure DOM elements exist before accessing them
   const gallery = document.getElementById("gallery");
   const loading = document.getElementById("loading");
   const errorElement = document.getElementById("error");
 
+  if (!gallery || !loading || !errorElement) {
+    console.error("Required DOM elements not found.");
+    return;
+  }
+
   try {
+    // Show loading spinner
     loading.style.display = "block";
+    errorElement.style.display = "none";
+
     const ratings = await fetchHostawayReviews();
     const ratingMap = mapRatingsToListings(ratings);
 
@@ -222,7 +230,10 @@ async function loadListings() {
     const filterContainer = document.createElement("div");
     filterContainer.classList.add("container", "mb-5", "mt-4");
 
-    gallery.parentNode.insertBefore(filterContainer, gallery);
+    // Insert filter container before the gallery
+    if (gallery.parentNode) {
+      gallery.parentNode.insertBefore(filterContainer, gallery);
+    }
 
     // Add click handlers for filter buttons
     const filterButtons = document.querySelectorAll(".filter-buttons button");
@@ -238,12 +249,12 @@ async function loadListings() {
       });
     });
 
+    // Hide loading spinner
     loading.style.display = "none";
 
+    // Render listings
     images.forEach((image, index) => {
-      const listing = listings.find(
-        (l) => l.id.toString() === image.id.toString()
-      );
+      const listing = listings.find((l) => l.id.toString() === image.id.toString());
       const container = document.createElement("div");
       container.classList.add("col-lg-4", "col-md-6", "wow", "fadeInUp");
       container.setAttribute("data-wow-delay", `${0.1 * (index + 1)}s`);
@@ -256,80 +267,70 @@ async function loadListings() {
       console.log(`Rating for listing ${image.id}:`, rating); // Debug log
 
       container.innerHTML = `
-        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${
-          image.id
-        }" style="height: 600px !important;">
+        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${image.id}" style="height: 600px !important;">
           <div class="position-relative" style="height: 300px !important;">
-            <img class="img-fluid" src="${getImageUrlById(
-              image.id
-            )}" alt="Listing Image ${
-        image.id
-      }" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
-<small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6B7560; border: 1px #6B7560 solid;">              Starting from ${
-        currentCurrency === "USD"
-          ? `$${getBasePriceByListingId(image.id)}`
-          : `₨${(getBasePriceByListingId(image.id) * usdToPkrRate)
-              .toFixed(2)
-              .toLocaleString()}`
-      }
+            <img class="img-fluid" src="${getImageUrlById(image.id)}" alt="Listing Image ${image.id}" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
+            <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6B7560; border: 1px #6B7560 solid;">
+              Starting from ${
+                currentCurrency === "USD"
+                  ? `$${getBasePriceByListingId(image.id)}`
+                  : `₨${(getBasePriceByListingId(image.id) * usdToPkrRate).toFixed(2).toLocaleString()}`
+              }
             </small>
           </div>
           <div class="p-4 mt-2" style="height: 300px !important; display: flex !important; flex-direction: column !important;">
             <div class="d-flex justify-content-between mb-3" style="align-items: center !important;">
-              <h5 class="mb-0" style="max-width: 70% !important; font-size: 20px !important;">${
-                listing ? listing.name : "Loading..."
-              }</h5>
+              <h5 class="mb-0" style="max-width: 70% !important; font-size: 20px !important;">${listing ? listing.name : "Loading..."}</h5>
               <div class="ps-2 d-flex" style="color: #ffc107;">
                 ${ratingToStars(rating)}
               </div>
             </div>
             <div class="d-flex mb-3">
-                <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #212429;"></i>${
-                  roomDetails.beds
-                } Bed(s)</small>
-                <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #212429;"></i>${
-                  roomDetails.guests
-                } Guests</small>
-                <small><i class="fa fa-wifi me-2" style="color: #212429;"></i>Wifi</small>
+              <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #212429;"></i>${roomDetails.beds} Bed(s)</small>
+              <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #212429;"></i>${roomDetails.guests} Guests</small>
+              <small><i class="fa fa-wifi me-2" style="color: #212429;"></i>Wifi</small>
             </div>
             <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${
               roomDescriptions[images.findIndex((img) => img.id === image.id)]
             }</p>
             <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
-                <a href="/listings-details?id=${
-                  image.id
-                }" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #6c757e; border: none;">
-                    <i class="fas fa-info-circle me-2"></i>View Details
-                </a>
-                <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
-                    <i class="fas fa-video me-2"></i>Virtual Tour
-                </button>
-                <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn"
-                 style="background-color: #6B7560; border: 1px #6B7560 solid; ">
+              <a href="/listings-details?id=${image.id}" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #6c757e; border: none;">
+                <i class="fas fa-info-circle me-2"></i>View Details
+              </a>
+              <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
+                <i class="fas fa-video me-2"></i>Virtual Tour
+              </button>
+              <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn" style="background-color: #6B7560; border: 1px #6B7560 solid;">
                 <i class="fas fa-calendar-check me-2"></i>Book Now
-                </button>
+              </button>
             </div>
           </div>
         </div>
       `;
+
+      // Append the container to the gallery
       gallery.appendChild(container);
 
       // Add event listener for the virtual tour button
       const virtualTourBtn = container.querySelector(".virtual-tour");
-      virtualTourBtn.addEventListener("click", () => {
-        const tourLink = virtualTourLinks[image.id]; // Get the corresponding virtual tour link
-        if (tourLink) {
-          window.location.href = tourLink; // Redirect to the virtual tour link
-        } else {
-          alert("Virtual tour is not available for this listing.");
-        }
-      });
+      if (virtualTourBtn) {
+        virtualTourBtn.addEventListener("click", () => {
+          const tourLink = virtualTourLinks[image.id]; // Get the corresponding virtual tour link
+          if (tourLink) {
+            window.location.href = tourLink; // Redirect to the virtual tour link
+          } else {
+            alert("Virtual tour is not available for this listing.");
+          }
+        });
+      }
 
       // Add Book Now button functionality
       const bookNowBtn = container.querySelector(".book-now-btn");
-      bookNowBtn.addEventListener("click", () => {
-        openBookingModal(image.id);
-      });
+      if (bookNowBtn) {
+        bookNowBtn.addEventListener("click", () => {
+          openBookingModal(image.id);
+        });
+      }
     });
 
     // Add currency selector functionality
@@ -342,11 +343,19 @@ async function loadListings() {
     }
   } catch (error) {
     console.error("Error loading listings:", error);
-    errorElement.textContent = `Failed to load listings: ${error.message}`;
-    errorElement.style.display = "block";
-    loading.style.display = "none";
+    if (errorElement) {
+      errorElement.textContent = `Failed to load listings: ${error.message}`;
+      errorElement.style.display = "block";
+    }
+    if (loading) {
+      loading.style.display = "none";
+    }
   }
 }
+
+// Initialize when DOM is loaded
+document.addEventListener("DOMContentLoaded", loadListings);
+
 
 // Helper function to get room type and base price by listing ID
 function getListingInfo(listingId) {
