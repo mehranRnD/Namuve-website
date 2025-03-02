@@ -1,4 +1,4 @@
-import { showRedAlert } from "./alert.js";
+import { showRedAlert, showInfoAlert } from "./alert.js";
 import { idToImageUrlMap, LISTINGS, virtualTourLinks } from "./data.js";
 import { fetchHostawayReviews, mapRatingsToListings, ratingToStars } from "./listings.js";
 
@@ -215,7 +215,7 @@ const loadRooms = async () => {
         window.location.href = tourLink;
       } else {
         // Handle cases where the virtual tour link is not available
-        alert("Virtual tour is not available for this room.");
+        showInfoAlert("Virtual tour is not available for this room.");
       }
     });
   });

@@ -1,6 +1,6 @@
 import { showRedAlert, showInfoAlert } from "./alert.js";
-import { idToImageUrlMap, LISTINGS, roomDescriptions, LISTINGS_DATA } from "./data.js"; // Import the image URL map
-import { fetchHostawayReviews, mapRatingsToListings, ratingToStars } from "./listings.js";
+import {idToImageUrlMap, LISTINGS, roomDescriptions, LISTINGS_DATA} from "./data.js"; 
+import {fetchHostawayReviews, mapRatingsToListings, ratingToStars} from "./listings.js";
 
 const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
 const LISTING_IDS = LISTINGS.map((listing) => listing.id);
@@ -10,7 +10,9 @@ const listingDetailsCache = new Map();
 // Function to fetch USD to PKR exchange rate
 async function fetchConversionRate() {
   try {
-    const response = await fetch("https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD");
+    const response = await fetch(
+      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD"
+    );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
   } catch (error) {
@@ -32,7 +34,8 @@ function updatePrices(currency) {
 
     if (priceElement) {
       let basePrice = getPriceById(listingId);
-      let convertedPrice = currency === "PKR" ? (basePrice * usdToPkrRate).toFixed(0) : basePrice;
+      let convertedPrice =
+        currency === "PKR" ? (basePrice * usdToPkrRate).toFixed(0) : basePrice;
 
       priceElement.innerHTML = `Price: Starting from ${currency} ${convertedPrice}`;
     }
@@ -51,14 +54,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-
 // Fetch calendar data for a listing
 async function fetchCalendarData(listingId, startDate, endDate) {
   const cacheKey = `${listingId}-${startDate}-${endDate}`;
   if (calendarDataCache.has(cacheKey)) return calendarDataCache.get(cacheKey);
 
   try {
-    const response = await fetch(`${BASE_URL}/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`);
+    const response = await fetch(
+      `${BASE_URL}/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`
+    );
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
     const data = await response.json();
@@ -72,7 +76,8 @@ async function fetchCalendarData(listingId, startDate, endDate) {
 
 // Fetch listing details
 async function fetchListingDetails(listingId) {
-  if (listingDetailsCache.has(listingId)) return listingDetailsCache.get(listingId);
+  if (listingDetailsCache.has(listingId))
+    return listingDetailsCache.get(listingId);
 
   try {
     const response = await fetch(`${BASE_URL}/${listingId}`);
@@ -99,9 +104,13 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
     );
 
     return LISTING_IDS.filter((id, index) => {
-      const calendarData = results[index].status === "fulfilled" ? results[index].value : null;
-      return calendarData?.result?.some((entry) =>
-        entry.status === "available" && new Date(entry.date) >= checkin && new Date(entry.date) < checkout
+      const calendarData =
+        results[index].status === "fulfilled" ? results[index].value : null;
+      return calendarData?.result?.some(
+        (entry) =>
+          entry.status === "available" &&
+          new Date(entry.date) >= checkin &&
+          new Date(entry.date) < checkout
       );
     });
   } catch (error) {
@@ -109,7 +118,6 @@ async function checkAvailableListings(checkinDate, checkoutDate) {
     return [];
   }
 }
-
 
 // Handle booking form submission
 document.addEventListener("DOMContentLoaded", () => {
@@ -129,20 +137,26 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      sessionStorage.setItem('searchParams', JSON.stringify({
-        location,
-        checkinDate,
-        checkoutDate,
-        guests
-      }));
+      sessionStorage.setItem(
+        "searchParams",
+        JSON.stringify({
+          location,
+          checkinDate,
+          checkoutDate,
+          guests,
+        })
+      );
 
       showInfoAlert("Searching for available listings...");
 
       checkAvailableListings(checkinDate, checkoutDate)
-        .then(availableListings => {
-          sessionStorage.setItem('availableListings', JSON.stringify(availableListings));
+        .then((availableListings) => {
+          sessionStorage.setItem(
+            "availableListings",
+            JSON.stringify(availableListings)
+          );
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error fetching listings:", error);
         });
 
@@ -153,20 +167,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
-
 // Filter listings by category
 function filterListings(category) {
   document.querySelectorAll(".listing-item").forEach((listing) => {
     const listingId = parseInt(listing.getAttribute("data-id"));
-    listing.style.display = category === "All" || LISTINGS_DATA[category]?.includes(listingId) ? "block" : "none";
+    listing.style.display =
+      category === "All" || LISTINGS_DATA[category]?.includes(listingId)
+        ? "block"
+        : "none";
   });
 }
 
 // Event listener for filtering listings
 document.addEventListener("click", (event) => {
   if (event.target.classList.contains("btn-filter")) {
-    document.querySelectorAll(".btn-filter").forEach((btn) => btn.classList.remove("active"));
+    document
+      .querySelectorAll(".btn-filter")
+      .forEach((btn) => btn.classList.remove("active"));
     event.target.classList.add("active");
 
     filterListings(event.target.getAttribute("data-category"));
@@ -175,13 +192,14 @@ document.addEventListener("click", (event) => {
 
 document.addEventListener("click", (event) => {
   if (event.target.classList.contains("btn-filter")) {
-    document.querySelectorAll(".btn-filter").forEach((btn) => btn.classList.remove("active")); // Remove active class from all buttons
+    document
+      .querySelectorAll(".btn-filter")
+      .forEach((btn) => btn.classList.remove("active")); // Remove active class from all buttons
     event.target.classList.add("active"); // Add active class to clicked button
     const category = event.target.getAttribute("data-category"); // Get category from button
     filterListings(category); // Apply filtering
   }
 });
-
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -202,7 +220,7 @@ function getNextDescription() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Get search parameters from sessionStorage
-  const searchParams = JSON.parse(sessionStorage.getItem('searchParams'));
+  const searchParams = JSON.parse(sessionStorage.getItem("searchParams"));
 
   if (searchParams) {
     const { location, checkinDate, checkoutDate, guests } = searchParams;
@@ -219,10 +237,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       try {
         // Check available listings
-        const availableListings = await checkAvailableListings(checkinDate, checkoutDate);
+        const availableListings = await checkAvailableListings(
+          checkinDate,
+          checkoutDate
+        );
 
         if (availableListings.length > 0) {
-          const listingDetails = await Promise.all(availableListings.map(fetchListingDetails));
+          const listingDetails = await Promise.all(
+            availableListings.map(fetchListingDetails)
+          );
           const ratings = await fetchHostawayReviews();
           const mappedRatings = mapRatingsToListings(ratings);
 
@@ -256,19 +279,27 @@ document.addEventListener("DOMContentLoaded", async () => {
                   <div class="col-lg-8">
                     <div class="items">
                       <div class="row">
-                        ${listingDetails.filter(Boolean).map((listing) => {
-            const imageUrl = idToImageUrlMap[listing.id] || "https://dummyimage.com/300x300/000/fff";
-            const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
-            const rating = mappedRatings[listing.id] || 0;
-            const stars = ratingToStars(rating);
+                        ${listingDetails
+                          .filter(Boolean)
+                          .map((listing) => {
+                            const imageUrl =
+                              idToImageUrlMap[listing.id] ||
+                              "https://dummyimage.com/300x300/000/fff";
+                            const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
+                            const rating = mappedRatings[listing.id] || 0;
+                            const stars = ratingToStars(rating);
 
-            return `
-                            <div class="col-lg-12 mb-4 listing-item" data-id="${listing.id}">
+                            return `
+                            <div class="col-lg-12 mb-4 listing-item" data-id="${
+                              listing.id
+                            }">
                               <div class="item" style="padding: 15px;">
                                 <div class="row">
                                   <div class="col-lg-4 col-sm-5">
                                     <div class="image">
-                                      <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
+                                      <img src="${imageUrl}" alt="Listing Name: ${
+                              listing.name
+                            }" />
                                     </div>
                                   </div>
                                   <div class="col-lg-8 col-sm-7">
@@ -282,7 +313,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                                       </h4>
                                       <span>Description: ${getNextDescription()}</span>
                                       <ul class="info">
-                                        <li>Price: Starting from $${listing.price || "TBD"}</li>
+                                        <li>Price: Starting from $${
+                                          listing.price || "TBD"
+                                        }</li>
                                       </ul>
                                       <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
                                     </div>
@@ -290,7 +323,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 </div>
                               </div>
                             </div>`;
-          }).join("")}
+                          })
+                          .join("")}
                       </div>
                     </div>
                   </div>
@@ -312,11 +346,13 @@ document.addEventListener("DOMContentLoaded", async () => {
               </div>
             </div>`;
         } else {
-          listingsContainer.innerHTML = "<p class='text-danger text-center'>No available listings for the selected dates.</p>";
+          listingsContainer.innerHTML =
+            "<p class='text-danger text-center'>No available listings for the selected dates.</p>";
         }
       } catch (error) {
         console.error("Error fetching listing details:", error);
-        listingsContainer.innerHTML = "<p class='text-danger text-center'>Failed to load listings. Please try again later.</p>";
+        listingsContainer.innerHTML =
+          "<p class='text-danger text-center'>Failed to load listings. Please try again later.</p>";
       }
     }
   }

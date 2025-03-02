@@ -319,7 +319,7 @@ async function loadListings() {
           if (tourLink) {
             window.location.href = tourLink; // Redirect to the virtual tour link
           } else {
-            alert("Virtual tour is not available for this listing.");
+            showInfoAlert("Virtual tour is not available for this listing.");
           }
         });
       }
