@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import nodemailer from "nodemailer";
 import routes from "./routes/routes.js";
+import { getConfig } from "./config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,23 +14,55 @@ class HostawayListingManager {
   constructor() {
     this.app = express();
     this.apiBaseUrl = "https://api.hostaway.com/v1/listings";
-    this.port = 3000;
+    this.port = process.env.PORT || 3000;
+    this.config = getConfig();
     this.listings = [];
 
     // Initialize token
     this.authToken =
       "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc";
 
+    // Trust proxy for secure cookies in production
+    if (process.env.NODE_ENV === 'production') {
+      this.app.set('trust proxy', 1);
+    }
+
     // Middleware
-    this.app.use(cors());
+    this.app.use(cors({
+      origin: this.config.corsOrigins,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true
+    }));
     this.app.use(express.json());
+
+    // Security headers
+    this.app.use((req, res, next) => {
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('X-Frame-Options', 'DENY');
+      res.setHeader('X-XSS-Protection', '1; mode=block');
+      if (process.env.NODE_ENV === 'production') {
+        res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+      }
+      next();
+    });
 
     // Serve static files
     this.app.use(express.static(path.join(__dirname, "../frontend/public")));
     this.app.use("/", routes);
+
+    // Error handling middleware
+    this.app.use((err, req, res, next) => {
+      console.error(err.stack);
+      res.status(500).json({ 
+        error: process.env.NODE_ENV === 'production' 
+          ? 'Internal Server Error' 
+          : err.message 
+      });
+    });
+
     this.startRoutes();
   }
-
 
   startRoutes() {
     this.app.get("/test-token", (req, res) => {
@@ -185,8 +218,9 @@ class HostawayListingManager {
   }
 
   startServer() {
-    this.app.listen(this.port, () => {
-      console.log(`Server is running on port ${this.port}`);
+    const PORT = process.env.PORT || 3000;
+    this.app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
   }
 }

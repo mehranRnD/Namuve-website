@@ -18,7 +18,7 @@ const getAllListingIds = () => Object.values(LISTINGS_DATA).flat();
 async function fetchConversionRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD"
+      "https://v6.exchangerate-api.com/v6/def8c52eee67e8dd2250cd47/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
@@ -33,15 +33,24 @@ function getImageUrlById(id) {
   return idToImageUrlMap[id] || "https://dummyimage.com/300x300/000/fff";
 }
 
+// Base URL configuration
+const getBaseUrl = () => {
+  const hostname = window.location.hostname;
+  return hostname === 'namuve.com' || hostname === 'www.namuve.com'
+    ? 'https://namuve.com/api'
+    : 'http://localhost:3000/api';
+};
+
+const BASE_URL = getBaseUrl();
+
 // Function to fetch listings data from the server
 const getListingData = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/listings");
+    const response = await fetch(`${BASE_URL}/listings`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Error fetching listings:", error);
     return [];
@@ -81,7 +90,7 @@ function updateListingPrices(listings) {
 async function fetchCalendarData(listingId, startDate, endDate) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/listings/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`
+      `${BASE_URL}/listings/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -253,34 +262,33 @@ async function loadListings() {
     loading.style.display = "none";
 
     // Render listings
-    images.forEach((image, index) => {
-      const listing = listings.find((l) => l.id.toString() === image.id.toString());
+    const validListings = listings.filter(listing => listing && listing.id);
+    validListings.forEach((listing, index) => {
       const container = document.createElement("div");
       container.classList.add("col-lg-4", "col-md-6", "wow", "fadeInUp");
       container.setAttribute("data-wow-delay", `${0.1 * (index + 1)}s`);
 
       // Get room details
-      const roomDetails = getListingInfo(listing.id); // Fetch room details using the listing ID
+      const roomDetails = getListingInfo(listing.id);
 
       // Get rating from ratingMap
-      const rating = ratingMap[image.id] || 0;
-      console.log(`Rating for listing ${image.id}:`, rating); // Debug log
+      const rating = ratingMap[listing.id] || 0;
 
       container.innerHTML = `
-        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${image.id}" style="height: 600px !important;">
+        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${listing.id}" style="height: 600px !important;">
           <div class="position-relative" style="height: 300px !important;">
-            <img class="img-fluid" src="${getImageUrlById(image.id)}" alt="Listing Image ${image.id}" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
+            <img class="img-fluid" src="${getImageUrlById(listing.id)}" alt="Listing Image ${listing.id}" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
             <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6B7560; border: 1px #6B7560 solid;">
               Starting from ${
                 currentCurrency === "USD"
-                  ? `$${getBasePriceByListingId(image.id)}`
-                  : `₨${(getBasePriceByListingId(image.id) * usdToPkrRate).toFixed(2).toLocaleString()}`
+                  ? `$${getBasePriceByListingId(listing.id)}`
+                  : `₨${(getBasePriceByListingId(listing.id) * usdToPkrRate).toFixed(2).toLocaleString()}`
               }
             </small>
           </div>
           <div class="p-4 mt-2" style="height: 300px !important; display: flex !important; flex-direction: column !important;">
             <div class="d-flex justify-content-between mb-3" style="align-items: center !important;">
-              <h5 class="mb-0" style="max-width: 70% !important; font-size: 20px !important;">${listing ? listing.name : "Loading..."}</h5>
+              <h5 class="mb-0" style="max-width: 70% !important; font-size: 20px !important;">${listing.name || "Loading..."}</h5>
               <div class="ps-2 d-flex" style="color: #ffc107;">
                 ${ratingToStars(rating)}
               </div>
@@ -291,10 +299,10 @@ async function loadListings() {
               <small><i class="fa fa-wifi me-2" style="color: #212429;"></i>Wifi</small>
             </div>
             <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${
-              roomDescriptions[images.findIndex((img) => img.id === image.id)]
+              roomDescriptions[validListings.indexOf(listing)] || ""
             }</p>
             <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
-              <a href="/listings-details?id=${image.id}" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #6c757e; border: none;">
+              <a href="/listings-details?id=${listing.id}" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #6c757e; border: none;">
                 <i class="fas fa-info-circle me-2"></i>View Details
               </a>
               <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
@@ -315,9 +323,9 @@ async function loadListings() {
       const virtualTourBtn = container.querySelector(".virtual-tour");
       if (virtualTourBtn) {
         virtualTourBtn.addEventListener("click", () => {
-          const tourLink = virtualTourLinks[image.id]; // Get the corresponding virtual tour link
+          const tourLink = virtualTourLinks[listing.id];
           if (tourLink) {
-            window.location.href = tourLink; // Redirect to the virtual tour link
+            window.location.href = tourLink;
           } else {
             showInfoAlert("Virtual tour is not available for this listing.");
           }
@@ -328,7 +336,7 @@ async function loadListings() {
       const bookNowBtn = container.querySelector(".book-now-btn");
       if (bookNowBtn) {
         bookNowBtn.addEventListener("click", () => {
-          openBookingModal(image.id);
+          openBookingModal(listing.id);
         });
       }
     });

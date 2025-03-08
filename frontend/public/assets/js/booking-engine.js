@@ -2,7 +2,15 @@ import { showRedAlert, showInfoAlert } from "./alert.js";
 import {idToImageUrlMap, LISTINGS, roomDescriptions, LISTINGS_DATA} from "./data.js"; 
 import {fetchHostawayReviews, mapRatingsToListings, ratingToStars} from "./listings.js";
 
-const BASE_URL = "http://localhost:3000/api/listings"; // Base URL for the API
+// Base URL configuration
+const getBaseUrl = () => {
+  const hostname = window.location.hostname;
+  return hostname === 'namuve.com' || hostname === 'www.namuve.com'
+    ? 'https://namuve.com/api'
+    : 'http://localhost:3000/api';
+};
+
+const BASE_URL = getBaseUrl();
 const LISTING_IDS = LISTINGS.map((listing) => listing.id);
 let usdToPkrRate = 277.66; // Fallback rate
 const calendarDataCache = new Map();
@@ -11,7 +19,7 @@ const listingDetailsCache = new Map();
 async function fetchConversionRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD"
+      "https://v6.exchangerate-api.com/v6/def8c52eee67e8dd2250cd47/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
@@ -61,7 +69,7 @@ async function fetchCalendarData(listingId, startDate, endDate) {
 
   try {
     const response = await fetch(
-      `${BASE_URL}/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`
+      `${BASE_URL}/listings/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`
     );
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
@@ -80,7 +88,7 @@ async function fetchListingDetails(listingId) {
     return listingDetailsCache.get(listingId);
 
   try {
-    const response = await fetch(`${BASE_URL}/${listingId}`);
+    const response = await fetch(`${BASE_URL}/listings/${listingId}`);
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
     const listing = await response.json();

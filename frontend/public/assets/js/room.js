@@ -14,7 +14,7 @@ const roomDescriptions = [
 async function fetchConversionRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/5a1ad5478e4bbb71fc96df6b/latest/USD"
+      "https://v6.exchangerate-api.com/v6/def8c52eee67e8dd2250cd47/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
@@ -23,10 +23,20 @@ async function fetchConversionRate() {
     usdToPkrRate = 277.66; // Fallback rate
   }
 }
+// Base URL configuration
+const getBaseUrl = () => {
+  const hostname = window.location.hostname;
+  return hostname === 'namuve.com' || hostname === 'www.namuve.com'
+    ? 'https://namuve.com/api'
+    : 'http://localhost:3000/api';
+};
+
+const BASE_URL = getBaseUrl();
+
 // Fetch listings data from the server
 const getListingData = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/listings");
+    const response = await fetch(`${BASE_URL}/listings`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -61,7 +71,7 @@ function updateRoomPrices() {
 async function fetchCalendarData(listingId, startDate, endDate) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/listings/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`
+      `${BASE_URL}/listings/${listingId}/calendar?startDate=${startDate}&endDate=${endDate}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
