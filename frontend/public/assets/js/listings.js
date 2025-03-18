@@ -1,6 +1,5 @@
 import {
   idToImageUrlMap,
-  roomDescriptions,
   BASE_PRICES,
   LISTINGS_DATA,
   ROOM_DETAILS,
@@ -36,9 +35,9 @@ function getImageUrlById(id) {
 // Base URL configuration
 const getBaseUrl = () => {
   const hostname = window.location.hostname;
-  return hostname === 'namuve.com' || hostname === 'www.namuve.com'
-    ? 'https://namuve.com/api'
-    : 'http://localhost:3000/api';
+  return hostname === "namuve.com" || hostname === "www.namuve.com"
+    ? "https://namuve.com/api"
+    : "http://localhost:3000/api";
 };
 
 const BASE_URL = getBaseUrl();
@@ -137,15 +136,14 @@ async function fetchHostawayReviews() {
           review.rating >= 1 &&
           review.rating <= 10 &&
           review.type === "guest-to-host" &&
-          review.channelId === 2018 && 2005
-           ) {
+          review.channelId === 2018 &&
+          2005
+        ) {
           if (!ratingMap[review.listingMapId]) {
             ratingMap[review.listingMapId] = [];
           }
           ratingMap[review.listingMapId].push(review.rating);
-
         }
-        
       });
     });
 
@@ -210,7 +208,6 @@ function ratingToStars(rating) {
   return fullStars.join("") + halfStar + emptyStars.join("");
 }
 
-
 async function loadListings() {
   // Ensure DOM elements exist before accessing them
   const gallery = document.getElementById("gallery");
@@ -262,7 +259,7 @@ async function loadListings() {
     loading.style.display = "none";
 
     // Render listings
-    const validListings = listings.filter(listing => listing && listing.id);
+    const validListings = listings.filter((listing) => listing && listing.id);
     validListings.forEach((listing, index) => {
       const container = document.createElement("div");
       container.classList.add("col-lg-4", "col-md-6", "wow", "fadeInUp");
@@ -275,32 +272,48 @@ async function loadListings() {
       const rating = ratingMap[listing.id] || 0;
 
       container.innerHTML = `
-        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${listing.id}" style="height: 600px !important;">
+        <div class="room-item shadow rounded overflow-hidden" data-listing-id="${
+          listing.id
+        }" style="height: 600px !important;">
           <div class="position-relative" style="height: 300px !important;">
-            <img class="img-fluid" src="${getImageUrlById(listing.id)}" alt="Listing Image ${listing.id}" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
+            <img class="img-fluid" src="${getImageUrlById(
+              listing.id
+            )}" alt="Listing Image ${
+        listing.id
+      }" style="width: 100% !important; height: 300px !important; object-fit: cover !important;" />
             <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6B7560; border: 1px #6B7560 solid;">
               Starting from ${
                 currentCurrency === "USD"
                   ? `$${getBasePriceByListingId(listing.id)}`
-                  : `₨${(getBasePriceByListingId(listing.id) * usdToPkrRate).toFixed(2).toLocaleString()}`
+                  : `₨${(getBasePriceByListingId(listing.id) * usdToPkrRate)
+                      .toFixed(2)
+                      .toLocaleString()}`
               }
             </small>
           </div>
           <div class="p-4 mt-2" style="height: 300px !important; display: flex !important; flex-direction: column !important;">
             <div class="d-flex justify-content-between mb-3" style="align-items: center !important;">
-              <h5 class="mb-0" style="max-width: 70% !important; font-size: 20px !important;">${listing.name || "Loading..."}</h5>
+              <h5 class="mb-0" style="max-width: 70% !important; font-size: 20px !important;">${
+                listing.name || "Loading..."
+              }</h5>
               <div class="ps-2 d-flex" style="color: #ffc107;">
                 ${ratingToStars(rating)}
               </div>
             </div>
             <div class="d-flex mb-3">
-              <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #212429;"></i>${roomDetails.beds} Bed(s)</small>
-              <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #212429;"></i>${roomDetails.guests} Guests</small>
+              <small class="border-end me-3 pe-3"><i class="fa fa-bed me-2" style="color: #212429;"></i>${
+                roomDetails.beds
+              } Bed(s)</small>
+              <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #212429;"></i>${
+                roomDetails.guests
+              } Guests</small>
               <small><i class="fa fa-wifi me-2" style="color: #212429;"></i>Wifi</small>
             </div>
             
             <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
-              <a href="/listings-details?id=${listing.id}" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #6c757e; border: none;">
+              <a href="/listings-details?id=${
+                listing.id
+              }" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #6c757e; border: none;">
                 <i class="fas fa-info-circle me-2"></i>View Details
               </a>
               <button class="btn btn-dark rounded-pill px-4 py-2 flex-grow-1 virtual-tour">
@@ -361,7 +374,6 @@ async function loadListings() {
 
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", loadListings);
-
 
 // Helper function to get room type and base price by listing ID
 function getListingInfo(listingId) {
@@ -553,29 +565,59 @@ function openBookingModal(listingId) {
         return;
       }
 
-      // Call showInfoAlert after confirming booking details
-      showInfoAlert("Please wait while we redirect you to Booking form");
+      // Show loading message
+      showInfoAlert("Please wait while we process your booking...");
+
       // Check availability for both dates before proceeding
       const checkinData = await fetchCalendarData(listingId, checkin, checkin);
-      const checkoutData = await fetchCalendarData(
-        listingId,
-        checkout,
-        checkout
-      );
+      const checkoutData = await fetchCalendarData(listingId, checkout, checkout);
 
       const checkinStatus = checkAvailabilityStatus(checkinData, checkin);
       const checkoutStatus = checkAvailabilityStatus(checkoutData, checkout);
 
-      const booknrentUrl = `https://www.booknrent.com/checkout/${listingId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
+      if (!checkinStatus || !checkoutStatus || 
+          checkinStatus.status === "reserved" || 
+          checkoutStatus.status === "reserved") {
+        showRedAlert("Selected dates are not available. Please choose different dates.");
+        return;
+      }
 
-      // Reset form and close modal
-      checkinInput.value = "";
-      checkoutInput.value = "";
-      guestsInput.value = "1";
-      modal.hide();
+      try {
+        // Get listing details for the checkout
+        const listing = await getListingInfo(listingId);
+        
+        // Create checkout session
+        const response = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            listingId,
+            listingName: listing.name,
+            price: checkinStatus.price,
+            checkIn: checkin,
+            checkOut: checkout,
+            guests,
+            imageUrl: listing.imageUrl,
+            description: listing.description
+          }),
+        });
 
-      // Only redirect if dates are available
-      window.location.href = booknrentUrl;
+        const { url } = await response.json();
+        
+        // Reset form and close modal
+        checkinInput.value = "";
+        checkoutInput.value = "";
+        guestsInput.value = "1";
+        modal.hide();
+
+        // Redirect to Stripe checkout
+        window.location.href = url;
+      } catch (error) {
+        console.error('Error:', error);
+        showRedAlert("An error occurred while processing your booking. Please try again.");
+      }
     };
   }
 }
