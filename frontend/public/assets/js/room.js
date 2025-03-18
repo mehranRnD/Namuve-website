@@ -131,9 +131,6 @@ const loadRooms = async () => {
               ${starsHTML}
             </div>
           </div>
-          <p class="text-body mb-3" style="min-height: 48px !important;">${
-            roomDescriptions[index]
-          }</p>
           <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
             <a href="/listings-details?id=${image.id}"
               class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
