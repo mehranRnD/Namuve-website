@@ -53,7 +53,7 @@ export function createFooter() {
                             </p>
                        </span>
                         <p class="mt-2">
-                            <strong>Phone:</strong> <span>+17869872169</span>
+                            <strong>Phone:</strong> <span>+1 786 987 2169</span>
                         </p>
                         <span>
                             <strong>United Arab Emirates:</strong>
