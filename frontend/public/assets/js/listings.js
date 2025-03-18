@@ -298,9 +298,7 @@ async function loadListings() {
               <small class="border-end me-3 pe-3"><i class="fa fa-users me-2" style="color: #212429;"></i>${roomDetails.guests} Guests</small>
               <small><i class="fa fa-wifi me-2" style="color: #212429;"></i>Wifi</small>
             </div>
-            <p class="text-body mb-3" style="flex-grow: 1 !important; overflow: hidden !important;">${
-              roomDescriptions[validListings.indexOf(listing)] || ""
-            }</p>
+            
             <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
               <a href="/listings-details?id=${listing.id}" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1" style="background-color: #6c757e; border: none;">
                 <i class="fas fa-info-circle me-2"></i>View Details
