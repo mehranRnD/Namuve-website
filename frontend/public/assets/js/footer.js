@@ -31,14 +31,13 @@ export function createFooter() {
                             <li><a href="/">Home</a></li>
                             <li><a href="/about">About us</a></li>
                             <li><a href="/services">Services</a></li>
-                            <li><a href="/listings">Rooms</a></li>
+                            <li><a href="/listings">Properties</a></li>
                             <li><a href="/contact">Contact</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-3 col-6 footer-links">
                         <h4>Learn</h4>
                         <ul>
-                            <li><a href="/blogs">Blog / News</a></li>
                             <li><a href="/faqs">FAQs</a></li>
                             <li><a href="/reviews-and-testimonials">Reviews and Testimonials</a></li>
                             <li><a href="/terms-and-conditions">Terms & Conditions</a></li>

@@ -17,7 +17,7 @@ export function createNavbar() {
                     <li><a href="/" class="active">Home</a></li>
                     <li><a href="/about">About us</a></li>
                     <li><a href="/services">Services</a></li>
-                    <li><a href="/listings">Rooms</a></li>
+                    <li><a href="/listings">Properties</a></li>
                     <li class="nav-item dropdown">
                       <a
                         class="nav-link dropdown-toggle"
@@ -33,7 +33,6 @@ export function createNavbar() {
                         class="dropdown-menu"
                         aria-labelledby="insightshubDropdown"
                       >
-                        <a class="dropdown-item" href="/blogs">Blogs / News</a>
                         <a class="dropdown-item" href="/faqs">FAQs</a>
                         <a
                           class="dropdown-item"
@@ -45,7 +44,7 @@ export function createNavbar() {
                         >
                       </div>
                     </li>
-                    <li><a href="/estimate-revenue">Estimate Revenue</a></li>
+                    
                     
                     <li><a href="/contact">Contact</a></li>
                     <li>
