@@ -216,15 +216,15 @@ function shuffleArray(array) {
   }
 }
 
-shuffleArray(roomDescriptions);
-let currentIndex = 0;
-function getNextDescription() {
-  if (currentIndex >= roomDescriptions.length) {
-    currentIndex = 0;
-    shuffleArray(roomDescriptions);
-  }
-  return roomDescriptions[currentIndex++];
-}
+// shuffleArray(roomDescriptions);
+// let currentIndex = 0;
+// function getNextDescription() {
+//   if (currentIndex >= roomDescriptions.length) {
+//     currentIndex = 0;
+//     shuffleArray(roomDescriptions);
+//   }
+//   return roomDescriptions[currentIndex++];
+// }
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Get search parameters from sessionStorage
@@ -319,7 +319,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                                           ${stars}
                                         </div>
                                       </h4>
-                                      <span>Description: ${getNextDescription()}</span>
                                       <ul class="info">
                                         <li>Price: Starting from $${
                                           listing.price || "TBD"
