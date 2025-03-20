@@ -216,15 +216,15 @@ function shuffleArray(array) {
   }
 }
 
-shuffleArray(roomDescriptions);
-let currentIndex = 0;
-function getNextDescription() {
-  if (currentIndex >= roomDescriptions.length) {
-    currentIndex = 0;
-    shuffleArray(roomDescriptions);
-  }
-  return roomDescriptions[currentIndex++];
-}
+// shuffleArray(roomDescriptions);
+// let currentIndex = 0;
+// function getNextDescription() {
+//   if (currentIndex >= roomDescriptions.length) {
+//     currentIndex = 0;
+//     shuffleArray(roomDescriptions);
+//   }
+//   return roomDescriptions[currentIndex++];
+// }
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Get search parameters from sessionStorage

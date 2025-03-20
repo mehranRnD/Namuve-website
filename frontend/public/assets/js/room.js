@@ -1,6 +1,10 @@
 import { showRedAlert, showInfoAlert } from "./alert.js";
 import { idToImageUrlMap, LISTINGS, virtualTourLinks } from "./data.js";
-import { fetchHostawayReviews, mapRatingsToListings, ratingToStars } from "./listings.js";
+import {
+  fetchHostawayReviews,
+  mapRatingsToListings,
+  ratingToStars,
+} from "./listings.js";
 
 let usdToPkrRate = 1;
 let currentCurrency = "USD"; // Default currency
@@ -26,9 +30,9 @@ async function fetchConversionRate() {
 // Base URL configuration
 const getBaseUrl = () => {
   const hostname = window.location.hostname;
-  return hostname === 'namuve.com' || hostname === 'www.namuve.com'
-    ? 'https://namuve.com/api'
-    : 'http://localhost:3000/api';
+  return hostname === "namuve.com" || hostname === "www.namuve.com"
+    ? "https://namuve.com/api"
+    : "http://localhost:3000/api";
 };
 
 const BASE_URL = getBaseUrl();
@@ -53,7 +57,9 @@ function updateRoomPrices() {
   const roomItems = document.querySelectorAll(".room-item");
   roomItems.forEach((roomItem, index) => {
     const roomId = images[index].id; // Get the room ID
-    const listing = LISTINGS.find((listing) => listing.id.toString() === roomId); // Find the listing by ID
+    const listing = LISTINGS.find(
+      (listing) => listing.id.toString() === roomId
+    ); // Find the listing by ID
     const priceElement = roomItem.querySelector(".position-absolute");
     if (listing) {
       const priceInPkr = listing.price * usdToPkrRate;
@@ -107,19 +113,25 @@ const loadRooms = async () => {
     const imageUrl =
       idToImageUrlMap[image.id] || "https://dummyimage.com/300x300/000/fff";
 
-      // Get rating for this room
+    // Get rating for this room
     const rating = ratingMap[image.id] || 0;
     const starsHTML = ratingToStars(rating);
 
-   const roomItem = document.createElement("div");
+    const roomItem = document.createElement("div");
     roomItem.classList.add("col-lg-4", "col-md-6", "wow", "fadeInUp");
     roomItem.setAttribute("data-wow-delay", `${0.1 * (index + 1)}s`);
     roomItem.innerHTML = `
       <div class="room-item shadow rounded overflow-hidden" style="height: 100% !important;">
         <div class="position-relative">
-          <img class="img-fluid" src="${imageUrl}" alt="Room Image ${image.id}" style="width: 100%; height: 250px; object-fit: cover;" />
+          <img class="img-fluid" src="${imageUrl}" alt="Room Image ${
+      image.id
+    }" style="width: 100%; height: 250px; object-fit: cover;" />
           <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6B7560; border: 1px #6B7560 solid;">
-            ${listing ? `Starting from $${listing.price}` : "Price not available"}
+            ${
+              listing
+                ? `Starting from $${listing.price}`
+                : "Price not available"
+            }
           </small>
         </div>
         <div class="p-4 mt-2">
@@ -131,6 +143,9 @@ const loadRooms = async () => {
               ${starsHTML}
             </div>
           </div>
+          <p class="text-body mb-3" style="min-height: 48px !important;">${
+            roomDescriptions[index]
+          }</p>
           <div class="d-flex flex-wrap gap-2 justify-content-between mt-auto">
             <a href="/listings-details?id=${image.id}"
               class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1"
@@ -141,7 +156,9 @@ const loadRooms = async () => {
               <i class="fas fa-video me-2"></i>Virtual Tour
             </button>
             <button class="btn btn-success rounded-pill px-4 py-2 flex-grow-1 book-now-btn"
-            style="background-color: #6B7560; border: 1px #6B7560 solid; " data-room-id="${image.id}">
+            style="background-color: #6B7560; border: 1px #6B7560 solid; " data-room-id="${
+              image.id
+            }">
               <i class="fas fa-calendar-check me-2"></i>Book Now
             </button>
           </div>
