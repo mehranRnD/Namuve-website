@@ -271,7 +271,7 @@ router.get("/api/listings/:id/calendar", async (req, res) => {
 async function fetchExchangeRate() {
   try {
     const response = await axios.get(
-      "https://v6.exchangerate-api.com/v6/def8c52eee67e8dd2250cd47/latest/USD"
+      "https://v6.exchangerate-api.com/v6/cbb36a5aeba2aa9dbaa251e0/latest/USD"
     );
     const rate = response.data.conversion_rates.PKR;
     return rate;
