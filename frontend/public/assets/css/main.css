@@ -4172,7 +4172,7 @@ Visit Country Style
 .form_book .date {
   color: #7e7e7e;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   text-transform: uppercase;
   padding-left: 17px;
 }
@@ -4182,10 +4182,10 @@ Visit Country Style
   border-radius: 20px;
   background-color: #eeeeee67;
   width: 100%;
-  font-size: 16px;
+  font-size: 15px;
   height: auto;
   line-height: normal;
-  padding: 10px 20px;
+  padding: 10px 15px;
   transition: ease-in all 0.5s;
 }
 

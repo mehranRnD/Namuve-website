@@ -17,7 +17,6 @@ const __dirname = path.dirname(__filename);
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
   : null;
-
 if (!stripe) {
   console.error(
     "Warning: Stripe API key not found in environment variables. Stripe payments will not work."
