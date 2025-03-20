@@ -323,8 +323,8 @@ router.post("/api/create-checkout-session", async (req, res) => {
     const salesTax = salesTaxPerNight * numberOfNights;
     const totalAmount = basePrice + securityDeposit + salesTax;
 
-    // Convert total amount to PKR
-    const totalAmountPKR = totalAmount * exchangeRate;
+    // Convert total amount to USD
+    const totalAmountUSD = totalAmount / exchangeRate;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -334,8 +334,8 @@ router.post("/api/create-checkout-session", async (req, res) => {
             currency: "pkr",
             product_data: {
               name: "Reservation Details",
-              description: `Check-in: ${checkIn}\nCheck-out: ${checkOut}`,
-              images: imageUrl ? [imageUrl] : [],
+              description: `Check-in: ${checkIn} \n Check-out: ${checkOut}\nGuests: ${guests}`,
+              
             },
             unit_amount: Math.round(basePrice * 100),
           },
@@ -346,7 +346,7 @@ router.post("/api/create-checkout-session", async (req, res) => {
             currency: "pkr",
             product_data: {
               name: "Security Deposit",
-              description: `Refundable security deposit\nPrice: Rs ${securityDeposit.toFixed(2)}`,
+              description: "Refundable security deposit",
             },
             unit_amount: Math.round(securityDeposit * 100),
           },
@@ -357,7 +357,7 @@ router.post("/api/create-checkout-session", async (req, res) => {
             currency: "pkr",
             product_data: {
               name: "Sales Tax",
-              description: `16% sales tax for ${numberOfNights} nights\nPrice: Rs ${salesTax.toFixed(2)}`,
+              description: `Sales tax for ${numberOfNights} nights`,
             },
             unit_amount: Math.round(salesTax * 100),
           },
@@ -366,7 +366,7 @@ router.post("/api/create-checkout-session", async (req, res) => {
       ],
       mode: "payment",
       success_url: `${process.env.BASE_URL}/complete?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.BASE_URL}/cancel`,
+      cancel_url: `${process.env.BASE_URL}/cancel?session_id={CHECKOUT_SESSION_ID}`,
       metadata: {
         listingId,
         checkIn,

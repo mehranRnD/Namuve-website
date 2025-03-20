@@ -319,7 +319,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                                           ${stars}
                                         </div>
                                       </h4>
-                                      <span>Description: ${getNextDescription()}</span>
                                       <ul class="info">
                                         <li>Price: Starting from $${
                                           listing.price || "TBD"
