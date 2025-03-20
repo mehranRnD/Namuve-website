@@ -45,7 +45,7 @@ export function createNavbar() {
                         >
                       </div>
                     </li>
-                    <li><a href="/estimate-revenue">Estimate Revenue</a></li>
+                    
                     
                     <li><a href="/contact">Contact</a></li>
                     <li>
