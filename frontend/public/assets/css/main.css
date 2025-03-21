@@ -534,7 +534,7 @@ h6 {
     color: var(--nav-dropdown-color);
     padding: 7px 19px;
     font-family: var(--nav-font);
-    font-size: 17px;
+    font-size: 12px;
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -623,6 +623,30 @@ h6 {
   .mobile-nav-active .navmenu > ul {
     display: block;
   }
+
+  .terms-ss {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .terms-ss .terms-btn {
+    width: 100% !important;
+    font-size: 12px !important;
+  }
+
+  .testimonials .testimonial-item .testimonial-img {
+    width: 70px !important;
+    height: 70px !important;
+}
+
+}
+
+.terms-btn {
+  border: none;
+  width: 40%;
+  padding: 12px 15px ;
+  background-color: black;
+  color: aliceblue;
 }
 
 /*--------------------------------------------------------------
@@ -1279,6 +1303,14 @@ section,
     padding: 25px 0;
     scroll-margin-top: 98px;
     overflow: clip;
+  }
+
+  .video-space .video-s {
+    margin: 0rem !important;
+    width: 100% !important;
+    height: 75vh;
+    padding: 0.4rem !important;
+    background-color: #959361;
   }
 
   .services .service-item {
@@ -4523,6 +4555,16 @@ Visit Country Style
     animation: pulse 2s infinite, float 3s infinite;
     transition: all 0.3s ease-in-out;
 }
+
+
+}
+
+.video-space .video-s {
+  margin: 2rem; 
+  width: 70%; 
+  height: 75vh; 
+  padding: 1rem; 
+  background-color: #959361;
 }
 
 .visit-country .fa-star {
@@ -4545,6 +4587,7 @@ Visit Country Style
     gap: 10px;
     padding: 20px;
   }
+
 
   .available-listings {
     margin-top: 0px !important;
