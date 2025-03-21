@@ -173,13 +173,6 @@ function mapRatingsToListings(ratingMap) {
   return mappedRatings;
 }
 
-// Function to handle DOM content loading
-document.addEventListener("DOMContentLoaded", async () => {
-  const ratings = await fetchHostawayReviews();
-  const mappedRatings = mapRatingsToListings(ratings);
-  // console.log("Mapped Ratings:", mappedRatings);
-});
-
 // Function to handle mobile filter dropdown changes
 document.addEventListener("DOMContentLoaded", () => {
   const mobileDropdown = document.getElementById("mobileFilterDropdown");

@@ -109,7 +109,6 @@ export const roomDescriptions = [
   "Discover our tropical oasis suite, adorned with lush greenery and resort-style furnishings.",
   "Relax in our grand suite with an opulent four-poster bed and lavish decor.",
   "Unwind in our sunlit atrium room, designed to enhance natural light and spaciousness.",
-  "Enjoy our mountain-view retreat, featuring cozy interiors and breathtaking scenery.",
   "Stay in our cinematic suite, complete with an in-room home theater system for ultimate entertainment.",
   "Experience unparalleled elegance in our imperial suite, featuring handcrafted furnishings and bespoke service.",
   "Discover our enchanted forest room, a nature-inspired sanctuary with botanical elements.",

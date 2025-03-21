@@ -1,5 +1,5 @@
 import { showRedAlert, showInfoAlert } from "./alert.js";
-import { idToImageUrlMap, LISTINGS, virtualTourLinks } from "./data.js";
+import { idToImageUrlMap, virtualTourLinks } from "./data.js";
 import {
   fetchHostawayReviews,
   mapRatingsToListings,
@@ -52,26 +52,50 @@ const getListingData = async () => {
 };
 // Images array with IDs for room data
 const images = [{ id: "288675" }, { id: "288676" }, { id: "288723" }];
+// Function to get base price by listing ID
+async function getBasePriceByListingId(listingId) {
+  try {
+    const listings = await getListingData();
+    const listing = listings.find(l => l.id.toString() === listingId);
+    return listing ? listing.price : 0;
+  } catch (error) {
+    console.error("Error fetching base price:", error);
+    return 0;
+  }
+}
+
 // Function to update room prices based on selected currency
-function updateRoomPrices() {
+async function updateRoomPrices() {
   const roomItems = document.querySelectorAll(".room-item");
-  roomItems.forEach((roomItem, index) => {
-    const roomId = images[index].id; // Get the room ID
-    const listing = LISTINGS.find(
-      (listing) => listing.id.toString() === roomId
-    ); // Find the listing by ID
+  
+  for (const roomItem of roomItems) {
     const priceElement = roomItem.querySelector(".position-absolute");
-    if (listing) {
-      const priceInPkr = listing.price * usdToPkrRate;
-      const priceText =
-        currentCurrency === "USD"
-          ? `Starting from $${listing.price}`
-          : `Starting from ₨${priceInPkr.toFixed(2).toLocaleString()}`;
-      priceElement.textContent = priceText;
-    } else {
+    const roomId = roomItem.dataset.listingId;
+    
+    try {
+      const basePrice = await getBasePriceByListingId(roomId);
+      
+      if (basePrice > 0) {
+        const priceText =
+          currentCurrency === "USD"
+            ? `Starting from $${basePrice}`
+            : `Starting from ₨${(basePrice * usdToPkrRate)
+                .toFixed(2)
+                .toLocaleString()}`;
+        priceElement.textContent = priceText;
+      } else {
+        // If base price is 0, keep the existing text
+        if (priceElement.textContent.includes("Price not available")) {
+          priceElement.textContent = "Price not available";
+        } else {
+          priceElement.textContent = priceElement.textContent;
+        }
+      }
+    } catch (error) {
+      console.error("Error updating price:", error);
       priceElement.textContent = "Price not available";
     }
-  });
+  }
 }
 // Function to fetch calendar data for a specific listing
 async function fetchCalendarData(listingId, startDate, endDate) {
@@ -85,6 +109,21 @@ async function fetchCalendarData(listingId, startDate, endDate) {
     return await response.json();
   } catch (error) {
     console.error("Error fetching calendar data:", error);
+    return null;
+  }
+}
+// Function to fetch price data for a specific listing
+async function fetchPriceData(listingId, checkIn, checkOut) {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/listings/${listingId}/price?checkIn=${checkIn}&checkOut=${checkOut}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching price data:", error);
     return null;
   }
 }
@@ -120,6 +159,7 @@ const loadRooms = async () => {
     const roomItem = document.createElement("div");
     roomItem.classList.add("col-lg-4", "col-md-6", "wow", "fadeInUp");
     roomItem.setAttribute("data-wow-delay", `${0.1 * (index + 1)}s`);
+    roomItem.dataset.listingId = image.id;
     roomItem.innerHTML = `
       <div class="room-item shadow rounded overflow-hidden" style="height: 100% !important;">
         <div class="position-relative">
@@ -243,7 +283,7 @@ const loadRooms = async () => {
       }
     });
   });
-  updateRoomPrices(); // Call to update prices after rooms are loaded
+  await updateRoomPrices(); // Call to update prices after rooms are loaded
   const currencySelector = document.getElementById("currencySelector");
   if (currencySelector) {
     currencySelector.addEventListener("change", (event) => {
@@ -251,6 +291,39 @@ const loadRooms = async () => {
       updateRoomPrices(); // Update prices when currency changes
     });
   }
+  // Update prices when dates change
+  document.getElementById("checkin").addEventListener("change", async () => {
+    const checkIn = document.getElementById("checkin").value;
+    const checkOut = document.getElementById("checkout").value;
+    const roomCards = roomList.querySelectorAll(".room-item");
+    roomCards.forEach(async (card) => {
+      const roomId = card.querySelector(".book-now-btn").dataset.roomId;
+      // Fetch price data for this listing
+      const priceData = await fetchPriceData(roomId, checkIn, checkOut);
+      const priceElement = card.querySelector(".position-absolute");
+      if (priceData && priceData.price) {
+        priceElement.textContent = `$${priceData.price} per night`;
+      } else {
+        priceElement.textContent = "Price not available";
+      }
+    });
+  });
+  document.getElementById("checkout").addEventListener("change", async () => {
+    const checkIn = document.getElementById("checkin").value;
+    const checkOut = document.getElementById("checkout").value;
+    const roomCards = roomList.querySelectorAll(".room-item");
+    roomCards.forEach(async (card) => {
+      const roomId = card.querySelector(".book-now-btn").dataset.roomId;
+      // Fetch price data for this listing
+      const priceData = await fetchPriceData(roomId, checkIn, checkOut);
+      const priceElement = card.querySelector(".position-absolute");
+      if (priceData && priceData.price) {
+        priceElement.textContent = `$${priceData.price} per night`;
+      } else {
+        priceElement.textContent = "Price not available";
+      }
+    });
+  });
 };
 document.addEventListener("DOMContentLoaded", () => {
   loadRooms();
