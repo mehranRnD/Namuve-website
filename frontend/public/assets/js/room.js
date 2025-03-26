@@ -1,11 +1,14 @@
 import { showRedAlert, showInfoAlert } from "./alert.js";
-import { idToImageUrlMap, virtualTourLinks } from "./data.js";
+import {
+  idToImageUrlMap,
+  virtualTourLinks,
+  LISTINGS,
+} from "./data.js";
 import {
   fetchHostawayReviews,
   mapRatingsToListings,
   ratingToStars,
 } from "./listings.js";
-
 let usdToPkrRate = 1;
 let currentCurrency = "USD"; // Default currency
 // Descriptions for the rooms
@@ -50,53 +53,101 @@ const getListingData = async () => {
     return [];
   }
 };
-// Images array with IDs for room data
-const images = [{ id: "288675" }, { id: "288676" }, { id: "288723" }];
-// Function to get base price by listing ID
-async function getBasePriceByListingId(listingId) {
+
+async function fetchListingsPrices() {
+  const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc';
+  
   try {
-    const listings = await getListingData();
-    const listing = listings.find(l => l.id.toString() === listingId);
-    return listing ? listing.price : 0;
+    const today = new Date().toISOString().split('T')[0];
+    // console.log('Fetching prices for:', today);
+
+    const listingIds = LISTINGS.map(listing => listing.id);
+    
+    // Fetch all listing prices in parallel
+    const fetchPromises = listingIds.map(async listingId => {
+      try {
+        const response = await fetch(`https://api.hostaway.com/v1/listings/${listingId}/calendar`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.warn(`Failed to fetch calendar for listing ${listingId}: ${response.status}`);
+          return null;
+        }
+
+        const data = await response.json();
+        
+        let todayPrice = 
+          data.dates?.find(date => date.date === today)?.price ||
+          data.result?.find(date => date.date === today)?.price ||
+          data.calendar?.find(date => date.date === today)?.price;
+
+        return todayPrice !== undefined ? { listingId, price: todayPrice } : null;
+      } catch (error) {
+        console.error(`Error fetching calendar for listing ${listingId}:`, error);
+        return null;
+      }
+    });
+
+    // Wait for all fetches to complete
+    const allPrices = (await Promise.all(fetchPromises)).filter(Boolean);
+
+    // **Update LISTINGS with the latest prices**
+    LISTINGS.forEach(listing => {
+      const priceData = allPrices.find(p => p.listingId === listing.id);
+      if (priceData) {
+        listing.price = priceData.price;
+      }
+    });
+
+    // **Log Price Summary**
+    // const pricesSummary = LISTINGS.map(listing => `${listing.id}: ${listing.price}`);
+    // console.log('Updated Price Summary:\n', pricesSummary.join('\n'));
+
+    return allPrices;
   } catch (error) {
-    console.error("Error fetching base price:", error);
-    return 0;
+    console.error('Error fetching listings prices:', error);
+    return [];
   }
 }
 
-// Function to update room prices based on selected currency
-async function updateRoomPrices() {
-  const roomItems = document.querySelectorAll(".room-item");
-  
-  for (const roomItem of roomItems) {
-    const priceElement = roomItem.querySelector(".position-absolute");
-    const roomId = roomItem.dataset.listingId;
-    
-    try {
-      const basePrice = await getBasePriceByListingId(roomId);
-      
-      if (basePrice > 0) {
-        const priceText =
-          currentCurrency === "USD"
-            ? `Starting from $${basePrice}`
-            : `Starting from ₨${(basePrice * usdToPkrRate)
-                .toFixed(2)
-                .toLocaleString()}`;
-        priceElement.textContent = priceText;
-      } else {
-        // If base price is 0, keep the existing text
-        if (priceElement.textContent.includes("Price not available")) {
-          priceElement.textContent = "Price not available";
-        } else {
-          priceElement.textContent = priceElement.textContent;
-        }
-      }
-    } catch (error) {
-      console.error("Error updating price:", error);
-      priceElement.textContent = "Price not available";
-    }
+// Call the function
+fetchListingsPrices();
+
+// Images array with IDs for room data
+const images = [{ id: "288675" }, { id: "288676" }, { id: "288723" }];
+
+// Function to display real-time prices
+async function displayRealTimePrices() {
+  try {
+    const prices = await fetchListingsPrices();
+    images.forEach(image => {
+      const price = prices.find(p => p.listingId === Number(image.id));
+    });
+  } catch (error) {
+    console.error('Error displaying real-time prices:', error);
   }
 }
+
+// Call the function to display prices
+displayRealTimePrices();
+
+// Helper function to get base price by listing ID
+function getBasePriceByListingId(listingId) {
+  listingId = Number(listingId); // Ensure it's a number
+  // Find the index of this listing in the LISTINGS array
+  const listingIndex = LISTINGS.findIndex((item) => item.id === listingId);
+  if (listingIndex !== -1) {
+    // Use the corresponding price from allPrices array
+    const price = LISTINGS[listingIndex].price;
+    return price;
+  }
+  return 40; // Default fallback price
+}
+
 // Function to fetch calendar data for a specific listing
 async function fetchCalendarData(listingId, startDate, endDate) {
   try {
@@ -167,11 +218,7 @@ const loadRooms = async () => {
       image.id
     }" style="width: 100%; height: 250px; object-fit: cover;" />
           <small class="position-absolute start-0 top-100 translate-middle-y text-white rounded py-1 px-3 ms-4" style="background-color: #6B7560; border: 1px #6B7560 solid;">
-            ${
-              listing
-                ? `Starting from $${listing.price}`
-                : "Price not available"
-            }
+            Loading price...
           </small>
         </div>
         <div class="p-4 mt-2">
@@ -206,6 +253,22 @@ const loadRooms = async () => {
       </div>
     `;
     roomList.appendChild(roomItem);
+    (async () => {
+      try {
+        const prices = await fetchListingsPrices();
+        const price = prices.find(p => p.listingId === Number(image.id));
+        const priceElement = roomItem.querySelector('.position-absolute');
+        if (price) {
+          priceElement.textContent = `Starting from $${price.price}`;
+        } else {
+          priceElement.textContent = "Price not available";
+        }
+      } catch (error) {
+        console.error('Error updating price:', error);
+        const priceElement = roomItem.querySelector('.position-absolute');
+        priceElement.textContent = "Price not available";
+      }
+    })();
     const bookNowBtn = roomItem.querySelector(".book-now-btn");
     bookNowBtn.addEventListener("click", async () => {
       const roomId = image.id;
@@ -239,36 +302,6 @@ const loadRooms = async () => {
           document.getElementById("checkout").dataset.selectedDate = dateStr;
         },
       });
-      const confirmBookingBtn = document.getElementById("confirm-booking");
-      confirmBookingBtn.onclick = () => {
-        const checkinInput = document.getElementById("checkin");
-        const checkoutInput = document.getElementById("checkout");
-        const guestsInput = document.getElementById("guests");
-        const checkin = checkinInput.dataset.selectedDate;
-        const checkout = checkoutInput.dataset.selectedDate;
-        const guests = guestsInput.value;
-        if (!checkin) {
-          showRedAlert("Please enter a check-in date.");
-          return;
-        }
-        if (!checkout) {
-          showRedAlert("Please enter a check-out date.");
-          return;
-        }
-        if (!guests || parseInt(guests) < 1) {
-          showRedAlert("Please enter a valid number of guests.");
-          return;
-        }
-        const booknrentUrl = `https://www.booknrent.com/checkout/${roomId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
-        // Clear the form inputs
-        checkinInput.value = "";
-        checkoutInput.value = "";
-        guestsInput.value = "1";
-        checkinInput.dataset.selectedDate = "";
-        checkoutInput.dataset.selectedDate = "";
-        modal.hide();
-        window.location.href = booknrentUrl;
-      };
     });
     const virtualTourBtn = roomItem.querySelector(".virtual-tour");
     virtualTourBtn.addEventListener("click", () => {
@@ -283,12 +316,14 @@ const loadRooms = async () => {
       }
     });
   });
-  await updateRoomPrices(); // Call to update prices after rooms are loaded
-  const currencySelector = document.getElementById("currencySelector");
-  if (currencySelector) {
-    currencySelector.addEventListener("change", (event) => {
-      currentCurrency = event.target.value;
-      updateRoomPrices(); // Update prices when currency changes
+  const currencySelector = document.getElementById('currencySelector');
+  if (currencySelector !== null) {
+    currencySelector.addEventListener('change', async (event) => {
+      if (event.target.value !== null) {
+        currentCurrency = event.target.value;
+        await fetchConversionRate();
+        updateAllPrices();
+      }
     });
   }
   // Update prices when dates change
@@ -325,6 +360,137 @@ const loadRooms = async () => {
     });
   });
 };
+
+// Function to update all prices
+async function updateAllPrices() {
+  const priceElements = document.querySelectorAll('.position-absolute');
+  priceElements.forEach(async (element) => {
+    const roomId = element.closest('.room-item').dataset.listingId;
+    try {
+      const prices = await fetchListingsPrices();
+      const price = prices.find(p => p.listingId === Number(roomId));
+      if (price) {
+        const convertedPrice = currentCurrency === 'USD'
+          ? (price.price / usdToPkrRate).toFixed(2)
+          : (price.price * usdToPkrRate).toFixed(2);
+        const currencySymbol = currentCurrency === 'USD' ? '$' : '₨';
+        element.textContent = `Starting from ${currencySymbol}${convertedPrice}`;
+      } else {
+        element.textContent = "Price not available";
+      }
+    } catch (error) {
+      console.error('Error updating price:', error);
+      element.textContent = "Price not available";
+    }
+  });
+}
+
+// Function to get listing info
+async function getListingInfo(listingId) {
+  try {
+    const response = await fetch(`/api/listings/${listingId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching listing info:", error);
+    return null;
+  }
+}
+
+// Function to check availability status
+function checkAvailabilityStatus(calendarData, selectedDate) {
+  if (!calendarData || !calendarData.result) return null;
+  
+  const entry = calendarData.result.find(entry => entry.date === selectedDate);
+  if (!entry) return null;
+  
+  return {
+    status: entry.status,
+    price: entry.price
+  };
+}
+
+document.getElementById('confirm-booking').addEventListener('click', async () => {
+  const checkinInput = document.getElementById('checkin');
+  const checkoutInput = document.getElementById('checkout');
+  const guestsInput = document.getElementById('guests');
+  
+  const checkin = checkinInput.dataset.selectedDate;
+  const checkout = checkoutInput.dataset.selectedDate;
+  const guests = guestsInput.value;
+  
+  // Get the room ID from the modal's parent element
+  const modalElement = document.querySelector('.modal.show');
+  const roomId = modalElement ? modalElement.dataset.roomId : null;
+
+  if (!roomId) {
+    showRedAlert("Error: Room ID not found. Please try again.");
+    return;
+  }
+
+  if (!checkin || !checkout || !guests) {
+    showRedAlert("Please select both check-in and check-out dates and enter the number of guests.");
+    return;
+  }
+
+  // Show loading message
+  showInfoAlert("Please wait while we process your booking...");
+
+  try {
+    // Get listing details for the checkout
+    const listing = await getListingInfo(roomId);
+
+    // Create checkout session
+    const response = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        listingId: roomId,
+        listingName: listing.name,
+        price: listing.price,
+        checkIn: checkin,
+        checkOut: checkout,
+        guests,
+        imageUrl: listing.imageUrl,
+        description: listing.description,
+      }),
+    });
+
+    const { url } = await response.json();
+
+    // Reset form and close modal
+    checkinInput.value = "";
+    checkoutInput.value = "";
+    guestsInput.value = "1";
+    checkinInput.dataset.selectedDate = "";
+    checkoutInput.dataset.selectedDate = "";
+    
+    const modal = new bootstrap.Modal(modalElement);
+    modal.hide();
+
+    // Redirect to Stripe checkout
+    window.location.href = url;
+  } catch (error) {
+    console.error("Error:", error);
+    showRedAlert(
+      "An error occurred while processing your booking. Please try again."
+    );
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('currencySelector').addEventListener('change', async (event) => {
+    if (event.target.value !== null) {
+      currentCurrency = event.target.value;
+      await fetchConversionRate();
+    }
+  });
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   loadRooms();
 });

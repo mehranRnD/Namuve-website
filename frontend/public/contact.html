@@ -243,6 +243,56 @@
       import { createFooter } from "/assets/js/footer.js";
       document.addEventListener("DOMContentLoaded", createFooter);
     </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize Flatpickr for check-in and check-out date
+        flatpickr("#checkin", {
+          minDate: "today", // Disable past dates
+          dateFormat: "Y-m-d", // Format of the date
+          onChange: function (selectedDates) {
+            // If a check-in date is selected, set the minDate for check-out
+            if (selectedDates.length > 0) {
+              // Set the minDate for check-out to the selected check-in date
+              flatpickr("#checkout", {
+                minDate: selectedDates[0], // Set minDate for check-out
+                dateFormat: "Y-m-d", // Format of the date
+              });
+            }
+          },
+        });
+
+        flatpickr("#checkout", {
+          minDate: "today", // Disable past dates
+          dateFormat: "Y-m-d", // Format of the date
+          onChange: function (selectedDates) {
+            // If a check-out date is selected, blur the selected range
+            if (selectedDates.length > 0) {
+              const checkinDate = new Date(
+                document.getElementById("checkin").value
+              );
+              const checkoutDate = new Date(selectedDates[0]);
+              if (checkinDate && checkoutDate) {
+                const startDate = checkinDate.getTime();
+                const endDate = checkoutDate.getTime();
+                const dateElements =
+                  document.querySelectorAll(".flatpickr-day");
+
+                dateElements.forEach(function (day) {
+                  const dayDate = new Date(
+                    day.getAttribute("data-date")
+                  ).getTime();
+                  if (dayDate >= startDate && dayDate <= endDate) {
+                    day.classList.add("blurred"); // Add a class to blur the date
+                  } else {
+                    day.classList.remove("blurred"); // Remove blur from other dates
+                  }
+                });
+              }
+            }
+          },
+        });
+      });
+    </script>
 
     <!-- Scroll Top -->
     <a
@@ -272,9 +322,9 @@
       crossorigin="anonymous"
     ></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
     <script src="assets/vendor/aos/aos.js"></script>
     <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
     <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
     <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>

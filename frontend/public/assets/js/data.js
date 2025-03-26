@@ -1,4 +1,6 @@
 //data.js
+export const allPrices = [];
+
 export const idToImageUrlMap = {
   288675:
     "https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/80066-288675-tMHMyEGyMP8nuu48yUjh----O1Bwk--Cyx0yBPTM2ECf9o-6703a9e27bbf0-small",
@@ -114,9 +116,8 @@ export const roomDescriptions = [
   "Discover our enchanted forest room, a nature-inspired sanctuary with botanical elements.",
   "Relax in our lagoon-view villa, offering exclusive access to a tranquil water escape.",
   "Unwind in our yacht-inspired suite, designed with nautical decor and oceanic ambiance.",
-  "Enjoy our ultra-luxury estate suite, featuring private butler service and VIP amenities."
+  "Enjoy our ultra-luxury estate suite, featuring private butler service and VIP amenities.",
 ];
-
 
 // Add a mapping for virtual tour links
 export const virtualTourLinks = {
@@ -126,19 +127,40 @@ export const virtualTourLinks = {
   // ...
 };
 
+
 export const LISTINGS = [
-  { id: 288675, price: 40 }, { id: 288682, price: 40 }, { id: 288690, price: 40 },
-  { id: 323229, price: 40 }, { id: 323261, price: 40 }, { id: 336255, price: 40 }, // Studio
-  { id: 307143, price: 48 }, { id: 306032, price: 48 }, { id: 288691, price: 48 },
-  { id: 305069, price: 48 }, { id: 288681, price: 48 }, { id: 288726, price: 48 },
-  { id: 288679, price: 48 }, { id: 288723, price: 48 }, { id: 288678, price: 48 },
-  { id: 323258, price: 48 }, // 1BR
-  { id: 288677, price: 57 }, { id: 288684, price: 57 }, { id: 288687, price: 57 },
-  { id: 288977, price: 57 }, { id: 288689, price: 57 }, { id: 288685, price: 57 },
-  { id: 288683, price: 57 }, { id: 306543, price: 57 }, { id: 288724, price: 57 },// 2BR
-  { id: 305055, price: 78 }, { id: 309909, price: 78 }, { id: 323227, price: 78 },
-  { id: 288688, price: 78 }, // 2BR Premium
-  { id: 288686, price: 65 }, { id: 305327, price: 65 }, { id: 288676, price: 65 }, // 3BR
+  { id: 288675, price: allPrices[0] },
+  { id: 288682, price: allPrices[1] },
+  { id: 288690, price: allPrices[2] },
+  { id: 323229, price: allPrices[3] },
+  { id: 323261, price: allPrices[4] },
+  { id: 336255, price: allPrices[5] }, // Studio
+  { id: 307143, price: allPrices[6] },
+  { id: 306032, price: allPrices[7] },
+  { id: 288691, price: allPrices[8] },
+  { id: 305069, price: allPrices[9] },
+  { id: 288681, price: allPrices[10] },
+  { id: 288726, price: allPrices[11] },
+  { id: 288679, price: allPrices[12] },
+  { id: 288723, price: allPrices[13] },
+  { id: 288678, price: allPrices[14] },
+  { id: 323258, price: allPrices[15] }, // 1BR
+  { id: 288677, price: allPrices[16] },
+  { id: 288684, price: allPrices[17] },
+  { id: 288687, price: allPrices[18] },
+  { id: 288977, price: allPrices[19] },
+  { id: 288689, price: allPrices[20] },
+  { id: 288685, price: allPrices[21] },
+  { id: 288683, price: allPrices[22] },
+  { id: 306543, price: allPrices[23] },
+  { id: 288724, price: allPrices[24] }, // 2BR
+  { id: 305055, price: allPrices[25] },
+  { id: 309909, price: allPrices[26] },
+  { id: 323227, price: allPrices[27] },
+  { id: 288688, price: allPrices[28] }, // 2BR Premium
+  { id: 288686, price: allPrices[29] },
+  { id: 305327, price: allPrices[30] },
+  { id: 288676, price: allPrices[31] }, // 3BR
 ];
 
 // Add the same pricing and listings data structure
@@ -157,7 +179,7 @@ export const LISTINGS_DATA = {
     323258,
   ],
   "2BR": [
-    288677, 288684, 288687, 288977, 288689, 288685, 288683, 306543, 288724
+    288677, 288684, 288687, 288977, 288689, 288685, 288683, 306543, 288724,
   ],
   "2BR Premium": [305055, 309909, 323227, 288688],
   "3BR": [288686, 305327, 288676],
@@ -186,3 +208,64 @@ export const ROOM_DETAILS = {
     beds: "3",
   },
 };
+
+async function fetchListingsPrices() {
+  const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc';
+  
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    // console.log('Fetching prices for:', today);
+
+    const listingIds = LISTINGS.map(listing => listing.id);
+    
+    // Fetch all listing prices in parallel
+    const fetchPromises = listingIds.map(async listingId => {
+      try {
+        const response = await fetch(`https://api.hostaway.com/v1/listings/${listingId}/calendar`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.warn(`Failed to fetch calendar for listing ${listingId}: ${response.status}`);
+          return null;
+        }
+
+        const data = await response.json();
+        
+        let todayPrice = 
+          data.dates?.find(date => date.date === today)?.price ||
+          data.result?.find(date => date.date === today)?.price ||
+          data.calendar?.find(date => date.date === today)?.price;
+
+        return todayPrice !== undefined ? { listingId, price: todayPrice } : null;
+      } catch (error) {
+        console.error(`Error fetching calendar for listing ${listingId}:`, error);
+        return null;
+      }
+    });
+
+    // Wait for all fetches to complete
+    const allPrices = (await Promise.all(fetchPromises)).filter(Boolean);
+
+    // ✅ **Update LISTINGS with the latest prices**
+    LISTINGS.forEach(listing => {
+      const priceData = allPrices.find(p => p.listingId === listing.id);
+      if (priceData) {
+        listing.price = priceData.price;
+      }
+    });
+
+    // ✅ **Log Price Summary**
+    // const pricesSummary = LISTINGS.map(listing => `${listing.id}: ${listing.price}`);
+    // console.log('Updated Price Summary:\n', pricesSummary.join('\n'));
+
+  } catch (error) {
+    console.error('Error fetching listings prices:', error);
+  }
+}
+
+// Call the function
+fetchListingsPrices();

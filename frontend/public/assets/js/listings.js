@@ -2,6 +2,7 @@ import {
   idToImageUrlMap,
   BASE_PRICES,
   LISTINGS_DATA,
+  LISTINGS,
   ROOM_DETAILS,
   virtualTourLinks,
 } from "./data.js";
@@ -58,12 +59,16 @@ const getListingData = async () => {
 
 // Helper function to get base price by listing ID
 function getBasePriceByListingId(listingId) {
-  listingId = Number(listingId);
+  listingId = Number(listingId); // Ensure it's a number
+
   for (const [category, ids] of Object.entries(LISTINGS_DATA)) {
     if (ids.includes(listingId)) {
-      return BASE_PRICES[category];
+      // Find the listing in the LISTINGS array that matches this ID
+      const listing = LISTINGS.find((item) => item.id === listingId);
+      return listing ? listing.price : 40; // Use default if not found
     }
   }
+
   return 40; // Default fallback price
 }
 
@@ -74,7 +79,6 @@ function updateListingPrices(listings) {
     const priceElement = listingItem.querySelector(".position-absolute");
     const listingId = listingItem.dataset.listingId;
     const basePrice = getBasePriceByListingId(listingId);
-
     const priceText =
       currentCurrency === "USD"
         ? `Starting from $${basePrice}`
@@ -208,7 +212,7 @@ async function loadListings() {
   const errorElement = document.getElementById("error");
 
   if (!gallery || !loading || !errorElement) {
-    console.error("Required DOM elements not found.");
+    // console.log("Welcome to Namuve.com");
     return;
   }
 
@@ -471,9 +475,9 @@ function openBookingModal(listingId) {
       const calendarData = await fetchCalendarData(listingId, dateStr, dateStr);
       const result = checkAvailabilityStatus(calendarData, dateStr);
       if (result) {
-        console.log(`Check-in date ${dateStr}:`);
-        console.log(`Status: ${result.status}`);
-        console.log(`Price: $${result.price}`);
+        // console.log(`Check-in date ${dateStr}:`);
+        // console.log(`Status: ${result.status}`);
+        // console.log(`Price: $${result.price}`);
 
         if (result.status === "reserved") {
           checkinInput.value = ""; // Clear the input if date is reserved
@@ -511,9 +515,9 @@ function openBookingModal(listingId) {
       const calendarData = await fetchCalendarData(listingId, dateStr, dateStr);
       const result = checkAvailabilityStatus(calendarData, dateStr);
       if (result) {
-        console.log(`Check-out date ${dateStr}:`);
-        console.log(`Status: ${result.status}`);
-        console.log(`Price: $${result.price}`);
+        // console.log(`Check-out date ${dateStr}:`);
+        // console.log(`Status: ${result.status}`);
+        // console.log(`Price: $${result.price}`);
 
         if (result.status === "reserved") {
           checkoutInput.value = ""; // Clear the input if date is reserved
@@ -563,27 +567,36 @@ function openBookingModal(listingId) {
 
       // Check availability for both dates before proceeding
       const checkinData = await fetchCalendarData(listingId, checkin, checkin);
-      const checkoutData = await fetchCalendarData(listingId, checkout, checkout);
+      const checkoutData = await fetchCalendarData(
+        listingId,
+        checkout,
+        checkout
+      );
 
       const checkinStatus = checkAvailabilityStatus(checkinData, checkin);
       const checkoutStatus = checkAvailabilityStatus(checkoutData, checkout);
 
-      if (!checkinStatus || !checkoutStatus || 
-          checkinStatus.status === "reserved" || 
-          checkoutStatus.status === "reserved") {
-        showRedAlert("Selected dates are not available. Please choose different dates.");
+      if (
+        !checkinStatus ||
+        !checkoutStatus ||
+        checkinStatus.status === "reserved" ||
+        checkoutStatus.status === "reserved"
+      ) {
+        showRedAlert(
+          "Selected dates are not available. Please choose different dates."
+        );
         return;
       }
 
       try {
         // Get listing details for the checkout
         const listing = await getListingInfo(listingId);
-        
+
         // Create checkout session
-        const response = await fetch('/api/create-checkout-session', {
-          method: 'POST',
+        const response = await fetch("/api/create-checkout-session", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             listingId,
@@ -593,12 +606,12 @@ function openBookingModal(listingId) {
             checkOut: checkout,
             guests,
             imageUrl: listing.imageUrl,
-            description: listing.description
+            description: listing.description,
           }),
         });
 
         const { url } = await response.json();
-        
+
         // Reset form and close modal
         checkinInput.value = "";
         checkoutInput.value = "";
@@ -608,8 +621,10 @@ function openBookingModal(listingId) {
         // Redirect to Stripe checkout
         window.location.href = url;
       } catch (error) {
-        console.error('Error:', error);
-        showRedAlert("An error occurred while processing your booking. Please try again.");
+        console.error("Error:", error);
+        showRedAlert(
+          "An error occurred while processing your booking. Please try again."
+        );
       }
     };
   }

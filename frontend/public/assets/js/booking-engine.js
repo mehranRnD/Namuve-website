@@ -1,5 +1,5 @@
 import { showRedAlert, showInfoAlert } from "./alert.js";
-import {idToImageUrlMap, LISTINGS, roomDescriptions, LISTINGS_DATA} from "./data.js"; 
+import {idToImageUrlMap, LISTINGS, LISTINGS_DATA} from "./data.js"; 
 import {fetchHostawayReviews, mapRatingsToListings, ratingToStars} from "./listings.js";
 
 // Base URL configuration
@@ -31,7 +31,7 @@ async function fetchConversionRate() {
 // Get listing price by ID
 const getPriceById = (listingId) => {
   const listing = LISTINGS.find((l) => l.id === listingId);
-  return listing ? listing.price : "N/A";
+  return listing ? listing.price : 40; // Fallback to 40 if price not found
 };
 
 // Update all listing prices based on selected currency
@@ -92,7 +92,7 @@ async function fetchListingDetails(listingId) {
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
     const listing = await response.json();
-    listing.price = getPriceById(listingId);
+    listing.price = getPriceById(listingId); // Get price from LISTINGS array
     listingDetailsCache.set(listingId, listing);
     return listing;
   } catch (error) {
@@ -140,6 +140,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const checkoutDate = document.getElementById("checkout").value;
       const guests = document.getElementById("guests").value;
 
+      // console.log("Booking form values:");
+      // console.log("Location:", location);
+      // console.log("Check-in Date:", checkinDate);
+      // console.log("Check-out Date:", checkoutDate);
+      // console.log("Number of Guests:", guests);
+
       if (!checkinDate || !checkoutDate || !guests || parseInt(guests) < 1) {
         showRedAlert("Please fill all fields correctly.");
         return;
@@ -154,6 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
           guests,
         })
       );
+
+      // Log saved values from sessionStorage
+      // const savedValues = JSON.parse(sessionStorage.getItem("searchParams"));
+      // console.log("\nSaved values in sessionStorage:");
+      // console.log("Location:", savedValues.location);
+      // console.log("Check-in Date:", savedValues.checkinDate);
+      // console.log("Check-out Date:", savedValues.checkoutDate);
+      // console.log("Number of Guests:", savedValues.guests);
 
       showInfoAlert("Searching for available listings...");
 
@@ -293,21 +307,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                             const imageUrl =
                               idToImageUrlMap[listing.id] ||
                               "https://dummyimage.com/300x300/000/fff";
-                            const booknrentUrl = `https://www.booknrent.com/checkout/${listing.id}?start=${checkinDate}&end=${checkoutDate}&numberOfGuests=${guests}`;
                             const rating = mappedRatings[listing.id] || 0;
                             const stars = ratingToStars(rating);
 
                             return `
-                            <div class="col-lg-12 mb-4 listing-item" data-id="${
-                              listing.id
-                            }">
+                            <div class="col-lg-12 mb-4 listing-item" data-id="${listing.id}">
                               <div class="item" style="padding: 15px;">
                                 <div class="row">
                                   <div class="col-lg-4 col-sm-5">
                                     <div class="image">
-                                      <img src="${imageUrl}" alt="Listing Name: ${
-                              listing.name
-                            }" />
+                                      <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
                                     </div>
                                   </div>
                                   <div class="col-lg-8 col-sm-7">
@@ -320,11 +329,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                                         </div>
                                       </h4>
                                       <ul class="info">
-                                        <li>Price: Starting from $${
-                                          listing.price || "TBD"
-                                        }</li>
+                                        <li>Price: Starting from ${listing.price || "TBD"}</li>
                                       </ul>
-                                      <a href="${booknrentUrl}" class="btn btn-dark">Book Now</a>
+                                      <button class="btn btn-dark book-now-btn" data-listing-id="${listing.id}">
+                                        Book Now
+                                      </button>
                                     </div>
                                   </div>
                                 </div>
@@ -352,6 +361,114 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </div>
               </div>
             </div>`;
+
+          // Set up event listeners for Book Now buttons
+          const bookNowButtons = document.querySelectorAll(".book-now-btn");
+          // console.log("Setting up event listeners for", bookNowButtons.length, "book now buttons");
+
+          bookNowButtons.forEach(button => {
+            // console.log("Setting up event listener for button:", button);
+            
+            button.addEventListener("click", async (event) => {
+              event.preventDefault();
+              
+              // console.log("Book Now button clicked!");
+              
+              // Get the listing ID from the button's dataset
+              const listingId = button.dataset.listingId;
+              
+              if (!listingId) {
+                console.error("No listing ID found");
+                showRedAlert("Error: Listing ID not found. Please try again.");
+                return;
+              }
+              
+              // console.log("Listing ID:", listingId);
+              
+              // Get saved values from sessionStorage
+              const searchParams = JSON.parse(sessionStorage.getItem("searchParams"));
+              
+              if (!searchParams) {
+                console.error("No search params found");
+                showRedAlert("Please select check-in, check-out dates and number of guests first.");
+                return;
+              }
+
+              const { checkinDate, checkoutDate, guests } = searchParams;
+              
+              // console.log("Check-in Date:", checkinDate);
+              // console.log("Check-out Date:", checkoutDate);
+              // console.log("Number of Guests:", guests);
+              
+              // Show loading message
+              showInfoAlert("Let us process your booking...");
+
+              try {
+                // Get listing details
+                const listing = await fetchListingDetails(listingId);
+                
+                if (!listing) {
+                  console.error("No listing details found");
+                  showRedAlert("Error fetching listing details. Please try again.");
+                  return;
+                }
+
+                // console.log("Listing details:", listing);
+
+                // Create checkout session
+                const response = await fetch("/api/create-checkout-session", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    listingId,
+                    listingName: listing.name,
+                    price: parseFloat(listing.price), // Convert to number
+                    checkIn: checkinDate,
+                    checkOut: checkoutDate,
+                    guests: parseInt(guests),
+                    imageUrl: listing.imageUrl || "",
+                    description: listing.description || ""
+                  }),
+                });
+
+                // console.log("API request body:", {
+                //   listingId,
+                //   listingName: listing.name,
+                //   price: parseFloat(listing.price),
+                //   checkIn: checkinDate,
+                //   checkOut: checkoutDate,
+                //   guests: parseInt(guests),
+                //   imageUrl: listing.imageUrl || "",
+                //   description: listing.description || ""
+                // });
+
+                // console.log("API response status:", response.status);
+                // console.log("API response headers:", response.headers);
+
+                if (!response.ok) {
+                  const errorText = await response.text();
+                  console.error("API error response:", errorText);
+                  throw new Error(`API error! Status: ${response.status}, Response: ${errorText}`);
+                }
+
+                const responseData = await response.json();
+                // console.log("API response data:", responseData);
+
+                const { url } = responseData;
+
+                // console.log("Stripe checkout URL:", url);
+
+                // Redirect to Stripe checkout
+                window.location.href = url;
+              } catch (error) {
+                console.error("Error processing booking:", error);
+                console.error("Error stack:", error.stack);
+                showRedAlert("An error occurred while processing your booking. Please try again.");
+              }
+            });
+          });
         } else {
           listingsContainer.innerHTML =
             "<p class='text-danger text-center'>No available listings for the selected dates.</p>";
@@ -363,4 +480,116 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // console.log("Booking engine script loaded");
+  
+  // Test if buttons exist
+  const bookNowButtons = document.querySelectorAll(".book-now-btn");
+  // console.log("Found book now buttons:", bookNowButtons.length);
+  
+  bookNowButtons.forEach(button => {
+    // console.log("Setting up event listener for button:", button);
+    
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      
+      // console.log("Book Now button clicked!");
+      
+      // Get the listing ID from the button's dataset
+      const listingId = button.dataset.listingId;
+      
+      if (!listingId) {
+        console.error("No listing ID found");
+        showRedAlert("Error: Listing ID not found. Please try again.");
+        return;
+      }
+      
+      // console.log("Listing ID:", listingId);
+      
+      // Get saved values from sessionStorage
+      const searchParams = JSON.parse(sessionStorage.getItem("searchParams"));
+      
+      if (!searchParams) {
+        console.error("No search params found");
+        showRedAlert("Please select check-in, check-out dates and number of guests first.");
+        return;
+      }
+
+      const { checkinDate, checkoutDate, guests } = searchParams;
+      
+      // console.log("Check-in Date:", checkinDate);
+      // console.log("Check-out Date:", checkoutDate);
+      // console.log("Number of Guests:", guests);
+      
+      // Show loading message
+      showInfoAlert("Processing your booking...");
+
+      try {
+        // Get listing details
+        const listing = await fetchListingDetails(listingId);
+        
+        if (!listing) {
+          console.error("No listing details found");
+          showRedAlert("Error fetching listing details. Please try again.");
+          return;
+        }
+
+        // console.log("Listing details:", listing);
+
+        // Create checkout session
+        const response = await fetch("/api/create-checkout-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            listingId,
+            listingName: listing.name,
+            price: parseFloat(listing.price), // Convert to number
+            checkIn: checkinDate,
+            checkOut: checkoutDate,
+            guests: parseInt(guests),
+            imageUrl: listing.imageUrl || "",
+            description: listing.description || ""
+          }),
+        });
+
+        // console.log("API request body:", {
+        //   listingId,
+        //   listingName: listing.name,
+        //   price: parseFloat(listing.price),
+        //   checkIn: checkinDate,
+        //   checkOut: checkoutDate,
+        //   guests: parseInt(guests),
+        //   imageUrl: listing.imageUrl || "",
+        //   description: listing.description || ""
+        // });
+
+        // console.log("API response status:", response.status);
+        // console.log("API response headers:", response.headers);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("API error response:", errorText);
+          throw new Error(`API error! Status: ${response.status}, Response: ${errorText}`);
+        }
+
+        const responseData = await response.json();
+        // console.log("API response data:", responseData);
+
+        const { url } = responseData;
+
+        // console.log("Stripe checkout URL:", url);
+
+        // Redirect to Stripe checkout
+        window.location.href = url;
+      } catch (error) {
+        console.error("Error processing booking:", error);
+        console.error("Error stack:", error.stack);
+        showRedAlert("An error occurred while processing your booking. Please try again.");
+      }
+    });
+  });
 });

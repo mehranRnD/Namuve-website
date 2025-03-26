@@ -2,6 +2,16 @@
 flatpickr("#checkin", { dateFormat: "Y-m-d" });
 flatpickr("#checkout", { dateFormat: "Y-m-d" });
 
+// Base URL configuration
+const getBaseUrl = () => {
+  const hostname = window.location.hostname;
+  return hostname === "namuve.com" || hostname === "www.namuve.com"
+    ? "https://namuve.com/api"
+    : "http://localhost:3000/api";
+};
+
+const BASE_URL = getBaseUrl();
+
 // Function to save the form data and clear the form
 function saveAndClearForm() {
   const location = document.getElementById("location").value;

@@ -1,4 +1,3 @@
-//data.js
 // data.js
 
 export const idToImageUrlMap = {

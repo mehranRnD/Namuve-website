@@ -24,6 +24,16 @@ function getListingInfo(listingId) {
   }; // Default fallback
 }
 
+// Base URL configuration
+const getBaseUrl = () => {
+  const hostname = window.location.hostname;
+  return hostname === "namuve.com" || hostname === "www.namuve.com"
+    ? "https://namuve.com/api"
+    : "http://localhost:3000/api";
+};
+
+const BASE_URL = getBaseUrl();
+
 // Function to fetch USD to PKR conversion rate
 async function fetchExchangeRate() {
   try {
@@ -118,7 +128,7 @@ async function fetchListingDetails() {
     // Fetch exchange rate first
     await fetchExchangeRate();
 
-    const response = await fetch(`/api/listings/${listingId}`);
+    const response = await fetch(`${BASE_URL}/listings/${listingId}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch listing details (${response.status})`);
     }

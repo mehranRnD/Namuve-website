@@ -3,7 +3,6 @@ import cors from "cors";
 import axios from "axios";
 import path from "path";
 import { fileURLToPath } from "url";
-import nodemailer from "nodemailer";
 import routes from "./routes/routes.js";
 import { getConfig } from "./config.js";
 

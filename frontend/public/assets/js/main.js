@@ -1,6 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
 
+  // Base URL configuration
+  const getBaseUrl = () => {
+    const hostname = window.location.hostname;
+    return hostname === "namuve.com" || hostname === "www.namuve.com"
+      ? "https://namuve.com/api"
+      : "http://localhost:3000/api";
+  };
+
+  const BASE_URL = getBaseUrl();
+
   /**
    * Apply .scrolled class to the body as the page is scrolled down
    */
