@@ -17,7 +17,7 @@ const roomDescriptions = [
 async function fetchConversionRate() {
   try {
     const response = await fetch(
-      "https://v6.exchangerate-api.com/v6/cbb36a5aeba2aa9dbaa251e0/latest/USD"
+      "https://v6.exchangerate-api.com/v6/3b9001336ab2983f823b5bb6/latest/USD"
     );
     const data = await response.json();
     usdToPkrRate = data.conversion_rates.PKR;
@@ -398,14 +398,56 @@ async function getListingInfo(listingId) {
   try {
     const response = await fetch(`/api/listings/${listingId}`);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error("Failed to fetch listing details");
     }
     return await response.json();
   } catch (error) {
-    console.error("Error fetching listing info:", error);
-    return null;
+    console.error("Error fetching listing details:", error);
+    throw error;
   }
 }
+
+// Handle confirm booking button click
+document
+  .getElementById("confirm-booking")
+  .addEventListener("click", async () => {
+    const checkinInput = document.getElementById("checkin");
+    const checkoutInput = document.getElementById("checkout");
+    const guestsInput = document.getElementById("guests");
+    const checkin = checkinInput.dataset.selectedDate;
+    const checkout = checkoutInput.dataset.selectedDate;
+    const guests = guestsInput.value;
+
+    if (!checkin || !checkout || !guests) {
+      showRedAlert(
+        "Please select both check-in and check-out dates and enter the number of guests."
+      );
+      return;
+    }
+
+    // Get the room ID from the modal's parent element
+    const modalElement = document.querySelector(".modal.show");
+    const roomId = modalElement ? modalElement.dataset.roomId : null;
+
+    if (!roomId) {
+      showRedAlert("Error: Room ID not found. Please try again.");
+      return;
+    }
+
+    // Show loading message
+    showInfoAlert("Please wait while we process your booking...");
+
+    try {
+      // Redirect to BooknRent checkout URL
+      const checkoutUrl = `https://www.booknrent.com/checkout/${roomId}?start=${checkin}&end=${checkout}&numberOfGuests=${guests}`;
+      window.location.href = checkoutUrl;
+    } catch (error) {
+      console.error("Error:", error);
+      showRedAlert(
+        "An error occurred while processing your booking. Please try again."
+      );
+    }
+  });
 
 // Function to check availability status
 function checkAvailabilityStatus(calendarData, selectedDate) {
@@ -422,91 +464,17 @@ function checkAvailabilityStatus(calendarData, selectedDate) {
   };
 }
 
-document
-  .getElementById("confirm-booking")
-  .addEventListener("click", async () => {
-    const checkinInput = document.getElementById("checkin");
-    const checkoutInput = document.getElementById("checkout");
-    const guestsInput = document.getElementById("guests");
-
-    const checkin = checkinInput.dataset.selectedDate;
-    const checkout = checkoutInput.dataset.selectedDate;
-    const guests = guestsInput.value;
-
-    // Get the room ID from the modal's parent element
-    const modalElement = document.querySelector(".modal.show");
-    const roomId = modalElement ? modalElement.dataset.roomId : null;
-
-    if (!roomId) {
-      showRedAlert("Error: Room ID not found. Please try again.");
-      return;
-    }
-
-    if (!checkin || !checkout || !guests) {
-      showRedAlert(
-        "Please select both check-in and check-out dates and enter the number of guests."
-      );
-      return;
-    }
-
-    // Show loading message
-    showInfoAlert("Please wait while we process your booking...");
-
-    try {
-      // Get listing details for the checkout
-      const listing = await getListingInfo(roomId);
-
-      // Create checkout session
-      const response = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          listingId: roomId,
-          listingName: listing.name,
-          price: listing.price,
-          checkIn: checkin,
-          checkOut: checkout,
-          guests,
-          imageUrl: listing.imageUrl,
-          description: listing.description,
-        }),
-      });
-
-      const { url } = await response.json();
-
-      // Reset form and close modal
-      checkinInput.value = "";
-      checkoutInput.value = "";
-      guestsInput.value = "1";
-      checkinInput.dataset.selectedDate = "";
-      checkoutInput.dataset.selectedDate = "";
-
-      const modal = new bootstrap.Modal(modalElement);
-      modal.hide();
-
-      // Redirect to Stripe checkout
-      window.location.href = url;
-    } catch (error) {
-      console.error("Error:", error);
-      showRedAlert(
-        "An error occurred while processing your booking. Please try again."
-      );
-    }
-  });
-
 document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("currencySelector")
-    .addEventListener("change", async (event) => {
+  // Add currency selector event listener
+  const currencySelector = document.getElementById("currencySelector");
+  if (currencySelector) {
+    currencySelector.addEventListener("change", async (event) => {
       if (event.target.value !== null) {
         currentCurrency = event.target.value;
         await fetchConversionRate();
       }
     });
-});
+  }
 
-document.addEventListener("DOMContentLoaded", () => {
   loadRooms();
 });
