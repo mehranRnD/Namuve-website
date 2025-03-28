@@ -449,6 +449,14 @@ const checkAvailabilityStatus = (calendarData, selectedDate) => {
   };
 };
 
+// Function to create reservation
+async function createReservation(listingId, checkIn, checkOut, guests) {
+  // Redirect to BooknRent checkout URL
+  const checkoutUrl = `https://www.booknrent.com/checkout/${listingId}?start=${checkIn}&end=${checkOut}&numberOfGuests=${guests}`;
+  window.location.href = checkoutUrl;
+  return;
+}
+
 // Function to open booking modal
 function openBookingModal(listingId) {
   const modal = new bootstrap.Modal(document.getElementById("calendar-popup"));
@@ -475,10 +483,6 @@ function openBookingModal(listingId) {
       const calendarData = await fetchCalendarData(listingId, dateStr, dateStr);
       const result = checkAvailabilityStatus(calendarData, dateStr);
       if (result) {
-        // console.log(`Check-in date ${dateStr}:`);
-        // console.log(`Status: ${result.status}`);
-        // console.log(`Price: $${result.price}`);
-
         if (result.status === "reserved") {
           checkinInput.value = ""; // Clear the input if date is reserved
           showInfoAlert("This date is not available for booking.");
@@ -515,10 +519,6 @@ function openBookingModal(listingId) {
       const calendarData = await fetchCalendarData(listingId, dateStr, dateStr);
       const result = checkAvailabilityStatus(calendarData, dateStr);
       if (result) {
-        // console.log(`Check-out date ${dateStr}:`);
-        // console.log(`Status: ${result.status}`);
-        // console.log(`Price: $${result.price}`);
-
         if (result.status === "reserved") {
           checkoutInput.value = ""; // Clear the input if date is reserved
           showInfoAlert("This date is not available for booking.");
@@ -589,37 +589,8 @@ function openBookingModal(listingId) {
       }
 
       try {
-        // Get listing details for the checkout
-        const listing = await getListingInfo(listingId);
-
-        // Create checkout session
-        const response = await fetch("/api/create-checkout-session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            listingId,
-            listingName: listing.name,
-            price: checkinStatus.price,
-            checkIn: checkin,
-            checkOut: checkout,
-            guests,
-            imageUrl: listing.imageUrl,
-            description: listing.description,
-          }),
-        });
-
-        const { url } = await response.json();
-
-        // Reset form and close modal
-        checkinInput.value = "";
-        checkoutInput.value = "";
-        guestsInput.value = "1";
-        modal.hide();
-
-        // Redirect to Stripe checkout
-        window.location.href = url;
+        // Create reservation (which will redirect to BooknRent)
+        await createReservation(listingId, checkin, checkout, guests);
       } catch (error) {
         console.error("Error:", error);
         showRedAlert(

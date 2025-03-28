@@ -1,13 +1,17 @@
 import { showRedAlert, showInfoAlert } from "./alert.js";
-import {idToImageUrlMap, LISTINGS, LISTINGS_DATA} from "./data.js"; 
-import {fetchHostawayReviews, mapRatingsToListings, ratingToStars} from "./listings.js";
+import { idToImageUrlMap, LISTINGS, LISTINGS_DATA } from "./data.js";
+import {
+  fetchHostawayReviews,
+  mapRatingsToListings,
+  ratingToStars,
+} from "./listings.js";
 
 // Base URL configuration
 const getBaseUrl = () => {
   const hostname = window.location.hostname;
-  return hostname === 'namuve.com' || hostname === 'www.namuve.com'
-    ? 'https://namuve.com/api'
-    : 'http://localhost:3000/api';
+  return hostname === "namuve.com" || hostname === "www.namuve.com"
+    ? "https://namuve.com/api"
+    : "http://localhost:3000/api";
 };
 
 const BASE_URL = getBaseUrl();
@@ -45,7 +49,7 @@ function updatePrices(currency) {
       let convertedPrice =
         currency === "PKR" ? (basePrice * usdToPkrRate).toFixed(0) : basePrice;
 
-      priceElement.innerHTML = `Price: Starting from $${currency} ${convertedPrice}`;
+      priceElement.innerHTML = `Price: Starting from ${currency} ${convertedPrice}`;
     }
   });
 }
@@ -311,12 +315,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                             const stars = ratingToStars(rating);
 
                             return `
-                            <div class="col-lg-12 mb-4 listing-item" data-id="${listing.id}">
+                            <div class="col-lg-12 mb-4 listing-item" data-id="${
+                              listing.id
+                            }">
                               <div class="item" style="padding: 15px;">
                                 <div class="row">
                                   <div class="col-lg-4 col-sm-5">
                                     <div class="image">
-                                      <img src="${imageUrl}" alt="Listing Name: ${listing.name}" />
+                                      <img src="${imageUrl}" alt="Listing Name: ${
+                              listing.name
+                            }" />
                                     </div>
                                   </div>
                                   <div class="col-lg-8 col-sm-7">
@@ -329,9 +337,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                                         </div>
                                       </h4>
                                       <ul class="info">
-                                        <li>Price: Starting from $${listing.price || "TBD"}</li>
+                                        <li>Price: Starting from ${
+                                          listing.price || "TBD"
+                                        }</li>
                                       </ul>
-                                      <button class="btn btn-dark book-now-btn" data-listing-id="${listing.id}">
+                                      <button class="btn btn-dark book-now-btn" data-listing-id="${
+                                        listing.id
+                                      }">
                                         Book Now
                                       </button>
                                     </div>
@@ -366,50 +378,56 @@ document.addEventListener("DOMContentLoaded", async () => {
           const bookNowButtons = document.querySelectorAll(".book-now-btn");
           // console.log("Setting up event listeners for", bookNowButtons.length, "book now buttons");
 
-          bookNowButtons.forEach(button => {
+          bookNowButtons.forEach((button) => {
             // console.log("Setting up event listener for button:", button);
-            
+
             button.addEventListener("click", async (event) => {
               event.preventDefault();
-              
+
               // console.log("Book Now button clicked!");
-              
+
               // Get the listing ID from the button's dataset
               const listingId = button.dataset.listingId;
-              
+
               if (!listingId) {
                 console.error("No listing ID found");
                 showRedAlert("Error: Listing ID not found. Please try again.");
                 return;
               }
-              
+
               // console.log("Listing ID:", listingId);
-              
+
               // Get saved values from sessionStorage
-              const searchParams = JSON.parse(sessionStorage.getItem("searchParams"));
-              
+              const searchParams = JSON.parse(
+                sessionStorage.getItem("searchParams")
+              );
+
               if (!searchParams) {
                 console.error("No search params found");
-                showRedAlert("Please select check-in, check-out dates and number of guests first.");
+                showRedAlert(
+                  "Please select check-in, check-out dates and number of guests first."
+                );
                 return;
               }
 
               const { checkinDate, checkoutDate, guests } = searchParams;
-              
+
               // console.log("Check-in Date:", checkinDate);
               // console.log("Check-out Date:", checkoutDate);
               // console.log("Number of Guests:", guests);
-              
+
               // Show loading message
               showInfoAlert("Let us process your booking...");
 
               try {
                 // Get listing details
                 const listing = await fetchListingDetails(listingId);
-                
+
                 if (!listing) {
                   console.error("No listing details found");
-                  showRedAlert("Error fetching listing details. Please try again.");
+                  showRedAlert(
+                    "Error fetching listing details. Please try again."
+                  );
                   return;
                 }
 
@@ -429,7 +447,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     checkOut: checkoutDate,
                     guests: parseInt(guests),
                     imageUrl: listing.imageUrl || "",
-                    description: listing.description || ""
+                    description: listing.description || "",
                   }),
                 });
 
@@ -450,7 +468,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (!response.ok) {
                   const errorText = await response.text();
                   console.error("API error response:", errorText);
-                  throw new Error(`API error! Status: ${response.status}, Response: ${errorText}`);
+                  throw new Error(
+                    `API error! Status: ${response.status}, Response: ${errorText}`
+                  );
                 }
 
                 const responseData = await response.json();
@@ -465,7 +485,9 @@ document.addEventListener("DOMContentLoaded", async () => {
               } catch (error) {
                 console.error("Error processing booking:", error);
                 console.error("Error stack:", error.stack);
-                showRedAlert("An error occurred while processing your booking. Please try again.");
+                showRedAlert(
+                  "An error occurred while processing your booking. Please try again."
+                );
               }
             });
           });
@@ -484,52 +506,54 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   // console.log("Booking engine script loaded");
-  
+
   // Test if buttons exist
   const bookNowButtons = document.querySelectorAll(".book-now-btn");
   // console.log("Found book now buttons:", bookNowButtons.length);
-  
-  bookNowButtons.forEach(button => {
+
+  bookNowButtons.forEach((button) => {
     // console.log("Setting up event listener for button:", button);
-    
+
     button.addEventListener("click", async (event) => {
       event.preventDefault();
-      
+
       // console.log("Book Now button clicked!");
-      
+
       // Get the listing ID from the button's dataset
       const listingId = button.dataset.listingId;
-      
+
       if (!listingId) {
         console.error("No listing ID found");
         showRedAlert("Error: Listing ID not found. Please try again.");
         return;
       }
-      
+
       // console.log("Listing ID:", listingId);
-      
+
       // Get saved values from sessionStorage
       const searchParams = JSON.parse(sessionStorage.getItem("searchParams"));
-      
+
       if (!searchParams) {
         console.error("No search params found");
-        showRedAlert("Please select check-in, check-out dates and number of guests first.");
+        showRedAlert(
+          "Please select check-in, check-out dates and number of guests first."
+        );
         return;
       }
 
       const { checkinDate, checkoutDate, guests } = searchParams;
-      
+
       // console.log("Check-in Date:", checkinDate);
       // console.log("Check-out Date:", checkoutDate);
       // console.log("Number of Guests:", guests);
-      
+
       // Show loading message
       showInfoAlert("Processing your booking...");
 
       try {
         // Get listing details
         const listing = await fetchListingDetails(listingId);
-        
+
         if (!listing) {
           console.error("No listing details found");
           showRedAlert("Error fetching listing details. Please try again.");
@@ -552,7 +576,7 @@ document.addEventListener("DOMContentLoaded", () => {
             checkOut: checkoutDate,
             guests: parseInt(guests),
             imageUrl: listing.imageUrl || "",
-            description: listing.description || ""
+            description: listing.description || "",
           }),
         });
 
@@ -573,7 +597,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!response.ok) {
           const errorText = await response.text();
           console.error("API error response:", errorText);
-          throw new Error(`API error! Status: ${response.status}, Response: ${errorText}`);
+          throw new Error(
+            `API error! Status: ${response.status}, Response: ${errorText}`
+          );
         }
 
         const responseData = await response.json();
@@ -588,7 +614,9 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         console.error("Error processing booking:", error);
         console.error("Error stack:", error.stack);
-        showRedAlert("An error occurred while processing your booking. Please try again.");
+        showRedAlert(
+          "An error occurred while processing your booking. Please try again."
+        );
       }
     });
   });
