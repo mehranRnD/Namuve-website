@@ -1,9 +1,5 @@
 import { showRedAlert, showInfoAlert } from "./alert.js";
-import {
-  idToImageUrlMap,
-  virtualTourLinks,
-  LISTINGS,
-} from "./data.js";
+import { idToImageUrlMap, virtualTourLinks, LISTINGS } from "./data.js";
 import {
   fetchHostawayReviews,
   mapRatingsToListings,
@@ -55,39 +51,50 @@ const getListingData = async () => {
 };
 
 async function fetchListingsPrices() {
-  const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc';
-  
+  const token =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4MDA2NiIsImp0aSI6ImE0OTkzMDcyMzdiNmQyODA2M2NlYzYwZjUzM2RmYTM1NTU4ZjU0Yzc4OTJhMTk5MmFkZGNhYjZlZWE5NTE1MzFjMDYwM2UzMGI5ZjczZDRhIiwiaWF0IjoxNzM5MjcwMjM2LjA0NzE4LCJuYmYiOjE3MzkyNzAyMzYuMDQ3MTgyLCJleHAiOjIwNTQ4MDMwMzYuMDQ3MTg2LCJzdWIiOiIiLCJzY29wZXMiOlsiZ2VuZXJhbCJdLCJzZWNyZXRJZCI6NTI0OTJ9.n_QTZxeFcJn121EGofg290ReOoNE7vMJAE4-lnXhNbLCZw0mIJu1KQWE5pM0xPUcUHeJ-7XTQfS0U5yIkabGi7vGGex0yx9A0h03fn7ZBAtCzPLq_Xmj8ZOdHzahpRqxRsNRRNOlnbttTSrpSo4NJCdK6yhMTKrKkTTVh60IJIc";
+
   try {
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
     // console.log('Fetching prices for:', today);
 
-    const listingIds = LISTINGS.map(listing => listing.id);
-    
+    const listingIds = LISTINGS.map((listing) => listing.id);
+
     // Fetch all listing prices in parallel
-    const fetchPromises = listingIds.map(async listingId => {
+    const fetchPromises = listingIds.map(async (listingId) => {
       try {
-        const response = await fetch(`https://api.hostaway.com/v1/listings/${listingId}/calendar`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+        const response = await fetch(
+          `https://api.hostaway.com/v1/listings/${listingId}/calendar`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
 
         if (!response.ok) {
-          console.warn(`Failed to fetch calendar for listing ${listingId}: ${response.status}`);
+          console.warn(
+            `Failed to fetch calendar for listing ${listingId}: ${response.status}`
+          );
           return null;
         }
 
         const data = await response.json();
-        
-        let todayPrice = 
-          data.dates?.find(date => date.date === today)?.price ||
-          data.result?.find(date => date.date === today)?.price ||
-          data.calendar?.find(date => date.date === today)?.price;
 
-        return todayPrice !== undefined ? { listingId, price: todayPrice } : null;
+        let todayPrice =
+          data.dates?.find((date) => date.date === today)?.price ||
+          data.result?.find((date) => date.date === today)?.price ||
+          data.calendar?.find((date) => date.date === today)?.price;
+
+        return todayPrice !== undefined
+          ? { listingId, price: todayPrice }
+          : null;
       } catch (error) {
-        console.error(`Error fetching calendar for listing ${listingId}:`, error);
+        console.error(
+          `Error fetching calendar for listing ${listingId}:`,
+          error
+        );
         return null;
       }
     });
@@ -96,8 +103,8 @@ async function fetchListingsPrices() {
     const allPrices = (await Promise.all(fetchPromises)).filter(Boolean);
 
     // **Update LISTINGS with the latest prices**
-    LISTINGS.forEach(listing => {
-      const priceData = allPrices.find(p => p.listingId === listing.id);
+    LISTINGS.forEach((listing) => {
+      const priceData = allPrices.find((p) => p.listingId === listing.id);
       if (priceData) {
         listing.price = priceData.price;
       }
@@ -109,7 +116,7 @@ async function fetchListingsPrices() {
 
     return allPrices;
   } catch (error) {
-    console.error('Error fetching listings prices:', error);
+    console.error("Error fetching listings prices:", error);
     return [];
   }
 }
@@ -124,11 +131,11 @@ const images = [{ id: "288675" }, { id: "288676" }, { id: "288723" }];
 async function displayRealTimePrices() {
   try {
     const prices = await fetchListingsPrices();
-    images.forEach(image => {
-      const price = prices.find(p => p.listingId === Number(image.id));
+    images.forEach((image) => {
+      const price = prices.find((p) => p.listingId === Number(image.id));
     });
   } catch (error) {
-    console.error('Error displaying real-time prices:', error);
+    console.error("Error displaying real-time prices:", error);
   }
 }
 
@@ -256,16 +263,16 @@ const loadRooms = async () => {
     (async () => {
       try {
         const prices = await fetchListingsPrices();
-        const price = prices.find(p => p.listingId === Number(image.id));
-        const priceElement = roomItem.querySelector('.position-absolute');
+        const price = prices.find((p) => p.listingId === Number(image.id));
+        const priceElement = roomItem.querySelector(".position-absolute");
         if (price) {
           priceElement.textContent = `Starting from $${price.price}`;
         } else {
           priceElement.textContent = "Price not available";
         }
       } catch (error) {
-        console.error('Error updating price:', error);
-        const priceElement = roomItem.querySelector('.position-absolute');
+        console.error("Error updating price:", error);
+        const priceElement = roomItem.querySelector(".position-absolute");
         priceElement.textContent = "Price not available";
       }
     })();
@@ -316,9 +323,9 @@ const loadRooms = async () => {
       }
     });
   });
-  const currencySelector = document.getElementById('currencySelector');
+  const currencySelector = document.getElementById("currencySelector");
   if (currencySelector !== null) {
-    currencySelector.addEventListener('change', async (event) => {
+    currencySelector.addEventListener("change", async (event) => {
       if (event.target.value !== null) {
         currentCurrency = event.target.value;
         await fetchConversionRate();
@@ -363,23 +370,24 @@ const loadRooms = async () => {
 
 // Function to update all prices
 async function updateAllPrices() {
-  const priceElements = document.querySelectorAll('.position-absolute');
+  const priceElements = document.querySelectorAll(".position-absolute");
   priceElements.forEach(async (element) => {
-    const roomId = element.closest('.room-item').dataset.listingId;
+    const roomId = element.closest(".room-item").dataset.listingId;
     try {
       const prices = await fetchListingsPrices();
-      const price = prices.find(p => p.listingId === Number(roomId));
+      const price = prices.find((p) => p.listingId === Number(roomId));
       if (price) {
-        const convertedPrice = currentCurrency === 'USD'
-          ? (price.price / usdToPkrRate).toFixed(2)
-          : (price.price * usdToPkrRate).toFixed(2);
-        const currencySymbol = currentCurrency === 'USD' ? '$' : '₨';
+        const convertedPrice =
+          currentCurrency === "USD"
+            ? (price.price / usdToPkrRate).toFixed(2)
+            : (price.price * usdToPkrRate).toFixed(2);
+        const currencySymbol = currentCurrency === "USD" ? "$" : "₨";
         element.textContent = `Starting from ${currencySymbol}${convertedPrice}`;
       } else {
         element.textContent = "Price not available";
       }
     } catch (error) {
-      console.error('Error updating price:', error);
+      console.error("Error updating price:", error);
       element.textContent = "Price not available";
     }
   });
@@ -402,93 +410,101 @@ async function getListingInfo(listingId) {
 // Function to check availability status
 function checkAvailabilityStatus(calendarData, selectedDate) {
   if (!calendarData || !calendarData.result) return null;
-  
-  const entry = calendarData.result.find(entry => entry.date === selectedDate);
+
+  const entry = calendarData.result.find(
+    (entry) => entry.date === selectedDate
+  );
   if (!entry) return null;
-  
+
   return {
     status: entry.status,
-    price: entry.price
+    price: entry.price,
   };
 }
 
-document.getElementById('confirm-booking').addEventListener('click', async () => {
-  const checkinInput = document.getElementById('checkin');
-  const checkoutInput = document.getElementById('checkout');
-  const guestsInput = document.getElementById('guests');
-  
-  const checkin = checkinInput.dataset.selectedDate;
-  const checkout = checkoutInput.dataset.selectedDate;
-  const guests = guestsInput.value;
-  
-  // Get the room ID from the modal's parent element
-  const modalElement = document.querySelector('.modal.show');
-  const roomId = modalElement ? modalElement.dataset.roomId : null;
+document
+  .getElementById("confirm-booking")
+  .addEventListener("click", async () => {
+    const checkinInput = document.getElementById("checkin");
+    const checkoutInput = document.getElementById("checkout");
+    const guestsInput = document.getElementById("guests");
 
-  if (!roomId) {
-    showRedAlert("Error: Room ID not found. Please try again.");
-    return;
-  }
+    const checkin = checkinInput.dataset.selectedDate;
+    const checkout = checkoutInput.dataset.selectedDate;
+    const guests = guestsInput.value;
 
-  if (!checkin || !checkout || !guests) {
-    showRedAlert("Please select both check-in and check-out dates and enter the number of guests.");
-    return;
-  }
+    // Get the room ID from the modal's parent element
+    const modalElement = document.querySelector(".modal.show");
+    const roomId = modalElement ? modalElement.dataset.roomId : null;
 
-  // Show loading message
-  showInfoAlert("Please wait while we process your booking...");
+    if (!roomId) {
+      showRedAlert("Error: Room ID not found. Please try again.");
+      return;
+    }
 
-  try {
-    // Get listing details for the checkout
-    const listing = await getListingInfo(roomId);
+    if (!checkin || !checkout || !guests) {
+      showRedAlert(
+        "Please select both check-in and check-out dates and enter the number of guests."
+      );
+      return;
+    }
 
-    // Create checkout session
-    const response = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        listingId: roomId,
-        listingName: listing.name,
-        price: listing.price,
-        checkIn: checkin,
-        checkOut: checkout,
-        guests,
-        imageUrl: listing.imageUrl,
-        description: listing.description,
-      }),
-    });
+    // Show loading message
+    showInfoAlert("Please wait while we process your booking...");
 
-    const { url } = await response.json();
+    try {
+      // Get listing details for the checkout
+      const listing = await getListingInfo(roomId);
 
-    // Reset form and close modal
-    checkinInput.value = "";
-    checkoutInput.value = "";
-    guestsInput.value = "1";
-    checkinInput.dataset.selectedDate = "";
-    checkoutInput.dataset.selectedDate = "";
-    
-    const modal = new bootstrap.Modal(modalElement);
-    modal.hide();
+      // Create checkout session
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          listingId: roomId,
+          listingName: listing.name,
+          price: listing.price,
+          checkIn: checkin,
+          checkOut: checkout,
+          guests,
+          imageUrl: listing.imageUrl,
+          description: listing.description,
+        }),
+      });
 
-    // Redirect to Stripe checkout
-    window.location.href = url;
-  } catch (error) {
-    console.error("Error:", error);
-    showRedAlert(
-      "An error occurred while processing your booking. Please try again."
-    );
-  }
-});
+      const { url } = await response.json();
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('currencySelector').addEventListener('change', async (event) => {
-    if (event.target.value !== null) {
-      currentCurrency = event.target.value;
-      await fetchConversionRate();
+      // Reset form and close modal
+      checkinInput.value = "";
+      checkoutInput.value = "";
+      guestsInput.value = "1";
+      checkinInput.dataset.selectedDate = "";
+      checkoutInput.dataset.selectedDate = "";
+
+      const modal = new bootstrap.Modal(modalElement);
+      modal.hide();
+
+      // Redirect to Stripe checkout
+      window.location.href = url;
+    } catch (error) {
+      console.error("Error:", error);
+      showRedAlert(
+        "An error occurred while processing your booking. Please try again."
+      );
     }
   });
+
+document.addEventListener("DOMContentLoaded", () => {
+  document
+    .getElementById("currencySelector")
+    .addEventListener("change", async (event) => {
+      if (event.target.value !== null) {
+        currentCurrency = event.target.value;
+        await fetchConversionRate();
+      }
+    });
 });
 
 document.addEventListener("DOMContentLoaded", () => {

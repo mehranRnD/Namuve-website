@@ -334,7 +334,6 @@ router.post("/api/create-checkout-session", async (req, res) => {
             product_data: {
               name: "Reservation Details",
               description: `Check-in: ${checkIn} \n Check-out: ${checkOut}\nGuests: ${guests}`,
-              
             },
             unit_amount: Math.round(basePrice * 100),
           },
@@ -388,7 +387,8 @@ router.post("/api/create-checkout-session", async (req, res) => {
     console.error("Stripe session creation error:", error);
     res.status(500).json({
       error: "Failed to create checkout session",
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 });

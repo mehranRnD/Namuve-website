@@ -45,7 +45,7 @@ function updatePrices(currency) {
       let convertedPrice =
         currency === "PKR" ? (basePrice * usdToPkrRate).toFixed(0) : basePrice;
 
-      priceElement.innerHTML = `Price: Starting from ${currency} ${convertedPrice}`;
+      priceElement.innerHTML = `Price: Starting from $${currency} ${convertedPrice}`;
     }
   });
 }
@@ -329,7 +329,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                                         </div>
                                       </h4>
                                       <ul class="info">
-                                        <li>Price: Starting from ${listing.price || "TBD"}</li>
+                                        <li>Price: Starting from $${listing.price || "TBD"}</li>
                                       </ul>
                                       <button class="btn btn-dark book-now-btn" data-listing-id="${listing.id}">
                                         Book Now
