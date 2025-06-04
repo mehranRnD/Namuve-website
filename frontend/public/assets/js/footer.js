@@ -47,13 +47,15 @@ export function createFooter() {
     <h4 style="font-weight: bold;">Contact Us</h4>
 
     <span>
+    <p style="margin: 5px 0 0 0;">
+    <strong>Company Name:</strong> NAMU VENTURES LLC
+</p>
+<br>
         <strong style="display: block; font-weight: bold;">USA:</strong>
         <p style="margin: 0;">
            7901 4th St N, #22609, St. Petersburg, Florida 33702, USA.
         </p>
-<p style="margin: 5px 0 0 0;">
-    <strong>Company Name:</strong> NAMU VENTURES LLC
-</p>
+
     </span>
 
     <p class="mt-2" style="margin-top: 10px;">
