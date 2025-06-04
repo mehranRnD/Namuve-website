@@ -43,44 +43,62 @@ export function createFooter() {
                             <li><a href="/terms-and-conditions">Terms & Conditions</a></li>
                         </ul>
                     </div>
-                    <div class="col-lg-3 col-md-12 footer-contact text-md-start">
-                        <h4>Contact Us</h4>
-                       <span>
-                            <strong>USA:</strong>
-                            <p>
-                                7901 4th St N, #22609, St. Petersburg, Florida 33702, USA.
-                            </p>
-                       </span>
-                        <p class="mt-2">
-                            <strong>Phone:</strong> <span>+1 786 987 2169</span>
-                        </p>
-                        <span>
-                            <strong>United Arab Emirates:</strong>
-                            <p>
-                               B2B Tower, Office #903, Business Bay, Dubai, United Arab Emirates.
-                            </p>
-                       </span>
-                        <p class="mt-2">
-                            <strong>Phone:</strong> <span>+971 56 907 1883</span>
-                        </p>
-                        <span>
-                            <strong>Pakistan:</strong>
-                            <p>
-                               30-A, Block L, Gulberg III, Lahore, Punjab.
-                            </p>
-                       </span>
-                        <p class="mt-2">
-                            <strong>Phone:</strong> <span>+92 300 045 4711</span>
-                        </p>
-                        <p><strong>Email:</strong> <a href="mailto:info@namuve.com"><span>info@namuve.com</span></a></p>
-                    </div>
+                    <div class="col-lg-3 col-md-12 footer-contact text-md-start" style="text-align: left;">
+    <h4 style="font-weight: bold;">Contact Us</h4>
+
+    <span>
+        <strong style="display: block; font-weight: bold;">USA:</strong>
+        <p style="margin: 0;">
+           7901 4th St N, #22609, St. Petersburg, Florida 33702, USA.
+        </p>
+<p style="margin: 5px 0 0 0;">
+    <strong>Company Name:</strong> NAMU VENTURES LLC
+</p>
+    </span>
+
+    <p class="mt-2" style="margin-top: 10px;">
+        <strong>Phone:</strong> <span>+1 786 987 2169</span><br>
+        <strong>POC Email:</strong> <span>1198R.Umerelahi.fl@gmail.com</span>
+    </p>
+
+    <span>
+        <strong style="display: block; font-weight: bold;">United Arab Emirates:</strong>
+        <p style="margin: 0;">
+            B2B Tower, Office #903, Business Bay, Dubai, United Arab Emirates.
+        </p>
+    </span>
+
+    <p class="mt-2" style="margin-top: 10px;">
+        <strong>Phone:</strong> <span>+971 56 907 1883</span><br>
+        <strong>POC Email:</strong> <span>1198R.Umerelahi.fl@gmail.com</span>
+    </p>
+
+    <span>
+        <strong style="display: block; font-weight: bold;">Pakistan:</strong>
+        <p style="margin: 0;">
+            30-A, Block L, Gulberg III, Lahore, Punjab.
+        </p>
+    </span>
+
+    <p class="mt-2" style="margin-top: 10px;">
+        <strong>Phone:</strong> <span>+92 300 045 4711</span><br>
+        <strong>POC Email:</strong> <span>1198R.Umerelahi.fl@gmail.com</span>
+    </p>
+
+    <p style="margin-top: 10px;">
+        <strong>Email:</strong> 
+        <a href="mailto:info@namuve.com" style="text-decoration: none; color: inherit;">
+            <span>info@namuve.com</span>
+        </a>
+    </p>
+</div>
+
                 </div>
             </div>
             <div class="container copyright text-center mt-4">
-                <p>
-                    © <span>Copyright</span> <strong class="sitename">Namuve</strong>
-                    <span>All Rights Reserved</span>
-                </p>
+                <p style="text-align: center; font-size: 14px; margin-top: 20px;">
+                    © <strong>NAMU VENTURES LLC</strong> All Rights Reserved
+                </p>    
             </div>
         </footer>
     `;
