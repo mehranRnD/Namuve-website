@@ -72,7 +72,6 @@ export function createFooter() {
 
     <p class="mt-2" style="margin-top: 10px;">
         <strong>Phone:</strong> <span>+971 56 907 1883</span><br>
-        <strong>POC Email:</strong> <span>1198R.Umerelahi.fl@gmail.com</span>
     </p>
 
     <span>
@@ -84,14 +83,15 @@ export function createFooter() {
 
     <p class="mt-2" style="margin-top: 10px;">
         <strong>Phone:</strong> <span>+92 300 045 4711</span><br>
-        <strong>POC Email:</strong> <span>1198R.Umerelahi.fl@gmail.com</span>
+       
     </p>
 
     <p style="margin-top: 10px;">
-        <strong>Email:</strong> 
+        <strong>Company Email:</strong> 
         <a href="mailto:info@namuve.com" style="text-decoration: none; color: inherit;">
             <span>info@namuve.com</span>
         </a>
+        <br>
     </p>
 </div>
 
